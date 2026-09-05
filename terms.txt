@@ -1,0 +1,60 @@
+Terms of Service for energypriceboard.com
+Last Updated: 08.06.2026
+
+1. Acceptance of Terms
+By accessing and using energypriceboard.com (the "Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you must not use the Service.
+
+2. Description of Service
+The Service is an automated aggregator that provides informational data on energy prices on the TRON network. The data is collected from various third-party sources via APIs and publicly available internet data.
+
+3. Intellectual Property
+All content on this Service, including but not limited to text, graphics, logos, and the compilation of data, is the property of the Service owner and is protected by copyright and other intellectual property laws.
+You are granted a limited, non-exclusive license to access and use the Service for personal, non-commercial use. If you use any data from this Service on another website or application, you must provide a clear and visible hyperlink back to energypriceboard.com.
+
+4. User Conduct
+You agree to use the Service only for lawful purposes. You are prohibited from using the Service:
+
+To engage in any fraudulent or illegal activity.
+
+To overload, damage, or disrupt the functioning of the Service through automated means (e.g., bots, scrapers) that cause unreasonable server load. Permissible, lightweight scraping for personal use is allowed, provided it does not harm the Service's performance.
+
+5. Age Restriction
+The Service is intended for individuals who are of the legal age of majority in their jurisdiction. By using the Service, you represent and warrant that you meet this requirement.
+
+6. Disclaimer of Warranties and Limitation of Liability
+6.1 No Warranty: The Service and all data therein are provided on an "AS IS" and "AS AVAILABLE" basis without any warranties of any kind, either express or implied.
+6.2 Accuracy of Data: We do not guarantee the accuracy, completeness, or timeliness of the information on the Service. The information should not be construed as financial or investment advice.
+6.3 Third-Party Links: The Service contains links to third-party websites and services. Some links are referral/affiliate links — we may earn a commission at no extra cost to you. Platform rankings are determined by price, not by referral status. We are not responsible for the content, accuracy, or practices of these external sites. Your interaction with any third-party is solely between you and that party.
+6.4 Limitation of Liability: To the fullest extent permitted by applicable law, the Service owner shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, or any loss of profits or data, resulting from:
+
+Your access to or use of or inability to access or use the Service.
+
+Any conduct or content of any third party on the Service.
+
+Any unauthorized access to or use of our servers and/or any personal information stored therein.
+
+Any errors or omissions in any content or for any loss or damage incurred as a result of the use of any content posted or otherwise made available through the Service.
+In no event shall the total aggregate liability of the Service owner exceed one hundred US dollars ($100.00).
+
+7. Indemnification
+You agree to defend, indemnify, and hold harmless the Service owner from and against any and all claims, damages, obligations, losses, liabilities, costs, or debt (including attorney's fees) arising from:
+
+Your use of and access to the Service.
+
+Your violation of any term of these Terms.
+
+Your violation of any third-party right, including without limitation any copyright or privacy right.
+
+8. Changes to Terms
+We reserve the right, at our sole discretion, to modify or replace these Terms at any time. The "Last Updated" date at the top of this page will indicate when changes were made. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms.
+
+9. Termination
+We may terminate or suspend your access to the Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
+
+10. Governing Law
+These Terms shall be governed and construed in accordance with the laws of the Russian Federation, without regard to its conflict of law provisions.
+
+11. Contact Information
+For any questions about these Terms of Service, please contact us at:
+Email: fivex56@gmail.com
+

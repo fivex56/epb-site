@@ -1,0 +1,2535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="shortcut icon" href="favicon.ico"/>
+<title>Compare TRON Energy Platforms — Matrix & Charts | Energy Price Board</title>
+<meta name="description" data-live-count-in="platforms" content="A live price matrix for 20 TRON energy rental platforms: 65k and 130k across five rental terms, feature filters, and a chart of every sample recorded."/>
+<meta name="robots" content="index,follow"/>
+<link rel="canonical" href="https://energypriceboard.com/compare.html"/>
+<link rel="alternate" type="application/rss+xml" title="Energy Price Board — Blog" href="rss.xml"/>
+<meta property="og:title" content="Compare Platforms — Energy Price Board"/>
+<meta property="og:description" data-live-count-in="platforms" content="Live 65k and 130k prices for 20 TRON energy platforms across five rental terms."/>
+<meta property="og:url" content="https://energypriceboard.com/compare.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://energypriceboard.com/logos/epb_preview.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@energypricebrd"/>
+<meta name="twitter:title" content="Compare TRON Energy Platforms — Matrix & Charts"/>
+<meta name="twitter:description" data-live-count-in="platforms" content="Live 65k and 130k prices for 20 TRON energy platforms across five rental terms."/>
+<meta name="twitter:image" content="https://energypriceboard.com/logos/epb_preview.webp"/>
+<!-- Yandex.Metrika -->
+<script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=109720065','ym');ym(109720065,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/109720065" style="position:absolute;left:-9999px" alt=""/></div></noscript>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CQ2WTT1T10"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CQ2WTT1T10');</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://mc.yandex.ru">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+<style>
+/* ===== Compare page — layout on top of the shared design system ===== */
+body.compare .container{max-width:1440px}
+.compare .page-head{padding:40px 0 26px;max-width:760px}
+.compare .page-head h1{font-size:clamp(26px,3.6vw,38px);letter-spacing:-.03em}
+.compare .subtitle{margin:12px 0 0;font-size:15.5px;color:var(--text-2)}
+.compare .own-note{margin:10px 0 0;font-size:13px;line-height:1.6;color:var(--text-2);max-width:76ch}
+.compare .page-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+
+.feat-bar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 18px}
+.feat-bar .feat-label{font:700 10.5px/1.3 var(--font);text-transform:uppercase;letter-spacing:.09em;color:var(--text-3);margin-right:2px}
+#featMatchCount{font-size:12.5px;color:var(--text-2);margin-left:4px}
+
+.tab-bar{margin-bottom:18px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.mtx-toolbar,.chart-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.mtx-toolbar-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mtx-label{font:700 10px/1.3 var(--font);color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-right:2px}
+.mtx-search{margin-left:auto;display:flex;gap:6px;align-items:center}
+.search-box{width:210px;max-width:46vw}
+@media(max-width:760px){.mtx-search{margin-left:0;width:100%}.search-box{width:100%;max-width:none}}
+
+/* The table owns the whole row until a platform is picked; the panel column
+   only exists while there is something in it. */
+.mtx-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+/* minmax(0,...) or the min-content width of the 720px matrix blows the grid
+   column past the viewport and the table can no longer scroll inside itself. */
+@media(min-width:1081px){.mtx-layout.has-detail{grid-template-columns:minmax(0,1fr) 340px}}
+@media(max-width:1080px){.detail-panel{position:static;max-height:none}}
+.mtx-table{min-width:720px}
+.mtx-table th:first-child,.mtx-table td.label{min-width:170px}
+.mtx-table td.spark-cell{width:84px;padding:6px 10px}
+.mtx-table td.spark-cell .spark{height:20px;width:68px;margin:0 auto}
+.mtx-plat-link{color:inherit;text-decoration:none}
+.mtx-plat-link:hover{color:var(--accent);text-decoration:underline}
+.mtx-table tbody tr[data-pid]{cursor:pointer}
+.mtx-table tbody tr[data-pid]:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#mtxCount{font-size:12.5px;color:var(--text-2);margin-bottom:8px}
+#mtxLegend{font-size:12px;color:var(--text-3);margin-top:10px}
+
+/* Column headers sort the column under them. The chip row and the header row
+   drive the same state, so they can never point at different columns. */
+.mtx-sort{
+  -webkit-appearance:none;appearance:none;background:none;border:0;margin:0;
+  padding:3px 0;font:inherit;color:inherit;letter-spacing:inherit;
+  text-transform:inherit;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;min-height:24px;
+}
+.mtx-sort:hover{color:var(--text)}
+.mtx-sort .dir{font-size:8px;line-height:1;width:8px;text-align:center}
+.mtx-table th[aria-sort] .mtx-sort{color:var(--accent)}
+.mtx-table th[aria-sort]{background:var(--accent-soft)}
+
+/* Loading state. The rows are drawn at the height a real row measures, so the
+   scan lands into a box that is already the right size instead of pushing the
+   rest of the page down. */
+.mtx-sk td{height:48px}
+@media(max-width:820px){.mtx-sk td{height:49px}}
+.mtx-sk .sk{height:11px;border-radius:var(--r-xs)}
+.mtx-sk td.label .sk{width:64%}
+.mtx-sk td:not(.label) .sk{width:44px;margin-left:auto}
+
+/* Same idea for the price card the shared runtime writes after the fetch.
+   With scripting off nothing ever writes it, so it holds no space either. */
+/* Sized against the fallback face, which wraps the disclosure onto a third
+   line: reserve the taller of the two and the web font can only ever land
+   inside the box. */
+.cta-live{min-height:186px}
+@media(max-width:560px){.cta-live{min-height:244px}}
+@media(max-width:420px){.cta-live{min-height:264px}}
+:root:not(.epb-js) .cta-live{display:none}
+:root.epb-js .nojs-only{display:none}
+/* The freshness pill starts empty and grows to 32px once the timestamp lands. */
+.compare #hUpdated{min-height:32px}
+
+/* Note marker: the "i" is drawn, not typed, so copying a cell or a heading
+   returns the platform name on its own. The note itself travels in the title
+   and, in full, in the panel's own paragraph. */
+.compare .note-mark{-webkit-appearance:none;appearance:none;padding:0;position:relative}
+.compare .note-mark::before{content:"i"}
+.compare .note-mark::after{content:'';position:absolute;inset:-6px}
+
+/* Detail panel */
+.detail-panel{padding:20px;position:sticky;top:76px;max-height:calc(100vh - 96px);
+  overflow-y:auto;scroll-margin-top:88px}
+.detail-panel:empty{display:none}
+.detail-panel:focus{outline:none}
+.detail-panel:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dp-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
+.dp-name{font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.dp-url{font-size:12px;color:var(--accent);text-decoration:none;display:block;margin-top:2px}
+.dp-url:hover{text-decoration:underline}
+.dp-close{width:32px;height:32px;flex:0 0 32px;border-radius:var(--r-xs);cursor:pointer;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--font)}
+.dp-close:hover{color:var(--text);border-color:var(--line-3)}
+.dp-section{margin-bottom:16px}
+.dp-section-title{font:700 10px/1.3 var(--font);color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px}
+.dp-price-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.dp-price-row:last-child{border-bottom:0}
+.dp-price-row .lbl{color:var(--text-2)}
+.dp-price-row .val{font-weight:700;color:var(--text)}
+.dp-price-row .val.est{color:var(--warn)}
+.dp-features{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.dp-feat-tag{padding:4px 11px;border-radius:var(--r-pill);font:600 11px/1.3 var(--font);
+  background:var(--surface-2);color:var(--text-3)}
+.dp-feat-tag.has{background:var(--good-soft);color:var(--good)}
+/* Supported and unsupported carry a mark as well as a colour — the same pair
+   the platform pages use — so the row still reads in greyscale. */
+.dp-feat-tag .mk{font-weight:800;margin-right:5px}
+.dp-feat-tag.no .mk{opacity:.75}
+.dp-spark{margin:2px 0 4px}
+.dp-spark .spark{height:44px}
+
+/* Without scripting the matrix has nothing to draw. Say so, and point at the
+   pages that print their numbers into the file. */
+.nojs-panel{padding:16px 18px;border-radius:var(--r);max-width:70ch;
+  background:var(--warn-soft);border:1px solid var(--warn-soft);
+  color:var(--text-2);font-size:14px;line-height:1.7}
+.nojs-panel strong{color:var(--text)}
+.nojs-panel p{margin:0 0 8px}
+.nojs-panel p:last-child{margin:0}
+
+/* Chart tab */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px}
+.stat-card{padding:16px 18px}
+.stat-card .sl{font:600 10px/1.3 var(--font);color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.stat-card .sv{font:800 21px/1.1 var(--font);letter-spacing:-.03em;color:var(--text)}
+.stat-card .sb{font-size:11.5px;color:var(--text-2);margin-top:3px;min-height:16px}
+.service-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;min-height:30px}
+.svc-tag{min-height:30px;padding:0 12px;font-size:11.5px}
+.svc-tag-all{font-weight:700;color:var(--text);border-color:var(--line-3)}
+#cSvcNote{font-size:12px;color:var(--text-3);margin:-8px 0 16px}
+.chart-card{padding:20px 22px;margin-bottom:20px}
+.chart-card h3{font-size:15px;font-weight:700;margin:0 0 4px}
+.chart-card .chart-hint{font-size:12.5px;color:var(--text-2);margin-bottom:14px}
+.chart-wrap{position:relative;height:420px}
+.chart-wrap canvas{width:100%!important}
+@media(max-width:760px){.chart-wrap{height:300px}}
+
+.footer-wrap{border-top:1px solid var(--line);margin-top:48px;background:var(--bg-raised)}
+.compare .footer-bottom{border-top:0}
+</style>
+<!--EPB-THEME-->
+<script>(function(){try{var t=localStorage.getItem('epb-theme');if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<style>
+:root{color-scheme:dark;--bg:#08090d;--band:#0b0d13;--bg-raised:#101219;--surface:#14161f;--surface-2:#191c26;--surface-3:#1f2331;--line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.11);--line-3:rgba(255,255,255,.18);--text:#eef1f7;--text-2:#9aa4b8;--text-3:#858fa6;--accent:#6d99ff;--accent-2:#9b8cff;--accent-ink:#05070d;--accent-soft:rgba(109,153,255,.14);--accent-line:rgba(109,153,255,.36);--accent-strong:var(--accent);--good:#3ecf94;--good-soft:rgba(62,207,148,.13);--warn:#e3a94f;--warn-soft:rgba(227,169,79,.13);--bad:#f0736f;--bad-soft:rgba(240,115,111,.13);--tile:#181b24;--tile-line:rgba(255,255,255,.10);--tile-ink:#b3bccd;--mono-l1:32%;--mono-l2:21%;--mono-s:30%;--header-bg:rgba(8,9,13,.78);--skeleton:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.09),rgba(255,255,255,.04));--card-top:inset 0 1px 0 rgba(255,255,255,.05);--edge-accent:inset 0 0 0 1px var(--accent-line);--edge-good:inset 0 0 0 1px var(--good);--edge-warn:inset 0 0 0 1px var(--warn-soft);--halo-good:0 0 0 3px var(--good-soft);--halo-warn:0 0 0 3px var(--warn-soft);--halo-accent:0 0 0 3px var(--accent-soft);--ring:0 0 0 4px rgba(109,153,255,.3);--atmos-1:rgba(109,153,255,.13);--atmos-2:rgba(155,140,255,.08);--est-ink:#c2a065;--zebra:rgba(255,255,255,.03);--heat:62,207,148;--scroll-fade:linear-gradient(90deg,rgba(8,9,13,0),rgba(8,9,13,.9));--r-xs:8px;--r-sm:10px;--r:14px;--r-lg:20px;--r-xl:var(--r-lg);--r-pill:999px;--sh-1:0 1px 2px rgba(0,0,0,.35);--sh-2:0 6px 24px -12px rgba(0,0,0,.7);--sh-3:0 18px 50px -24px rgba(0,0,0,.8);--fade-l:inset 36px 0 26px -18px rgba(0,0,0,.72);--fade-r:inset -36px 0 26px -18px rgba(0,0,0,.72);--t-micro:11px;--t-meta:13px;--t-body:15px;--t-lead:17px;--t-h2:22px;--t-h1:clamp(30px,3.4vw,40px);--t-read:16.5px;--t-display:clamp(38px,4.4vw,52px);--t-num:clamp(28px,3.2vw,36px);--page-max:1240px;--pad:32px;--ease:cubic-bezier(.2,.7,.3,1);--dur:180ms;--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:18px;--sp-5:26px;--sp-6:36px;--sp-7:52px;--sp-8:72px;--gap-item:var(--sp-3);--gap-block:var(--sp-5);--gap-section:var(--sp-7);--pad-head:var(--sp-7) 0 var(--sp-5);--measure:60ch;--font:'Inter','Golos Text','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}:root[data-theme="light"]{color-scheme:light;--bg:#f5f6fa;--band:#eceff5;--bg-raised:#ffffff;--surface:#ffffff;--surface-2:#f2f4f9;--surface-3:#e9ecf4;--line:rgba(16,22,38,.09);--line-2:rgba(16,22,38,.14);--line-3:rgba(16,22,38,.22);--text:#111725;--text-2:#57617a;--text-3:#636b7f;--accent:#3059d6;--accent-2:#6a4fd8;--accent-ink:#ffffff;--accent-soft:rgba(48,89,214,.14);--accent-line:rgba(48,89,214,.28);--accent-strong:#2a4cb8;--good:#07694a;--good-soft:rgba(15,143,99,.1);--warn:#77510a;--warn-soft:rgba(154,101,16,.1);--bad:#b3352f;--bad-soft:rgba(179,53,47,.1);--tile:#e9ecf4;--tile-line:rgba(16,22,38,.10);--tile-ink:#57617a;--mono-l1:90%;--mono-l2:83%;--mono-s:34%;--header-bg:rgba(245,246,250,.8);--skeleton:linear-gradient(90deg,rgba(16,22,38,.05),rgba(16,22,38,.1),rgba(16,22,38,.05));--card-top:inset 0 1px 0 rgba(255,255,255,.9);--edge-accent:inset 0 0 0 1px var(--accent-line);--edge-good:inset 0 0 0 1px var(--good);--edge-warn:inset 0 0 0 1px var(--warn-soft);--halo-good:0 0 0 3px var(--good-soft);--halo-warn:0 0 0 3px var(--warn-soft);--halo-accent:0 0 0 3px var(--accent-soft);--ring:0 0 0 4px rgba(48,89,214,.22);--atmos-1:rgba(48,89,214,.10);--atmos-2:rgba(106,79,216,.07);--est-ink:#8a6a2e;--zebra:rgba(16,22,38,.032);--heat:10,122,83;--scroll-fade:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.92));--sh-1:0 1px 2px rgba(16,22,38,.06);--sh-2:0 6px 20px -12px rgba(16,22,38,.22);--sh-3:0 18px 44px -24px rgba(16,22,38,.28);--fade-l:inset 36px 0 26px -20px rgba(16,22,38,.42);--fade-r:inset -36px 0 26px -20px rgba(16,22,38,.42)}:root,:root[data-theme="light"]{--bg-dark:var(--bg);--bg-light:var(--bg);--card-dark:var(--surface);--ink-white:var(--text);--ink-secondary:var(--text-2);--ink-primary-light:var(--text);--ink-secondary-light:var(--text-2);--blue:var(--accent);--purple:var(--accent-2);--violet:var(--accent-2);--green:var(--good);--amber:var(--warn);--red:var(--bad);--line-dark:var(--line);--line-light:var(--line);--radius-lg:var(--r-xl);--radius-card:var(--r-lg);--radius-btn:var(--r);--radius-sm:var(--r-sm)}*,*::before,*::after{box-sizing:border-box}[hidden]{display:none!important}html{height:100%;-webkit-text-size-adjust:100%}html,body{overflow-x:clip}body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:400 var(--t-body)/1.6 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-variant-numeric:tabular-nums}img,svg,video{max-width:100%;height:auto}::selection{background:var(--accent-soft);color:var(--text)}.container{max-width:var(--page-max)!important;margin:0 auto;padding:0 var(--pad);width:100%}article:has(>.article-body),.read-more{max-width:604px;margin-left:auto;margin-right:auto}@media(min-width:1100px){.mtx-layout{--bleed:min(1440px,100vw - 2 * var(--pad));width:var(--bleed);max-width:var(--bleed);margin-left:calc(50% - var(--bleed) / 2)}}@media(max-width:900px){:root{--pad:20px}}@media(max-width:420px){:root{--pad:16px}}.epb-band{position:relative;z-index:0}.epb-band::before{content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);width:100vw;z-index:-1;pointer-events:none;background:var(--band);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.epb-band.band-open::before{border-top:0}.epb-band.band-close::before{border-bottom:0}.epb-band + .epb-band::before{border-top:0}body{position:relative}body::before{content:'';position:absolute;top:0;left:0;right:0;height:var(--band-h,0);z-index:-1;pointer-events:none;background:var(--band);border-bottom:1px solid var(--line)}:root.epb-banded .nav::before{background:transparent;border-bottom-color:transparent;transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease)}:root.epb-banded.epb-scrolled .nav::before{background:var(--header-bg);border-bottom-color:var(--line)}.faq-section,.board .faq-section,.all-plats,.h2h{position:relative;z-index:0;padding:var(--sp-7) 0;margin-top:var(--gap-section);border-top:0}.faq-section::before,.all-plats::before,.h2h::before{content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);width:100vw;z-index:-1;pointer-events:none;background:var(--band);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.footer{position:relative;z-index:0}.footer::before{content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);width:100vw;z-index:-1;pointer-events:none;background:var(--bg-raised);border-top:1px solid var(--line)}h1,h2,h3,h4,h5{margin:0;letter-spacing:-.022em;color:var(--text);font-weight:700;line-height:1.18}p{margin:0 0 14px}a{color:var(--accent)}.num,.price,.mono-num,.plat-price .pv,.cell-price,.rank-price,.stat-num,.stat-card .value,.stat-card .sv,.price-box .value,.cr-price-val{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.epb-skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--surface);color:var(--text);padding:10px 16px;border-radius:var(--r-sm);border:1px solid var(--line-2)}.epb-skip:focus{left:8px;top:8px}.nav{position:sticky;top:0;z-index:60;display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 0!important;margin-bottom:0;border-bottom:0!important;flex-direction:row!important;min-height:60px}.nav::before{content:'';position:absolute;inset:0 0 0 0;left:50%;transform:translateX(-50%);width:100vw;z-index:-1;background:var(--header-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid var(--line)}@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.nav::before{background:var(--bg)}}.nav-brand{font-size:var(--t-lead);font-weight:800;letter-spacing:-.03em;text-decoration:none;color:var(--text);white-space:nowrap;display:inline-flex;align-items:center;min-height:44px}.nav-brand em{font-style:normal;color:var(--accent)}.nav-links{display:flex!important;gap:2px;flex-wrap:nowrap!important;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-ms-overflow-style:none;justify-content:flex-end;mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}.nav-links::-webkit-scrollbar{display:none}.nav-links a{display:inline-flex;align-items:center;white-space:nowrap;min-height:44px;padding:0 13px;border-radius:var(--r-sm);text-decoration:none;color:var(--text-2);font-size:var(--t-meta);font-weight:500;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}.nav-links a:hover{color:var(--text);background:var(--surface-2)}.nav-links a.active,.nav-links a[aria-current="page"]{color:var(--text);background:var(--accent-soft);box-shadow:var(--edge-accent);font-weight:600}@media(max-width:900px){.nav-links{justify-content:flex-start}}@media(max-width:640px){.nav-links{mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%)}.nav-links a{padding:0 10px}.nav-brand{font-size:var(--t-body)}}.epb-toggle{-webkit-appearance:none;appearance:none;width:44px;height:44px;flex:0 0 44px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-sm);cursor:pointer;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);font:inherit;line-height:1;padding:0;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}.epb-toggle:hover{color:var(--text);border-color:var(--line-3)}.epb-toggle svg{width:18px;height:18px;display:block}.epb-toggle .epb-i-sun{display:none}:root[data-theme="light"] .epb-toggle .epb-i-sun{display:block}:root[data-theme="light"] .epb-toggle .epb-i-moon{display:none}.epb-live{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 10px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);font-size:var(--t-meta);font-weight:500;color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}.epb-dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;background:var(--text-3);box-shadow:0 0 0 0 transparent;position:relative}.epb-live.is-fresh{color:var(--text);border-color:var(--good-soft)}.epb-live.is-fresh .epb-dot{background:var(--good);box-shadow:0 0 0 3px var(--good-soft);animation:epb-pulse 2.4s var(--ease) infinite}.epb-live.is-stale{color:var(--text);border-color:var(--warn-soft);background:var(--warn-soft)}.epb-live.is-stale .epb-dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}@keyframes epb-pulse{0%{box-shadow:0 0 0 3px var(--good-soft)}50%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 3px var(--good-soft)}}.panel,.card,.stat-card,.chart-card,.chart-container,.rank-card,.insight-card,.detail-panel,.price-box,.info-item,.update,.article,.review,.sidebar-block,.platform-mini,.mtx-wrap,.heatmap-wrap,.plat-card,.cr-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1)}.price-box,.info-item,.update,.platform-mini,.cr-card{border-radius:var(--r)}.btn,.cta-btn,.links a,.details-btn,.instant-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--r-sm);font:600 var(--t-meta)/1 var(--font);letter-spacing:-.01em;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),transform var(--dur) var(--ease)}.btn-primary,.cta-primary,.links .btn-primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}.btn-primary:hover,.cta-primary:hover{background:var(--accent);filter:brightness(1.08);transform:translateY(-1px)}.btn-secondary,.cta-secondary,.btn-outline,.links .btn-secondary,.instant-btn{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-line)}.btn-secondary:hover,.cta-secondary:hover,.btn-outline:hover,.instant-btn:hover{border-color:var(--accent);background:var(--accent-soft);filter:brightness(1.12)}:root[data-theme="light"] .btn-secondary,:root[data-theme="light"] .cta-secondary,:root[data-theme="light"] .btn-outline,:root[data-theme="light"] .instant-btn{color:var(--accent-strong)}.btn-ghost,.details-btn{background:transparent;color:var(--text-2);border-color:var(--line-2)}.btn-ghost:hover,.details-btn:hover{color:var(--text);border-color:var(--line-3);background:var(--surface-2)}.chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag{-webkit-appearance:none;appearance:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);font:600 var(--t-meta)/1 var(--font);cursor:pointer;user-select:none;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease);box-shadow:none}.chip:hover,.feat-chip:hover,.calc-chip:hover,.tab:hover,.tab-btn:hover,.svc-tag:hover{color:var(--text);border-color:var(--line-3)}.chip.active,.feat-chip.on,.calc-chip.active,.tab.active,.tab-btn.active,.svc-tag.on{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent);box-shadow:none}:root[data-theme="light"] .chip.active,:root[data-theme="light"] .feat-chip.on,:root[data-theme="light"] .calc-chip.active,:root[data-theme="light"] .tab.active,:root[data-theme="light"] .tab-btn.active,:root[data-theme="light"] .svc-tag.on{color:var(--accent-strong)}.svc-tag.off{opacity:.45;background:transparent}.tab-bar,.tabs{display:inline-flex;gap:4px;padding:4px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none}.tab-bar::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}.tab-bar .tab-btn,.tabs .tab{border-color:transparent;background:transparent}.tab-bar .tab-btn.active,.tabs .tab.active{background:var(--accent-soft);border-color:var(--accent-line)}.search-box,input[type="text"],input[type="email"],input[type="search"],select,.controls select{min-height:40px;padding:0 12px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--line);color:var(--text);font:500 var(--t-meta)/1 var(--font);transition:border-color var(--dur) var(--ease)}.search-box::placeholder,input::placeholder{color:var(--text-3)}.search-box:focus,input:focus,select:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}.controls select,select{cursor:pointer;min-height:40px;padding:0 30px 0 12px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 15px) 17px,calc(100% - 10px) 17px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;-webkit-appearance:none;appearance:none;color:var(--text)}.search-wrap{position:relative;display:inline-flex;align-items:center}.search-wrap kbd{position:absolute;right:8px;pointer-events:none;font:600 var(--t-micro)/1 var(--mono);color:var(--text-3);border:1px solid var(--line-2);border-radius:var(--r-xs);padding:3px 5px;background:var(--surface)}.badge-stale,.badge-nodata,.badge-est,.badge-ours,.plat-best-badge,.dp-badge,.f-chip,.feature-tag,.article .meta .tag,.hero-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:var(--r-pill);font:700 var(--t-micro)/1.4 var(--font);letter-spacing:.02em;border:1px solid transparent;white-space:nowrap}.badge-stale{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-soft);text-transform:uppercase}.badge-nodata{background:var(--surface-3);color:var(--text-3);text-transform:uppercase}.badge-est{background:var(--warn-soft);color:var(--warn)}.badge-ours{background:var(--surface-3);color:var(--text-2);border-color:var(--line-2);text-transform:uppercase;letter-spacing:.02em}.plat-best-badge{background:var(--good-soft);color:var(--good);text-transform:uppercase}.plat-best-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--good)}.hero-badge{background:var(--surface-2);border-color:var(--line);color:var(--text-2);font-size:var(--t-meta);font-weight:500;padding:6px 14px;text-transform:none;letter-spacing:0}.hero-badge b{color:var(--text);font-weight:700}.feature-tag{background:var(--accent-soft);color:var(--accent);text-transform:uppercase;padding:4px 12px}.f-chip{padding:4px 12px}.f-chip.has{background:var(--good-soft);color:var(--good)}.f-chip.no{background:var(--surface-2);color:var(--text-3)}.f-chip.has::before{content:"\2713";font-weight:800}.f-chip.no::before{content:"\2717";opacity:.75}.dp-badge{padding:4px 10px;font-weight:600;background:var(--surface-2);color:var(--text-2)}.dp-badge.ref{background:var(--accent-soft);color:var(--accent)}.est,.pv.est,.cell-price.est,td.est,.value.est{color:var(--warn)!important}.note-mark{position:relative;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;flex:0 0 15px;margin-left:6px;border-radius:50%;border:1px solid var(--line-3);background:var(--surface-2);color:var(--text-2);font:700 var(--t-micro)/1 var(--font);font-style:normal;letter-spacing:0;text-transform:none;cursor:help;vertical-align:middle;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}.note-mark:hover,.note-mark:focus{color:var(--accent);border-color:var(--accent-line)}.note-mark:empty::before{content:"i"}.note-mark::after{content:"";position:absolute;inset:-5px;border-radius:50%}.price-note{margin:10px 0 0;font-size:var(--t-meta);line-height:1.65;color:var(--text-2);padding:10px 14px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--line)}.price-note b{color:var(--text);font-weight:700}.delta{display:inline-flex;align-items:center;gap:3px;font:700 var(--t-micro)/1 var(--font);font-variant-numeric:tabular-nums;padding:3px 7px;border-radius:var(--r-pill);white-space:nowrap}.delta-down{background:var(--good-soft);color:var(--good)}.delta-up{background:var(--bad-soft);color:var(--bad)}.delta-flat{background:var(--surface-2);color:var(--text-3)}.spark{display:block;width:100%;height:28px;overflow:visible}.spark-line{fill:none;stroke:var(--text-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.spark-area{fill:var(--accent-soft);stroke:none}.spark-guide{stroke:var(--line-3);stroke-width:1;stroke-dasharray:2 3;vector-effect:non-scaling-stroke;fill:none}.spark-end{fill:none;stroke:var(--text-2);stroke-width:3.4;stroke-linecap:round;vector-effect:non-scaling-stroke}.spark.is-down .spark-line{stroke:var(--good)}.spark.is-down .spark-end{stroke:var(--good)}.spark.is-up .spark-line{stroke:var(--bad)}.spark.is-up .spark-end{stroke:var(--bad)}.spark-dot{fill:currentColor}.spark-wrap{display:flex;align-items:center;gap:8px;min-width:0}.spark-wrap .spark{flex:1;min-width:0}td .spark{height:22px;width:72px}.trend-card .spark,.chart-card .spark,.dp-spark .spark{height:56px;padding:2px 0;background-image:repeating-linear-gradient(to bottom,var(--line) 0 1px,transparent 1px 25%);background-size:100% 100%}.mtx-wrap,.heatmap-wrap,.table-scroll,.table-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1),var(--card-top);scrollbar-width:thin;scrollbar-color:var(--line-3) transparent}.mtx-wrap::-webkit-scrollbar,.heatmap-wrap::-webkit-scrollbar,.table-scroll::-webkit-scrollbar,.table-wrap::-webkit-scrollbar{height:8px}.mtx-wrap::-webkit-scrollbar-thumb,.heatmap-wrap::-webkit-scrollbar-thumb,.table-scroll::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb{background:var(--line-3);border-radius:var(--r-pill)}.mtx-table,.heatmap,table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--t-meta)}.mtx-table th,.heatmap th,table.data th{position:sticky;top:0;z-index:3;padding:12px 12px;text-align:right;background:var(--surface);color:var(--text-2);font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line-2);white-space:nowrap}.mtx-table th:first-child,.heatmap th:first-child,table.data th:first-child{text-align:left}.mtx-table td,.heatmap td,table.data td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}.mtx-table tr:last-child td,.heatmap tr:last-child td{border-bottom:0}.mtx-table td.label,.heatmap td.label{text-align:left;padding:9px 14px;font-weight:600;color:var(--text)}.mtx-table td.spark-cell,.heatmap td.spark-cell{text-align:center}.mtx-table tbody tr:nth-child(even) td,.heatmap tbody tr:nth-child(even) td{background:var(--zebra)}.mtx-table tbody tr:hover td,.heatmap tbody tr:hover td{background:var(--surface-2)}.mtx-table tr.selected td,.mtx-table tr.selected:hover td{background:var(--accent-soft)}.mtx-table tr.selected td.label{box-shadow:inset 3px 0 0 var(--accent);color:var(--accent)}.mtx-table th:first-child,.mtx-table td.label,.heatmap th:first-child,.heatmap td.label{position:sticky;left:0;z-index:2;background:var(--surface);border-right:1px solid var(--line)}.mtx-table th:first-child,.heatmap th:first-child{z-index:4}.mtx-table tbody tr:nth-child(even) td.label,.heatmap tbody tr:nth-child(even) td.label{background:linear-gradient(var(--zebra),var(--zebra)),var(--surface)}.mtx-table tbody tr:hover td.label,.heatmap tbody tr:hover td.label{background:var(--surface-2)}.mtx-table tr.selected td.label{background:linear-gradient(var(--accent-soft),var(--accent-soft)),var(--surface)}.mtx-table tr.section-split td,.heatmap tr.section-split td{background:transparent!important;padding:22px 14px 6px;border-bottom:0;text-align:left;font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);opacity:1;position:static;box-shadow:none}.mtx-table tr.row-stale td,.mtx-table tr.row-nodata td,.heatmap tr.row-stale td,.heatmap tr.row-nodata td{opacity:.62}.cell-price{display:inline-block;min-width:58px;padding:5px 9px;border-radius:var(--r-xs);font:600 var(--t-meta)/1.2 var(--font);font-variant-numeric:tabular-nums;background:transparent;color:var(--text);white-space:nowrap}.cell-price.na{background:transparent;color:var(--text-3);font-weight:400}.cell-price.best{background:var(--good-soft);color:var(--good);font-weight:800;box-shadow:var(--edge-good)}.cell-price.price-neutral{background:var(--surface-2);color:var(--text)}.cell-price.price-down{background:var(--good-soft);color:var(--good)}.cell-price.price-up{background:var(--bad-soft);color:var(--bad)}.cell-delta{display:block;font-size:var(--t-micro);line-height:1.3;margin-top:2px}.sk{display:block;border-radius:var(--r-xs);background:var(--surface-2);background-image:var(--skeleton);background-size:200% 100%;background-repeat:no-repeat;animation:epb-shimmer 1.4s linear infinite;color:transparent!important}@keyframes epb-shimmer{0%{background-position:150% 0}100%{background-position:-50% 0}}.sk-line{height:12px;margin:6px 0}.sk-card{height:190px;border-radius:var(--r-lg)}.sk-row{height:38px;margin:6px 0;border-radius:var(--r-xs)}.sk-w40{width:40%}.sk-w60{width:60%}.sk-w80{width:80%}.footer{border-top:1px solid var(--line);padding:44px 0 32px;display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:36px}.footer-brand{font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em}.footer-brand em{font-style:normal;color:var(--accent)}.footer-desc{font-size:var(--t-meta);color:var(--text-2);line-height:1.6;margin:0;max-width:300px}.footer-col h5{font:700 var(--t-micro)/1.4 var(--font);color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin:0 0 12px}.footer-col a{display:block;color:var(--text-2);text-decoration:none;padding:5px 0;transition:color var(--dur) var(--ease)}.footer-col a:hover{color:var(--text)}.footer-bottom{border-top:1px solid var(--line);padding:18px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:var(--t-meta);color:var(--text-3)}.footer-bottom a{color:var(--text-3);text-decoration:none}.footer-bottom a:hover{color:var(--text-2)}@media(max-width:900px){.footer{grid-template-columns:1fr 1fr;gap:28px}}@media(max-width:560px){.footer{grid-template-columns:1fr;gap:24px}}.footer-newsletter{display:none!important}h1 span,.error-num{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:currentColor!important;color:inherit}.hero h1 span,.page-head h1 span,h1>span,.error-num{color:var(--accent)}.section-light,.section-dark{background:transparent!important;color:var(--text)!important}.article-body{color:var(--text-2)!important}.article-body strong,.article-body h2,.article-body h3{color:var(--text)!important}.breadcrumb,.breadcrumb a{color:var(--text-3)}.breadcrumb a:hover{color:var(--accent)}.breadcrumb span{color:var(--text-2)}.subtitle,.hint,.disclaimer,.feed-meta{color:var(--text-2)}.cta-primary,.btn-primary{color:var(--accent-ink)!important}.f-chip.has,.info-item .iv.yes,.price-box .best{color:var(--good)!important}.info-item .iv.no{color:var(--text-3)!important}.loading{text-align:center;padding:48px 20px;color:var(--text-2);font-size:var(--t-body)}.loading .spinner{display:inline-block;width:26px;height:26px;border:2px solid var(--line-2);border-top-color:var(--accent);border-radius:50%;animation:epb-spin .8s linear infinite;margin-bottom:10px}@keyframes epb-spin{to{transform:rotate(360deg)}}.tooltip{position:fixed;z-index:120;pointer-events:none;opacity:0;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:8px 12px;font-size:var(--t-meta);color:var(--text);box-shadow:var(--sh-3)}.tooltip.show{opacity:1}.tooltip .tt-price{font-size:var(--t-lead);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}.all-plats-list a,.h2h-list a,.vs-list a{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);text-decoration:none;font-size:var(--t-meta);font-weight:600;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}.all-plats-list a:hover,.h2h-list a:hover,.vs-list a:hover{color:var(--text);border-color:var(--accent-line);background:var(--accent-soft)}.all-plats h2,.h2h h2{font-weight:700;margin:0 0 6px}.all-plats p,.h2h p{font-size:var(--t-meta);color:var(--text-2);margin:0 0 14px}.accordion-item{border-bottom:1px solid var(--line)}.accordion-item:last-child{border-bottom:0}.accordion-trigger{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:56px;padding:18px 0;background:none;border:0;cursor:pointer;text-align:left;font:600 var(--t-lead)/1.4 var(--font);letter-spacing:-.015em;color:var(--text);transition:color var(--dur) var(--ease)}.accordion-trigger:hover{color:var(--accent)}.accordion-trigger .chevron{flex:0 0 26px;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);font-size:var(--t-micro);transition:transform var(--dur) var(--ease)}.accordion-trigger[aria-expanded="true"] .chevron,.accordion-trigger.open .chevron{transform:rotate(180deg);color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}.accordion-content{overflow:hidden;color:var(--text-2);font-size:var(--t-body);line-height:1.75;transition:max-height var(--dur) var(--ease)}.accordion-content>.accordion-inner{padding:0 0 20px;max-width:78ch}@media(max-width:640px){.accordion-trigger{padding:15px 0}}.eyebrow{font:700 var(--t-micro)/1.4 var(--font);text-transform:uppercase;letter-spacing:.09em;color:var(--text-3)}.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}.section-head h2{font-size:var(--t-h2)}.muted{color:var(--text-2)}.faint{color:var(--text-3)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.epb-flash{animation:epb-flash 700ms var(--ease) 1}@keyframes epb-flash{0%{color:var(--accent)}100%{color:inherit}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.epb-live.is-fresh .epb-dot{animation:none;box-shadow:0 0 0 3px var(--good-soft)}.sk{animation:none}}.stat-tile-link{text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease),transform var(--dur) var(--ease)}.stat-tile-link:hover{border-color:var(--accent-line);background:var(--accent-soft);transform:translateY(-1px)}.stat-tile-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.stat-tile-link .stat-label::after{content:"\2192";margin-left:6px;color:var(--accent);font-weight:700;opacity:.7}@media(max-width:820px){.nav{grid-template-columns:1fr auto;grid-template-areas:"brand toggle" "links links";row-gap:2px;padding-bottom:8px!important;min-height:0}.nav-brand{grid-area:brand}.epb-toggle{grid-area:toggle;justify-self:end}.nav-links{grid-area:links;flex-wrap:wrap!important;overflow:visible;mask-image:none;justify-content:flex-start;gap:2px 4px}.nav-links a{padding:0 10px;min-height:40px}}.cta-live{margin:28px 0 8px}.cta-live-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:18px 20px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--sh-1)}.cta-live-txt{display:flex;flex-direction:column;gap:2px;min-width:0}.cta-live-lbl{font:700 var(--t-micro)/1.4 var(--font);text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)}.cta-live-num{font:800 var(--t-num)/1.05 var(--font);letter-spacing:-.03em;color:var(--good);font-variant-numeric:tabular-nums}.cta-live-sub{font-size:var(--t-meta);color:var(--text-2)}.cta-live-note{margin:10px 2px 0;font-size:var(--t-meta);line-height:1.65;color:var(--text-2);max-width:74ch}.article-body .btn,.article-body .cta-btn,.cta-live .btn,.read-more a,.article-body .all-plats-list a,.article-body .vs-list a{text-decoration:none}@media(max-width:560px){.cta-live-in{flex-direction:column;align-items:stretch;gap:14px}.cta-live-in .btn{width:100%}}.footer-disclosure{flex-basis:100%;color:var(--text-3);font-size:var(--t-meta);line-height:1.6;padding-top:6px}h1{font-size:var(--t-h1);line-height:1.06;letter-spacing:-.03em;font-weight:800}h2{font-size:var(--t-h2);letter-spacing:-.026em;line-height:1.2}h3{font-size:var(--t-lead);letter-spacing:-.018em}h4{font-size:var(--t-body);letter-spacing:-.012em}.container>h2,.article-body>h2,article>h2,section>h2:first-child{margin:var(--sp-7) 0 var(--sp-3)}.container>h3,.article-body>h3,article>h3{margin:var(--sp-5) 0 var(--sp-2)}.container>h2:first-of-type{margin-top:var(--sp-6)}.article-body>h2::before{content:'';display:block;width:34px;height:2px;border-radius:var(--r-pill);background:var(--accent);margin-bottom:14px;opacity:.85}.container>p,.article-body>p{margin:0 0 var(--sp-4)}.breadcrumb{padding:var(--sp-3) 0 var(--sp-5);font-size:var(--t-meta)}.article-body,.snapshot,.accordion-content,.article-body>p,.article-body>ul,.article-body>ol,.container>p.subtitle{max-width:var(--measure)}.intro-p,.intro-p>p{max-width:56ch}.article-body{font-size:var(--t-read);line-height:1.75}.article-body p{margin:0 0 var(--sp-4)}.article-body li{margin-bottom:8px}.article-body code{font:600 .88em/1 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-xs);padding:2px 6px;color:var(--text)}.article-body table,.article-body .cta-live,.article-body .table-wrap{max-width:none}.article-body table{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--sh-1),var(--card-top);overflow:hidden;font-size:var(--t-meta);margin:0 0 var(--sp-4)}.article-body th{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line-2);font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.06em;color:var(--text-2)}.article-body td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--text)}.article-body tbody tr:nth-child(even) td{background:var(--zebra)}.article-body tbody tr:last-child td{border-bottom:0}.article-header{padding-bottom:var(--sp-5);margin-bottom:var(--sp-5);border-bottom:1px solid var(--line)}.article-header h1{margin:12px 0 10px}.article-header .meta{font-size:var(--t-meta);color:var(--text-3)}.eyebrow,.page-head .eyebrow{color:var(--accent);opacity:.95}.panel,.card,.stat-card,.chart-card,.chart-container,.rank-card,.insight-card,.detail-panel,.price-box,.info-item,.update,.review,.sidebar-block,.platform-mini,.plat-card,.cr-card,.stat-tile,.read-card,.api-card,.verdict{box-shadow:var(--sh-1),var(--card-top)}.stat-grid{gap:var(--sp-3);grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:820px){.stat-grid{grid-template-columns:1fr}}.stat-tile{padding:20px 22px;gap:7px}.stat-num{font-size:var(--t-num);line-height:1.02;letter-spacing:-.035em}.hero-actions .btn-primary,.hero-actions .cta-primary{min-height:48px;padding:0 24px}.stat-tile-link{position:relative}.stat-tile-link::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:var(--edge-accent);opacity:0;transition:opacity var(--dur) var(--ease)}.stat-tile-link:hover::after{opacity:1}.stat-tile-shop{background:linear-gradient(180deg,var(--accent-soft),transparent 78%),var(--surface);border-color:var(--accent-line)}.stat-tile-shop .stat-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.stat-tile-shop .badge-ours{margin:0}.stat-tile-shop .stat-num{color:var(--text)}.stat-tile-shop .stat-sub{color:var(--text-2)}.plat-grid{counter-reset:epbrank;gap:14px}.plat-card{position:relative;padding:18px 20px 17px;gap:12px}.plat-card:not(.stale):not(.nodata){counter-increment:epbrank}.plat-card:not(.stale):not(.nodata)::before{content:counter(epbrank);position:absolute;top:15px;right:16px;min-width:22px;height:22px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-xs);background:var(--surface-2);border:1px solid var(--line);font:800 var(--t-micro)/1 var(--font);color:var(--text-3);font-variant-numeric:tabular-nums}.plat-card:first-child:not(.stale):not(.nodata)::before{background:var(--good-soft);border-color:var(--good);color:var(--good)}.plat-card .plat-top{padding-right:30px}.plat-card:first-child:not(.stale):not(.nodata){border-color:var(--good);box-shadow:var(--sh-2),var(--card-top),inset 0 0 0 1px var(--good-soft)}.plat-name{font-size:var(--t-body)}.plat-prices{grid-template-columns:1.25fr 1fr;gap:8px;align-items:stretch}.plat-price{padding:11px 13px;gap:4px;justify-content:center}.plat-price .pl{letter-spacing:.07em}.plat-price .pv{font-size:var(--t-body)}.plat-price.is-focus .pv,.plat-price.plat-best .pv{font-size:var(--t-h2);letter-spacing:-.03em;line-height:1.05}.plat-price.is-focus,.plat-price.plat-best{padding:11px 14px}.plat-price.plat-best{border-color:var(--good)}.plat-save{display:flex;align-items:center;gap:9px;min-height:16px}.plat-save-bar{flex:0 0 62px;height:5px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;position:relative}.plat-save-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r-pill);background:var(--good);display:block}.plat-save-txt{font-size:var(--t-meta);color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.plat-save-txt b{color:var(--good);font-weight:800;font-variant-numeric:tabular-nums}.plat-save.is-none .plat-save-bar i{background:var(--bad)}.plat-save.is-none .plat-save-txt b{color:var(--bad)}.plat-card .plat-trend{min-height:26px}.plat-actions{gap:8px}.details-btn,.instant-btn{min-height:42px}.plat-card.nodata{border-style:dashed;border-color:var(--line-2);background:transparent;box-shadow:none}.plat-card.nodata .instant-btn{background:transparent;color:var(--text-2);border-color:var(--line-2)}.plat-card.nodata .instant-btn:hover{color:var(--text);border-color:var(--line-3);background:var(--surface-2);filter:none}.plat-nodata-note{font-size:var(--t-meta);line-height:1.55}.feat-bar{padding:10px 12px;border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--line);gap:6px}@media(max-width:640px){.feat-bar{border-radius:var(--r-lg);padding:12px}}.read-card{padding:20px 22px}.read-icon{border-radius:var(--r)}.read-title{font-size:var(--t-body)}.mtx-layout:has(>.detail-panel:empty){grid-template-columns:minmax(0,1fr)}.detail-panel:empty{min-height:0;padding:11px 16px;border-style:dashed;background:transparent;justify-content:flex-start;position:static}.detail-panel:empty::after{text-align:left;padding:0;font-size:var(--t-meta)}.mtx-toolbar{padding-bottom:2px}.mtx-label{color:var(--text-2)}#mtxCount,#featMatchCount{color:var(--text-2);font-weight:500}#mtxLegend,#hmLegend,.est-legend{color:var(--text-2);font-size:var(--t-meta)}.epb-scroller.is-scrollable,.epb-scroller.is-scrollable.at-start{box-shadow:var(--sh-1),var(--card-top),var(--fade-r)}.epb-scroller.is-scrollable.at-end{box-shadow:var(--sh-1),var(--card-top),var(--fade-l)}.epb-scroller.is-scrollable.at-mid{box-shadow:var(--sh-1),var(--card-top),var(--fade-l),var(--fade-r)}.scroll-hint{margin:9px 2px 0;font-size:var(--t-meta);color:var(--text-3);display:inline-flex;align-items:center;gap:6px}.scroll-hint::after{content:'\2192';font-weight:800;color:var(--text-2)}.heatmap td.heat{position:relative}.heatmap td.heat .cell-price{background:rgba(var(--heat),calc(var(--h,0) * .26));box-shadow:none}.heatmap td.heat .cell-price.best{background:var(--good-soft);box-shadow:var(--edge-good)}.heatmap td.heat .cell-price.na{background:transparent;box-shadow:none}.heatmap td.heat .cell-price.price-up{background:var(--bad-soft);color:var(--bad)}.heatmap td.heat .cell-price.price-down{background:var(--good-soft);color:var(--good)}.heat-key{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:var(--t-meta);color:var(--text-3)}.heat-key-ramp{display:inline-block;width:120px;height:8px;border-radius:var(--r-pill);background:linear-gradient(90deg,rgba(var(--heat),.26),rgba(var(--heat),.02));border:1px solid var(--line)}.stat-card .value{font-size:var(--t-num)}.rank-item{padding:10px 0;gap:11px;align-items:center}.rank-item:hover .rank-name{color:var(--accent)}.rank-pos{width:24px;height:24px;flex:0 0 24px;font-size:var(--t-micro)}.rank-price{font-size:var(--t-body)}.rank-right{margin-left:auto;position:relative;padding-right:38px}.rank-price{min-width:52px;text-align:right}.rank-diff{min-width:46px;text-align:right;font-variant-numeric:tabular-nums}.rank-right .rank-ref-link{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0}@media(max-width:560px){.rank-layout{grid-template-columns:minmax(0,1fr)}.rank-item{min-width:0}.rank-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}.chart-container h3,.chart-card h3,.rank-card h3{font-size:var(--t-lead)}.chart-container,.chart-card,.rank-card{padding:22px 24px}.chart-container canvas,.chart-card canvas{max-height:300px}[data-hist-depth],.hist-depth{display:block;padding:11px 14px;border-radius:var(--r-sm);background:var(--warn-soft);border:1px solid var(--warn-soft);color:var(--text-2);font-size:var(--t-meta);line-height:1.6}.insight-card .ic-icon{font-size:var(--t-lead)}.price-box{padding:18px 20px;text-align:left;position:relative;overflow:hidden}.price-box .amount{margin-bottom:8px}.price-box .value{font-size:var(--t-num);line-height:1.02;letter-spacing:-.035em}.price-box::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--line-2)}.price-box:first-child::after{background:linear-gradient(90deg,var(--accent),transparent)}.prices-grid{gap:12px}.trend-card{padding:18px 20px}.info-item{padding:14px 16px}.info-grid{gap:10px}.best-flag{font:700 var(--t-micro)/1.4 var(--font);letter-spacing:.02em;text-transform:uppercase;padding:5px 11px;display:inline-flex;align-items:center;gap:5px}.best-flag::before{content:'\2605'}#livePrices table{max-width:620px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--sh-1),var(--card-top);overflow:hidden}#livePrices th:last-child,#livePrices td:last-child{text-align:right;padding-right:18px}#livePrices th:first-child,#livePrices td:first-child{padding-left:18px}#livePrices th,#livePrices td{padding-top:11px;padding-bottom:11px}#livePrices table,.article-body table,.snapshot table{border-collapse:separate;border-spacing:0;width:100%}#livePrices tbody tr:nth-child(even) td{background:var(--zebra)}#livePrices tbody tr:last-child td{border-bottom:0}#livePrices + .disclaimer{margin-top:12px}.table-wrap table tbody tr:nth-child(even) td{background:var(--zebra)}.table-wrap>table{width:100%}.table-wrap th,.table-wrap td{white-space:nowrap}.table-wrap td:first-child,.table-wrap th:first-child{white-space:normal}.f-chip.f-yes::before{content:'\2713';font-weight:800}.f-chip.f-no::before{content:'\2717';opacity:.75}.f-chip.f-yes{background:var(--good-soft);color:var(--good)}.f-chip.f-no{background:var(--surface-2);color:var(--text-2)}.info-item .iv.yes::before{content:'\2713\00a0';font-weight:800}.info-item .iv.no::before{content:'\2717\00a0';opacity:.75}td.win::before{content:'\2605\00a0';color:var(--good)}.verdict{padding:var(--sp-4) 22px;font-size:var(--t-lead);line-height:1.5;border-left-width:4px}.verdict b,.verdict strong{color:var(--accent)}.cta-row{gap:10px}.disclaimer{max-width:var(--measure)}.all-plats-list,.h2h-list,.vs-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}.all-plats-list li,.h2h-list li,.vs-list li{margin:0;display:contents}.all-plats h2,.h2h h2{font-size:var(--t-h2)}.api-card{display:flex;flex-direction:column;padding:20px 22px}.api-card .price{font-size:var(--t-h2);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}.api-card .link{margin-top:auto;padding-top:14px}.api-card .desc{font-size:var(--t-meta);line-height:1.6}.update{padding:18px 20px;margin-bottom:10px}.update .date{font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px}.update h3{font-size:var(--t-body);margin-bottom:5px}.update p{margin:0;font-size:var(--t-body);color:var(--text-2);max-width:var(--measure)}.feed-meta{font-size:var(--t-meta)}.av,.avatar-sm,.author-av{color:#0a0c12!important;font-weight:800}.read-more{margin-top:var(--sp-7);padding-top:var(--sp-5);border-top:1px solid var(--line)}.read-more h3{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:12px}.read-more a{display:block;padding:13px 16px;margin-bottom:8px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--line);color:var(--text);text-decoration:none;font-weight:600;font-size:var(--t-body);transition:border-color var(--dur) var(--ease),color var(--dur) var(--ease)}.read-more a:hover{border-color:var(--accent-line);color:var(--accent)}body:has(>.container>.error-num){display:flex;align-items:center;min-height:100vh}.error-num{font-size:var(--t-display);font-weight:800;line-height:1;letter-spacing:-.04em;margin-bottom:var(--sp-2);font-variant-numeric:tabular-nums}.container>.error-num ~ h1,.err h1{font-size:var(--t-h2);margin-bottom:10px}.container>.error-num ~ p{color:var(--text-2);max-width:56ch;margin-left:auto;margin-right:auto}.links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}.links a{text-decoration:none}.epb-404-live{max-width:560px;margin:28px auto 0;text-align:left}.epb-404-live .cta-live-in{justify-content:space-between}.sk-num{height:30px;width:120px;border-radius:var(--r-xs);margin:4px 0}.plat-grid[aria-busy="true"]{position:relative}.plat-grid[aria-busy="true"]::after{content:'Loading live prices\2026';display:block;grid-column:1/-1;padding:16px;text-align:center;color:var(--text-3);font-size:var(--t-meta)}.epb-empty{padding:34px 24px;text-align:center;border:1px dashed var(--line-2);border-radius:var(--r-lg);color:var(--text-2);font-size:var(--t-body);background:transparent}.epb-empty b{display:block;color:var(--text);font-size:var(--t-body);margin-bottom:5px}.grid-empty,.calc-empty{padding:22px;border:1px dashed var(--line-2);border-radius:var(--r-lg);text-align:center;color:var(--text-2);font-size:var(--t-body)}.epb-failed{border-color:var(--warn-soft);background:var(--warn-soft);color:var(--text-2)}.badge-stale::before{content:'\26A0'}.badge-nodata::before{content:'\2014';font-weight:800}.plat-card.stale{opacity:1}.plat-card.stale .plat-price{opacity:.6}.plat-card.stale::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:var(--edge-warn);pointer-events:none}:root:not(.epb-js) .epb-nojs-hide,:root:not(.epb-js) .epb-live,:root:not(.epb-js) .loading .spinner{display:none!important}:root:not(.epb-js) #livePrices>.disclaimer,:root:not(.epb-js) #verdict,:root:not(.epb-js) .loading{font-size:0!important;line-height:0!important;color:transparent!important;max-width:620px!important;width:auto;text-align:left!important;display:block;padding:15px 17px;border-radius:var(--r-sm);background:var(--warn-soft);border:1px solid var(--warn-soft)}:root:not(.epb-js) #livePrices>.disclaimer::after,:root:not(.epb-js) #verdict::after,:root:not(.epb-js) .loading::after{content:'JavaScript is switched off. This page cannot read the live board without it. Turn it on to see the current numbers.';display:block;font-size:var(--t-meta);line-height:1.6;color:var(--text-2)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--ring)}.btn,.cta-btn,.links a,.details-btn,.instant-btn,.read-more a,.all-plats-list a,.h2h-list a,.vs-list a,.nav-links a,.footer-col a{text-decoration:none}.btn:active,.cta-btn:active,.details-btn:active,.instant-btn:active{transform:translateY(1px)}.btn-primary,.cta-primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}a:hover{text-decoration-thickness:1.5px}.footer{padding:var(--sp-8) 0 var(--sp-6);gap:40px}.footer:has(>.container){display:block;padding:var(--sp-6) 0}.footer>.container{max-width:var(--page-max,1240px)}.footer-brand{font-size:var(--t-lead)}.footer-desc{line-height:1.65}.footer-col h5{color:var(--text-2)}.footer-col a{font-size:var(--t-meta);padding:6px 0}.footer-social a{padding:6px 0;display:inline-flex;align-items:center;min-height:32px}.footer-bottom{padding:20px 0;font-size:var(--t-meta)}.footer-disclosure{border-top:1px dashed var(--line);margin-top:8px;padding-top:12px}.nav-links{padding:5px 0}.nav-links a.active,.nav-links a[aria-current="page"]{position:relative}.chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag,.seg .calc-chip{min-height:40px}.all-plats-list a,.h2h-list a,.vs-list a{min-height:40px}.hm-ref-link,.rank-ref-link,.mtx-ref-link{display:inline-flex;align-items:center;justify-content:center;min-width:30px;min-height:30px;border-radius:var(--r-xs);margin:-6px 0;transition:background var(--dur) var(--ease)}.hm-ref-link:hover,.rank-ref-link:hover{background:var(--accent-soft);text-decoration:none}.mtx-plat-link,.hm-plat-link,.rank-plat-link{display:inline-flex;align-items:center;min-height:34px;margin:-8px 0}.footer-col a{min-height:36px;display:flex;align-items:center}.footer-social a{min-height:40px}.footer a,.status a,.breadcrumb a,.site-url a,.link-item a,.update h3 a,.update p a{position:relative}.footer a::after,.status a::after,.breadcrumb a::after,.site-url a::after,.link-item a::after,.update h3 a::after,.update p a::after{content:"";position:absolute;left:0;right:0;top:50%;height:26px;transform:translateY(-13px)}.plat-price .pl{font-size:var(--t-micro);color:var(--text-2)}.plat-card:has(.plat-prices>.plat-price:first-child .pv.na){counter-increment:none}.plat-card:has(.plat-prices>.plat-price:first-child .pv.na)::before{display:none}.mtx-table td.spark-cell,.heatmap td.spark-cell{padding-right:16px}.heat-key{justify-content:flex-start;text-align:left}.heat-key b{color:var(--good);font-weight:700}#hmLegend,#mtxLegend{text-align:left!important}.h2h-cta a,.vs-list + p>a,.all-plats-list + p>a{display:inline-flex;align-items:center;min-height:44px}body::after{content:'';position:absolute;top:0;left:0;right:0;height:820px;z-index:-1;pointer-events:none;background:radial-gradient(92% 100% at 50% -20%,var(--atmos-1),transparent 64%),radial-gradient(48% 78% at 92% -8%,var(--atmos-2),transparent 76%)}body::before{border-bottom:0;-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);mask-image:linear-gradient(180deg,#000 62%,transparent 100%)}.plat-avatar,.plat-avatar.sm{border-radius:var(--r-sm);overflow:hidden;background:linear-gradient(180deg,var(--surface-3),var(--tile));box-shadow:inset 0 0 0 1px var(--tile-line),var(--card-top)}.plat-avatar{width:36px;height:36px;flex:0 0 36px}.plat-avatar.sm{width:30px;height:30px;flex:0 0 30px}.plat-avatar img{display:none!important}.plat-avatar .plat-avatar-fb[hidden]{display:flex!important}.plat-avatar-fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font:800 var(--t-body)/1 var(--font);letter-spacing:.01em;color:var(--tile-ink);text-transform:uppercase}.plat-avatar.sm .plat-avatar-fb{font-size:var(--t-meta)}.plat-avatar[style*="--mono-h"]{background:linear-gradient(180deg,hsl(var(--mono-h) var(--mono-s) var(--mono-l1)),hsl(var(--mono-h) var(--mono-s) var(--mono-l2)))}.plat-grid{gap:var(--sp-4)}.plat-card{padding:var(--sp-4);gap:var(--sp-3)}.plat-card .plat-top{padding-right:34px}.plat-card:not(.stale):not(.nodata)::before{top:var(--sp-4);right:var(--sp-4)}.plat-actions{gap:var(--sp-2)}.plat-actions .details-btn,.plat-actions .instant-btn{min-height:40px;padding:0 12px}.plat-card.clickable:hover{border-color:var(--line-3);transform:translateY(-1px);box-shadow:var(--sh-2),var(--card-top)}.plat-card:first-child:not(.stale):not(.nodata).clickable:hover{border-color:var(--good)}.read-card,.rank-card,a.cr-card{transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}.read-card:hover,a.cr-card:hover{border-color:var(--line-3);transform:translateY(-1px);box-shadow:var(--sh-2),var(--card-top)}.plat-price{border-color:var(--line);background:var(--surface-2)}.plat-price.is-focus,.plat-price.plat-best{border-color:var(--accent-line)}.plat-price.plat-best{border-color:var(--good);background:var(--good-soft)}.plat-price .pv{letter-spacing:-.02em}.est,.pv.est,.cell-price.est,td.est,.value.est{color:var(--est-ink)!important}.badge-est{background:var(--surface-2);color:var(--text-2);border-color:var(--line-2)}.cell-price.best{box-shadow:none}.mtx-table tbody tr:nth-child(even) td,.heatmap tbody tr:nth-child(even) td{background:transparent}.mtx-table tbody tr:nth-child(even) td.label,.heatmap tbody tr:nth-child(even) td.label{background:var(--surface)}.mtx-table tbody tr:hover td,.heatmap tbody tr:hover td{background:var(--surface-2)}.mtx-table tbody tr:hover td.label,.heatmap tbody tr:hover td.label{background:var(--surface-2)}.mtx-table tbody tr,.heatmap tbody tr{transition:none}.mtx-table td.label,.heatmap td.label{font-weight:600}.mtx-table th[role="button"],.mtx-table th[data-sort],.heatmap th[data-sort]{cursor:pointer}.mtx-table th.sorted,.mtx-table th[aria-sort]:not([aria-sort="none"]),.heatmap th[aria-sort]:not([aria-sort="none"]){color:var(--text);background:var(--surface-2)}#livePrices table,#termTable,.term-table{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--t-meta)}#livePrices th,#termTable th,.term-table th{padding:12px 16px;text-align:right;color:var(--text-2);font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line-2)}#livePrices th:first-child,#termTable th:first-child,.term-table th:first-child{text-align:left}#livePrices td,#termTable td,.term-table td{padding:11px 16px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}#livePrices td:first-child,#termTable td:first-child,.term-table td:first-child{text-align:left;color:var(--text-2)}#livePrices tr:last-child td,#termTable tr:last-child td,.term-table tr:last-child td{border-bottom:0}#livePrices tbody tr:hover td,#termTable tbody tr:hover td{background:var(--surface-2)}.prices-grid{gap:var(--sp-3)}.price-box{padding:var(--sp-4) var(--sp-5)}.section-head{margin-bottom:var(--sp-4)}.section-head + *{margin-top:0}section + section,.section + .section{margin-top:var(--gap-section)}.all-plats-list a,.h2h-list a,.vs-list a{display:inline-flex;align-items:center;padding:0 14px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);font:600 var(--t-meta)/1 var(--font);transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}.all-plats-list a:hover,.h2h-list a:hover,.vs-list a:hover{color:var(--text);border-color:var(--line-3)}.btn[disabled],.btn[aria-disabled="true"],.chip[disabled],.feat-chip[disabled],.calc-chip[disabled],.tab-btn[disabled],button[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}.hero-badge,.status-badge{vertical-align:middle}.plat-trend .spark-area{fill:none}.plat-trend .spark-guide{display:none}.plat-trend .spark-line{stroke-width:1.4}.plat-meta,.plat-trend-label{font-size:var(--t-micro);color:var(--text-3)}[data-hist-depth],.hist-depth,.epb-note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent-line);border-radius:var(--r-sm);color:var(--text-2)}#livePrices table{max-width:none}.plat-card:first-child:not(.stale):not(.nodata){box-shadow:var(--sh-2),var(--card-top)}.board .calc{padding:var(--sp-5);margin:var(--sp-2) 0 var(--gap-section)}.calc-head h2{font-size:var(--t-h2)}.calc-sub,.calc-empty{font-size:var(--t-meta)}.calc-legend{font-size:var(--t-micro)}.calc-controls{gap:var(--sp-5)}.calc-results{margin-top:var(--sp-5);padding-top:var(--sp-4)}.calc-results h3{font-size:var(--t-body)}.seg .calc-chip{font-size:var(--t-meta)}#livePrices tbody tr:nth-child(even) td,.table-wrap table tbody tr:nth-child(even) td{background:transparent}.price-box::after{background:var(--line-2)}.price-box:first-child::after{background:var(--line-2)}.price-box:has(.value.best)::after,.price-box.is-best::after{background:var(--good)}.faq-section,.board .faq-section,.all-plats,.h2h{padding:var(--sp-6) 0 var(--sp-7);margin-top:var(--sp-6)}.plat-trend .spark-line,.plat-trend .spark-end{stroke:var(--line-3)}.plat-trend .spark.is-down .spark-line,.plat-trend .spark.is-down .spark-end{stroke:var(--good)}.plat-trend .spark.is-up .spark-line,.plat-trend .spark.is-up .spark-end{stroke:var(--bad)}.stat-tile .stat-label{min-height:46px;align-items:flex-start;padding-right:20px}.stat-tile-link .stat-label::after{position:absolute;top:var(--sp-4);right:22px;margin:0;line-height:1}.stat-tile-shop .badge-ours{padding:3px 7px;letter-spacing:0}@media(max-width:820px){:root{--sp-7:38px;--sp-8:52px}.plat-prices{grid-template-columns:1fr 1fr}}@media(max-width:640px){.chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag,.seg .calc-chip{min-height:44px}.all-plats-list a,.h2h-list a,.vs-list a{min-height:44px;padding:0 16px}.hm-ref-link,.rank-ref-link{min-width:36px;min-height:36px}}@media(max-width:560px){.mtx-table th:first-child,.mtx-table td.label,.heatmap th:first-child,.heatmap td.label{min-width:112px!important;max-width:132px;padding-left:12px;padding-right:10px;font-size:var(--t-meta)}.mtx-table td,.heatmap td{padding-left:8px;padding-right:8px}.cell-price{min-width:52px;padding:5px 7px}}@media(max-width:480px){.plat-card{padding:16px 16px 15px}.plat-card::before{top:13px;right:13px}.footer{gap:28px}}@media(prefers-reduced-motion:reduce){.btn:active,.cta-btn:active,.plat-card.clickable:hover,.read-card:hover,.stat-tile-link:hover,a.cr-card:hover{transform:none!important}}@media print{.nav,.epb-toggle,.epb-skip,.footer-social,.cta-live{display:none!important}body{background:#fff;color:#000}.mtx-wrap,.heatmap-wrap,.table-wrap{overflow:visible;border:1px solid #ccc}}
+</style>
+<script>
+/* ============================================================================
+   Energy Price Board — shared runtime (2026)
+   SOURCE FILE. apply_theme.py inlines it into every .html between the
+   EPB-THEME markers; the page generators embed it too. No build step, no deps.
+
+   Everything here degrades safely: a page that never calls a helper still
+   gets the theme toggle, the keyboard shortcuts and the accordion.
+
+   NOTE on animation: functional state is never left to a CSS transition.
+   Anything that must end in a given state is driven by JS + setTimeout, so a
+   browser that throttles animations still ends up with a usable page.
+   ========================================================================= */
+(function (window, document) {
+  'use strict';
+
+  var EPB = window.EPB || (window.EPB = {});
+
+  /* Mark the document the moment this parses. Everything that only exists once
+     JavaScript has run can then say so honestly in CSS instead of leaving a
+     "Loading…" that never finishes. */
+  try { document.documentElement.classList.add('epb-js'); } catch (e) {}
+
+  /* ---------- constants ------------------------------------------------- */
+  EPB.TERMS = ['15m', '1h', '1d', '3d', '10d'];
+  EPB.VOLS = ['65k', '130k'];
+  EPB.EST_TITLE = 'Estimated from market ratios, not a quoted price';
+  EPB.STALE_TITLE = 'Last successful scrape is older than 3 hours';
+
+  EPB.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* ---------- relative path base ---------------------------------------- */
+  /* Root pages link favicon.svg, subdirectory pages link ../favicon.svg —
+     that is the cheapest reliable way to learn how deep we are. */
+  EPB.base = (function () {
+    try {
+      var l = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+      var h = l && l.getAttribute('href');
+      if (h) {
+        var i = h.lastIndexOf('/');
+        if (i !== -1) return h.slice(0, i + 1);
+        return '';
+      }
+    } catch (e) { /* fall through */ }
+    /* No icon link on this page (the blog and features pages never had one), so
+       work the depth out from the URL instead. Without this, a page in /blog/
+       asks for /blog/result.json and silently gets a 404. */
+    try {
+      var segs = (location.pathname || '/').split('/').filter(Boolean);
+      var depth = Math.max(0, segs.length - 1);   /* last segment is the file */
+      return depth ? new Array(depth + 1).join('../') : '';
+    } catch (e2) { return ''; }
+  })();
+  EPB.url = function (name) { return EPB.base + name; };
+
+  /* ---------- data-contract helpers ------------------------------------- */
+  function isNum(v) { return typeof v === 'number' && isFinite(v); }
+  EPB.isNum = isNum;
+  EPB.fmt = function (n, d) { return isNum(n) ? n.toFixed(d === undefined ? 2 : d) : '—'; };
+  EPB.isStale = function (p) { return !!(p && p.stale === true); };
+  EPB.hasPrices = function (p) {
+    if (!p) return false;
+    if (typeof p.has_prices === 'boolean') return p.has_prices;
+    for (var v = 0; v < EPB.VOLS.length; v++) {
+      for (var t = 0; t < EPB.TERMS.length; t++) {
+        if (isNum(p[EPB.VOLS[v] + '_' + EPB.TERMS[t] + '_price'])) return true;
+      }
+    }
+    return false;
+  };
+  EPB.isEstimated = function (p, key) {
+    return ((p && p.estimated_keys) || []).indexOf(key) !== -1;
+  };
+  EPB.isRankable = function (p) { return EPB.hasPrices(p) && !EPB.isStale(p); };
+  /* Optional per-platform sentence from the scraper (aggregate.py always ships
+     the field, empty when the scraper had nothing to say). */
+  EPB.priceNote = function (p) {
+    var n = p && p.price_note;
+    return (typeof n === 'string' && n.trim()) ? n.trim() : '';
+  };
+  /* Small "i" next to a platform name; '' when there is no note, so callers can
+     concatenate it unconditionally.
+
+     The marker carries no text of its own. Pages drop it inside an <h1> and
+     inside table cells, and a letter that lives in the markup turns the
+     heading of the APITRX review into "APITRXi" for anything that reads the
+     text rather than the pixels. The glyph is drawn by the stylesheet, the
+     marker itself is hidden from assistive software, and the sentence it
+     stands for follows it as visually hidden text — so the note is spoken in
+     full instead of as one stray letter. */
+  EPB.noteMark = function (p, label) {
+    var n = EPB.priceNote(p);
+    if (!n) return '';
+    var t = EPB.esc(n);
+    return '<span class="note-mark" aria-hidden="true" title="' + t + '"></span>' +
+      '<span class="sr-only">' + EPB.esc('How ' + (label || 'this') + ' price is read: ') + t + '</span>';
+  };
+  EPB.staleLabel = function (p) {
+    var m = null;
+    if (isNum(p.age_min)) m = p.age_min;
+    else if (p.ts) m = Math.floor((Date.now() - new Date(p.ts).getTime()) / 60000);
+    if (m === null || !isFinite(m)) return 'stale';
+    return m < 60 ? 'stale · ' + Math.round(m) + 'm' : 'stale · ' + Math.round(m / 60) + 'h';
+  };
+  EPB.esc = function (s) {
+    return String(s === null || s === undefined ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  };
+
+  /* ---------- freshness -------------------------------------------------- */
+  EPB.minutesSince = function (iso) {
+    if (!iso) return null;
+    var t = new Date(iso).getTime();
+    if (!isFinite(t)) return null;
+    return Math.max(0, Math.floor((Date.now() - t) / 60000));
+  };
+  EPB.relTime = function (iso) {
+    var m = EPB.minutesSince(iso);
+    if (m === null) return 'unknown';
+    if (m < 1) return 'just now';
+    if (m < 60) return m + 'm ago';
+    var h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ' + (m % 60) + 'm ago';
+    var d = Math.floor(h / 24);
+    return d + 'd ' + (h % 24) + 'h ago';
+  };
+
+  /* Wire an element up as the live-freshness badge. Returns a setter. */
+  EPB.freshness = function (el, label) {
+    if (!el) return function () {};
+    if (!el.querySelector('.epb-dot')) {
+      el.classList.add('epb-live');
+      el.innerHTML = '<span class="epb-dot" aria-hidden="true"></span><span class="epb-live-text"></span>';
+    }
+    var textEl = el.querySelector('.epb-live-text');
+    var iso = null;
+    function paint() {
+      var m = EPB.minutesSince(iso);
+      var txt = (label || 'updated') + ' ' + EPB.relTime(iso);
+      textEl.textContent = txt;
+      el.setAttribute('title', iso ? 'Last scan ' + new Date(iso).toUTCString() : 'No timestamp yet');
+      el.classList.toggle('is-fresh', m !== null && m <= 45);
+      el.classList.toggle('is-stale', m !== null && m > 180);
+    }
+    var timer = setInterval(paint, 15000);
+    el.addEventListener('epb:stop', function () { clearInterval(timer); });
+    return function (nextIso) { iso = nextIso; paint(); };
+  };
+
+  /* ---------- number updates -------------------------------------------- */
+  /* Writes text and marks the node briefly when the value actually changed.
+     The highlight is removed by a timer, never by a transition. */
+  EPB.setText = function (el, text) {
+    if (!el) return;
+    var next = String(text);
+    if (el.textContent === next) return;
+    el.textContent = next;
+    if (EPB.reduced) return;
+    el.classList.remove('epb-flash');
+    void el.offsetWidth;
+    el.classList.add('epb-flash');
+    clearTimeout(el._epbFlash);
+    el._epbFlash = setTimeout(function () { el.classList.remove('epb-flash'); }, 800);
+  };
+
+  /* ---------- history + sparklines --------------------------------------- */
+  var histCache = null, histPending = null;
+  EPB.loadHistory = function () {
+    if (histCache) return Promise.resolve(histCache);
+    if (histPending) return histPending;
+    histPending = fetch(EPB.url('history_7d.json'), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { histCache = j || { services_data: {} }; return histCache; })
+      .catch(function () { histCache = { services_data: {} }; return histCache; });
+    return histPending;
+  };
+
+  /* [[ms, value], ...] with nulls dropped, oldest first */
+  EPB.series = function (hist, pid, key) {
+    var sd = (hist && hist.services_data) || {};
+    var raw = (sd[pid] && sd[pid][key]) || null;
+    if (!raw || !raw.length) return [];
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      var e = raw[i];
+      if (e && isNum(e[1])) out.push([e[0], e[1]]);
+    }
+    out.sort(function (a, b) { return a[0] - b[0]; });
+    return out;
+  };
+
+  /* {pct, dir:'up'|'down'|'flat'} against the sample nearest 24h before the
+     newest one. null when there is nothing honest to compare against. */
+  EPB.delta24 = function (series) {
+    if (!series || series.length < 2) return null;
+    var last = series[series.length - 1];
+    var target = last[0] - 86400000;
+    var prev = null;
+    /* Newest sample that is genuinely a day old. Walking back to whatever
+       happens to be oldest would let a six-hour file report a 24-hour move,
+       which is exactly the kind of number nobody should have to double-check. */
+    for (var i = series.length - 2; i >= 0; i--) {
+      if (series[i][0] <= target) { prev = series[i]; break; }
+    }
+    if (!prev) {
+      /* Sampling gaps: accept the oldest point if it is within 10% of a day. */
+      var oldest = series[0];
+      if (last[0] - oldest[0] >= 86400000 * 0.9) prev = oldest; else return null;
+    }
+    if (prev === last) return null;
+    var a = prev[1], b = last[1];
+    if (!isNum(a) || !isNum(b) || a <= 0) return null;
+    var pct = (b - a) / a * 100;
+    return { pct: pct, dir: Math.abs(pct) < 0.5 ? 'flat' : (pct < 0 ? 'down' : 'up') };
+  };
+
+  /* A rise and a fall are comparatives: "2.5% dearer than 24 hours ago". A
+     standstill is not, and pouring it into the same sentence produced
+     "0.0% unchanged than 24h ago". The flat case therefore gets its own
+     wording and its own face: a percentage nobody can act on is replaced by
+     the one word that answers the question. The arrow, the bullet and the
+     number are hidden from assistive software so the sentence is read once,
+     as a sentence, instead of glyph by glyph. */
+  EPB.deltaHtml = function (d) {
+    if (!d) return '';
+    var flat = d.dir === 'flat';
+    var n = Math.abs(d.pct);
+    var txt = n >= 10 ? Math.round(n) : n.toFixed(1);
+    var sign = d.dir === 'down' ? '▼' : (d.dir === 'up' ? '▲' : '•');
+    /* The pill said "flat" and nothing else, so the reader had no way to know
+       flat over what — an hour, a week, since we started. The window is the
+       whole point of the number, so it is printed next to every one of them. */
+    var face = (flat ? 'flat' : txt + '%') + ' · 24h';
+    var said = flat ? 'same price as a day ago'
+                    : txt + '% ' + (d.dir === 'down' ? 'cheaper' : 'dearer') + ' than 24 hours ago';
+    return '<span class="delta delta-' + d.dir + '" title="' + said.charAt(0).toUpperCase() + said.slice(1) +
+      '"><span aria-hidden="true">' + sign + ' ' + face + '</span>' +
+      '<span class="sr-only">' + said + '</span></span>';
+  };
+
+  /* Inline SVG sparkline. Returns '' for fewer than 3 points — callers just
+     drop it in and nothing appears, exactly as specified.
+
+     The vertical scale has a FLOOR of 6% of the price level. Without it the
+     line is normalised to whatever range the window happens to contain, so a
+     platform that moved half a percent all week draws the same mountains as
+     one that doubled — the chart's shape then carries no information at all
+     and, worse, reads as volatility that is not there. With the floor a quiet
+     series draws quiet, and only a real move fills the box.
+
+     A dashed guide marks where the series STARTED, so "above the line" means
+     dearer than a week ago without needing the colour, and a round cap on the
+     last point says which end is now. */
+  EPB.sparkline = function (series, opts) {
+    opts = opts || {};
+    if (!series || series.length < 3) return '';
+    var vals = [], i;
+    for (i = 0; i < series.length; i++) vals.push(series[i][1]);
+    if (vals.length > 60) {                       // thin out very dense series
+      var step = vals.length / 60, thin = [];
+      for (i = 0; i < 60; i++) thin.push(vals[Math.floor(i * step)]);
+      thin.push(vals[vals.length - 1]);
+      vals = thin;
+    }
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    var sum = 0;
+    for (i = 0; i < vals.length; i++) sum += vals[i];
+    var level = Math.abs(sum / vals.length);
+    var W = 100, H = 30, pad = 3.5;
+    var mid = (min + max) / 2;
+    var span = Math.max(max - min, level * 0.06) || 1;
+    var lo = mid - span / 2;
+    function yOf(v) {
+      return Math.round((H - pad - ((v - lo) / span) * (H - pad * 2)) * 100) / 100;
+    }
+    var pts = [];
+    for (i = 0; i < vals.length; i++) {
+      pts.push([Math.round((i / (vals.length - 1)) * W * 100) / 100, yOf(vals[i])]);
+    }
+    var d = 'M' + pts.map(function (p) { return p[0] + ' ' + p[1]; }).join('L');
+    var area = d + 'L' + W + ' ' + H + 'L0 ' + H + 'Z';
+    var last = vals[vals.length - 1], first = vals[0];
+    var dir = last < first ? 'is-down' : (last > first ? 'is-up' : '');
+    var label = opts.label || '7-day price trend';
+    var y0 = yOf(first);
+    return '<svg class="spark ' + dir + '" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" ' +
+      'role="img" aria-label="' + EPB.esc(label) + ': ' + EPB.fmt(min) + ' to ' + EPB.fmt(max) + ' TRX" focusable="false">' +
+      (opts.area === false ? '' : '<path class="spark-area" d="' + area + '"/>') +
+      '<path class="spark-guide" d="M0 ' + y0 + 'H' + W + '"/>' +
+      '<path class="spark-line" d="' + d + '"/>' +
+      '<path class="spark-end" d="M' + W + ' ' + pts[pts.length - 1][1] + 'h0"/></svg>';
+  };
+
+  /* ---------- theme ------------------------------------------------------ */
+  var KEY = 'epb-theme';
+  EPB.getTheme = function () {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  };
+  EPB.setTheme = function (t, persist) {
+    t = t === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    if (persist !== false) { try { localStorage.setItem(KEY, t); } catch (e) {} }
+    var btns = document.querySelectorAll('.epb-toggle');
+    for (var i = 0; i < btns.length; i++) {
+      /* aria-pressed is the state of this button, not the offer it makes:
+         the button turns the dark theme on, so it is pressed while the dark
+         theme is on. The name stays put for the same reason a light switch
+         is not relabelled when you flick it; the tooltip, which only a mouse
+         ever sees, is the one that names the next step. */
+      btns[i].setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+      btns[i].setAttribute('aria-label', 'Dark theme');
+      btns[i].setAttribute('title', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+    document.dispatchEvent(new CustomEvent('epb:theme', { detail: { theme: t } }));
+  };
+
+  var MOON = '<svg class="epb-i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  var SUN = '<svg class="epb-i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>';
+
+  function mountToggle() {
+    var navs = document.querySelectorAll('nav.nav');
+    for (var i = 0; i < navs.length; i++) {
+      if (navs[i].querySelector('.epb-toggle')) continue;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'epb-toggle';
+      b.innerHTML = MOON + SUN;
+      b.addEventListener('click', function () {
+        EPB.setTheme(EPB.getTheme() === 'light' ? 'dark' : 'light');
+      });
+      navs[i].appendChild(b);
+    }
+    EPB.setTheme(EPB.getTheme(), false);
+
+    /* The link row scrolls horizontally on narrow screens; make sure the page
+       you are on is the one you can see. */
+    var links = document.querySelector('.nav-links');
+    var current = links && links.querySelector('a.active, a[aria-current="page"]');
+    if (links && current) {
+      /* offsetLeft is measured against the positioned <nav>, not the scroller,
+         so the two rects are what actually line up here. */
+      var lr = links.getBoundingClientRect(), cr = current.getBoundingClientRect();
+      links.scrollLeft = Math.max(0, links.scrollLeft + (cr.left - lr.left) - 12);
+    }
+  }
+
+  /* Follow the OS while the visitor has not made a choice of their own. */
+  try {
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: light)');
+      var onChange = function (e) {
+        var saved = null;
+        try { saved = localStorage.getItem(KEY); } catch (err) {}
+        if (saved !== 'light' && saved !== 'dark') EPB.setTheme(e.matches ? 'light' : 'dark', false);
+      };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    }
+  } catch (e) {}
+
+  /* ---------- accordion --------------------------------------------------- */
+  /* Opens by writing an inline max-height and clearing it on a timer, so the
+     panel is readable even where CSS transitions never run. */
+  function panelOf(btn) {
+    var n = btn.nextElementSibling;
+    return (n && n.classList.contains('accordion-content')) ? n : null;
+  }
+  function openPanel(btn, panel) {
+    clearTimeout(panel._epbT);
+    panel.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.classList.add('open');
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    panel._epbT = setTimeout(function () { panel.style.maxHeight = 'none'; }, EPB.reduced ? 0 : 200);
+  }
+  function closePanel(btn, panel) {
+    clearTimeout(panel._epbT);
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    void panel.offsetHeight;
+    panel.style.maxHeight = '0px';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('open');
+    panel.classList.remove('open');
+    panel._epbT = setTimeout(function () { panel.hidden = true; panel.style.maxHeight = ''; }, EPB.reduced ? 0 : 200);
+  }
+  EPB.initAccordion = function (root) {
+    var btns = (root || document).querySelectorAll('.accordion-trigger');
+    for (var i = 0; i < btns.length; i++) {
+      (function (btn) {
+        if (btn._epbBound) return;
+        btn._epbBound = true;
+        var panel = panelOf(btn);
+        if (!panel) return;
+        if (!panel.querySelector('.accordion-inner')) {
+          var inner = document.createElement('div');
+          inner.className = 'accordion-inner';
+          while (panel.firstChild) inner.appendChild(panel.firstChild);
+          panel.appendChild(inner);
+        }
+        if (!panel.id) panel.id = 'acc-panel-' + (i + 1) + '-' + Math.random().toString(36).slice(2, 7);
+        btn.setAttribute('aria-controls', panel.id);
+        btn.setAttribute('type', 'button');
+        var startOpen = btn.classList.contains('open') || panel.classList.contains('open');
+        if (startOpen) openPanel(btn, panel);
+        else { panel.hidden = true; panel.style.maxHeight = '0px'; btn.setAttribute('aria-expanded', 'false'); }
+        btn.addEventListener('click', function () {
+          var isOpen = btn.getAttribute('aria-expanded') === 'true';
+          var all = (root || document).querySelectorAll('.accordion-trigger');
+          for (var j = 0; j < all.length; j++) {
+            var p = panelOf(all[j]);
+            if (p && all[j] !== btn && all[j].getAttribute('aria-expanded') === 'true') closePanel(all[j], p);
+          }
+          if (isOpen) closePanel(btn, panel); else openPanel(btn, panel);
+        });
+      })(btns[i]);
+    }
+  };
+
+  /* ---------- keyboard ---------------------------------------------------- */
+  EPB.initKeyboard = function () {
+    if (EPB._kb) return;
+    EPB._kb = true;
+    document.addEventListener('keydown', function (e) {
+      var t = e.target || {};
+      var tag = (t.tagName || '').toLowerCase();
+      var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable;
+      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var box = document.querySelector('[data-epb-search]') || document.querySelector('.search-box');
+        if (box) { e.preventDefault(); box.focus(); box.select && box.select(); }
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (typing && t.blur) { t.blur(); }
+        document.dispatchEvent(new CustomEvent('epb:escape'));
+      }
+    });
+  };
+
+  /* ---------- conversion tracking ---------------------------------------- */
+  /* The board's only revenue signal is "the visitor left for a platform".
+     GA4 Enhanced Measurement does emit an outbound `click` event, but `click`
+     also covers every other link on the page, so marking it as a key event
+     would count navigation as conversion. We therefore emit our own named
+     events, which CAN be marked as key events without polluting anything:
+
+       platform_click  — left for one of the tracked energy platforms
+       outbound_click  — left for any other external host
+
+     Both carry platform_id / link_domain / placement, so GA4 can answer
+     "which platform earns the clicks, from which page". Everything below is a
+     no-op when neither gtag nor ym is on the page — nothing throws, nothing
+     blocks the navigation. */
+
+  EPB.placement = (function () {
+    var p = (location.pathname || '').toLowerCase();
+    if (/\/vs\//.test(p)) return 'vs_page';
+    if (/\/platforms\//.test(p)) return 'platform_page';
+    if (/\/blog\//.test(p)) return 'blog_article';
+    if (/\/features\//.test(p)) return 'feature_page';
+    if (/compare\.html$/.test(p)) return 'compare';
+    if (/history\.html$/.test(p)) return 'history';
+    if (/blog\.html$/.test(p)) return 'blog_index';
+    if (/news\.html$/.test(p)) return 'news';
+    if (/out-of-energy\.html$/.test(p)) return 'out_of_energy';
+    if (/platform\.html$/.test(p)) return 'platform_legacy';
+    if (/404\.html$/.test(p)) return 'not_found';
+    if (p === '' || p === '/' || /index\.html$/.test(p)) return 'board';
+    return 'other';
+  })();
+
+  /* Fire one event into whichever analytics libraries are present. */
+  EPB.sendEvent = function (name, params) {
+    params = params || {};
+    try {
+      if (typeof window.gtag === 'function') window.gtag('event', name, params);
+    } catch (e) { /* analytics must never break the page */ }
+    try {
+      /* Metrika goals are flat names; the params ride along as the third arg. */
+      var id = EPB.ymId();
+      if (typeof window.ym === 'function' && id) window.ym(id, 'reachGoal', name, params);
+    } catch (e) { /* ditto */ }
+  };
+
+  /* Counter id is read off the <noscript> tracking pixel that every page
+     already carries, so it is never hardcoded in two places. */
+  EPB.ymId = function () {
+    if (EPB._ym !== undefined) return EPB._ym;
+    EPB._ym = null;
+    try {
+      /* <noscript> is not parsed into a DOM subtree while scripting is on, so
+         its markup is readable as plain text — cheaper than serialising the
+         whole document. */
+      var ns = document.getElementsByTagName('noscript');
+      for (var i = 0; i < ns.length; i++) {
+        var m = /mc\.yandex\.ru\/watch\/(\d+)/.exec(ns[i].textContent || '');
+        if (m) { EPB._ym = m[1]; break; }
+      }
+    } catch (e) { /* leave null */ }
+    return EPB._ym;
+  };
+
+  function hostOf(url) {
+    try { return new URL(url, location.href).hostname.replace(/^www\./, ''); }
+    catch (e) { return ''; }
+  }
+
+  /* A platform id is only ever taken from an explicit annotation: referral
+     URLs often point at t.me/<bot>, so the hostname is not a reliable id. */
+  function pidOf(el) {
+    var n = el;
+    while (n && n.getAttribute) {
+      var v = n.getAttribute('data-epb-pid');
+      if (v) return v;
+      n = n.parentElement;
+    }
+    return '';
+  }
+
+  function reportExit(url, el, how) {
+    var host = hostOf(url);
+    if (!host || host === location.hostname.replace(/^www\./, '')) return;
+    var pid = pidOf(el);
+    var params = {
+      link_domain: host,
+      link_url: String(url).slice(0, 400),
+      placement: EPB.placement,
+      how: how
+    };
+    if (pid) {
+      params.platform_id = pid;
+      var nameEl = el && el.closest && el.closest('[data-epb-pname]');
+      if (nameEl) params.platform_name = nameEl.getAttribute('data-epb-pname');
+      EPB.sendEvent('platform_click', params);
+    } else {
+      EPB.sendEvent('outbound_click', params);
+    }
+  }
+
+  EPB.initTracking = function () {
+    if (EPB._trk) return;
+    EPB._trk = true;
+    function onClick(e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var a = t.closest('a[href]');
+      if (a) {
+        var href = a.getAttribute('href') || '';
+        if (/^(https?:)?\/\//i.test(href)) reportExit(a.href, a, 'link');
+        return;
+      }
+      /* Whole-card clicks on the board open the referral URL via window.open,
+         so there is no anchor to catch. Mirrors index.html's own handler. */
+      var card = t.closest('[data-go]');
+      if (card) reportExit(card.getAttribute('data-go'), card, 'card');
+    }
+    /* Capture phase: still counted if a handler stops propagation. */
+    document.addEventListener('click', onClick, true);
+    document.addEventListener('auxclick', function (e) {
+      if (e.button === 1) onClick(e);      /* middle-click = open in new tab */
+    }, true);
+  };
+
+  /* ---------- "cheapest right now" call to action -------------------------
+     Any page can drop in
+         <div class="cta-live" data-cta-cheapest="65k_1h"></div>
+     and it becomes a live card naming the cheapest platform for that cell with
+     a link to it. Articles used to end without anywhere to go, which is a waste
+     of the only traffic that arrives ready to rent. If the board cannot be read
+     the block removes itself rather than showing an empty promise. */
+  /* One shared read of the board file, so the CTA, the spread rail and the 404
+     card do not each ask for it. */
+  var boardPending = null, boardCache = null;
+  EPB.loadBoard = function () {
+    if (boardCache) return Promise.resolve(boardCache);
+    if (boardPending) return boardPending;
+    boardPending = fetch(EPB.url('result.json'), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { boardCache = j; return j; });
+    return boardPending;
+  };
+
+  EPB.initCheapestCta = function () {
+    var hosts = document.querySelectorAll('[data-cta-cheapest]');
+    if (!hosts.length) return;
+    EPB.loadBoard()
+      .then(function (data) {
+        var list = (data && data.platforms) || [];
+        hosts.forEach(function (host) {
+          var key = host.getAttribute('data-cta-cheapest') || '65k_1h';
+          if (!/_price$/.test(key)) key += '_price';
+          var best = null;
+          list.forEach(function (p) {
+            if (!p || p.has_prices === false || p.stale === true) return;
+            if ((p.estimated_keys || []).indexOf(key) !== -1) return;   /* never sell an estimate */
+            var v = p[key];
+            if (typeof v !== 'number' || !isFinite(v) || v <= 0) return;
+            if (!best || v < best[key]) best = p;
+          });
+          if (!best) { host.remove(); return; }
+          var name = best.platform_name || best.platform_id;
+          var href = EPB.outUrl(best);
+          var price = best[key].toFixed(2);
+          var vol = key.indexOf('130k') === 0 ? '130,000' : '65,000';
+          /* `sponsored` is a statement about money. It goes on the links that
+             actually pay us and nowhere else, or the markup contradicts the
+             disclosure printed underneath it. */
+          var relOut = EPB.outRel(best);
+          host.innerHTML =
+            '<div class="cta-live-in">' +
+              '<div class="cta-live-txt">' +
+                '<span class="cta-live-lbl">Cheapest right now</span>' +
+                '<span class="cta-live-num">' + price + ' TRX</span>' +
+                '<span class="cta-live-sub">' + vol + ' energy for one hour, at ' +
+                  EPB.esc(name) + '</span>' +
+              '</div>' +
+              (href
+                ? '<a class="btn btn-primary" href="' + EPB.esc(href) + '" target="_blank" ' +
+                  'rel="' + relOut + '" data-platform-id="' + EPB.esc(best.platform_id || '') +
+                  '">Rent at ' + EPB.esc(name) + '</a>'
+                /* No link we may send traffic through: the review page is the
+                   honest destination, and it carries the same live price. */
+                : '<a class="btn btn-primary" href="/platforms/' + EPB.esc(best.platform_id || '') +
+                  '.html">' + EPB.esc(name) + ' prices and review</a>') +
+            '</div>' +
+            '<p class="cta-live-note">Prices come from our own scan, refreshed every 15 minutes. ' +
+            (best.is_ours
+              ? 'The platform at the top of this scan is our own shop. It got there on price, ' +
+                'which is the only thing this board sorts by.'
+              : 'Some outbound links are referral links: the platform pays us, you pay the same ' +
+                'price, and the ranking is by price only.') + '</p>';
+        });
+      })
+      .catch(function () { hosts.forEach(function (h) { h.remove(); }); });
+  };
+
+  /* ---------- how deep the archive really is ------------------------------
+     The charts are labelled "7 days" by the file name, not by the data. Until
+     the archive is that deep, say what it actually holds: a page that claims a
+     week and draws eighteen hours teaches the reader not to trust the rest. */
+  EPB.initHistoryDepth = function () {
+    var nodes = document.querySelectorAll('[data-hist-range], [data-hist-depth]');
+    if (!nodes.length) return;
+    EPB.loadHistory().then(function (h) {
+      var sd = (h && h.services_data) || {}, lo = Infinity, hi = 0;
+      Object.keys(sd).forEach(function (k) {
+        var s = sd[k] && sd[k]['65k_1h_price'];
+        if (!s || !s.length) return;
+        s.forEach(function (pt) {
+          if (!pt || typeof pt[0] !== 'number') return;
+          if (pt[0] < lo) lo = pt[0];
+          if (pt[0] > hi) hi = pt[0];
+        });
+      });
+      if (!hi || lo === Infinity) return;
+      var hours = (hi - lo) / 3600000;
+      var txt = hours < 48 ? Math.round(hours) + ' hours of data so far'
+                           : Math.round(hours / 24) + ' days of data so far';
+      document.querySelectorAll('[data-hist-range]').forEach(function (el) { el.textContent = txt; });
+      document.querySelectorAll('[data-hist-depth]').forEach(function (el) {
+        el.textContent = 'The archive is ' + txt.replace(' so far', '') +
+          ' deep — the board started recording on ' +
+          new Date(lo).toISOString().slice(0, 10) + '. Charts show everything collected, not a full week.';
+      });
+    });
+  };
+
+  /* ---------- platform monograms ------------------------------------------
+     The board draws every platform as a monogram rather than a logo, so the
+     monogram has to carry the identity a logo would. One letter did not: T
+     stood for TronZap, TR Energy, TronMax, Tron Fee Energy Rental and our own
+     tronfor.me, which is five rows of the same mark in one column.
+
+     Two letters, taken the way a person would read the name: the initials of
+     its parts when it has parts (TronZap -> TZ), otherwise its first two
+     letters (Tronify -> TR). A trailing domain suffix is not a part of a
+     name, so feee.io is FE and not FI. Where two platforms still land on the
+     same pair, monogramMap lengthens both until they are apart — one pass
+     over the list the board is about to draw, so the marks are unique for the
+     set actually on screen. */
+  function monoParts(name) {
+    var n = String(name || '').trim();
+    var dot = n.lastIndexOf('.');
+    if (dot > 0 && /^[a-z]{2,8}$/.test(n.slice(dot + 1))) n = n.slice(0, dot);
+    /* camelCase and TitleCase count as a word boundary. */
+    n = n.replace(/([a-z])([A-Z])/g, '$1 $2');
+    return n.split(/[^A-Za-z]+/).filter(Boolean);
+  }
+  EPB.monoCandidates = function (name) {
+    var parts = monoParts(name);
+    if (!parts.length) return ['?'];
+    var flat = parts.join('');
+    var out = [parts.length > 1 ? parts[0].charAt(0) + parts[1].charAt(0) : flat.slice(0, 2),
+               flat.slice(0, 3)];
+    if (flat.length > 2) out.push(flat.slice(0, 2) + flat.slice(-1));
+    return out.map(function (c) { return c.toUpperCase(); });
+  };
+  EPB.monogram = function (name) { return EPB.monoCandidates(name)[0]; };
+  /* A mark two platforms share is worse than no mark, so a clash walks down
+     the candidates until it reaches one nobody has taken. Three letters is
+     the ceiling: four do not fit the tile. */
+  EPB.monogramMap = function (list) {
+    var out = {}, taken = {}, i, j;
+    for (i = 0; i < list.length; i++) {
+      var pid = list[i].platform_id || '';
+      var cands = EPB.monoCandidates(list[i].platform_name || pid);
+      var m = cands[cands.length - 1];
+      for (j = 0; j < cands.length; j++) {
+        if (!taken[cands[j]]) { m = cands[j]; break; }
+      }
+      taken[m] = true;
+      out[pid] = m;
+    }
+    return out;
+  };
+  /* A hue per platform, stable across reloads and never random: the same id
+     always draws the same tile. Kept low in saturation by the CSS — this is a
+     way of telling twenty tiles apart, not a palette. */
+  EPB.hueFor = function (pid) {
+    var h = 0, s = String(pid || '');
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
+    return h;
+  };
+
+  /* ---------- outbound links ----------------------------------------------
+     One rule for the whole site: we link out to a platform only when the link
+     is one we have an arrangement for, or when the shop is our own. A bare
+     link to somebody else's site is free traffic we hand a competitor, and it
+     is the one thing on this board that costs us money to show. Platforms
+     without a link still get their row, their price and their review page.
+     Callers that get '' must render no outbound link at all. */
+  EPB.outUrl = function (p) {
+    if (!p) return '';
+    if (p.has_referral && p.referral_url) return p.referral_url;
+    if (p.is_ours) return p.url || '';
+    return '';
+  };
+  EPB.outRel = function (p) {
+    return (p && p.has_referral && p.referral_url)
+      ? 'sponsored nofollow noopener' : 'nofollow noopener';
+  };
+
+  /* ---------- referral disclosure ----------------------------------------
+     Every page carries it, because the board takes referral money from some of
+     the platforms it ranks. Injected here rather than pasted into sixty files,
+     and skipped if a page already says it in its own words. */
+  EPB.initDisclosure = function () {
+    var bar = document.querySelector('.footer-bottom');
+    if (!bar || /referral link/i.test(document.body.textContent || '')) return;
+    var el = document.createElement('span');
+    el.className = 'footer-disclosure';
+    el.textContent = 'Some links to platforms are referral links. They cost you nothing, ' +
+                     'and the ranking is by price only.';
+    bar.appendChild(el);
+  };
+
+  /* TRON proposal #104, August 2025: 100 SUN per unit of energy burned. */
+  var BURN_SUN = 100;              /* TRON proposal #104, August 2025 */
+  function burnCost(energy) { return energy * BURN_SUN / 1000000; }
+
+  /* ---------- what it costs against burning -------------------------------
+     A board card without this answers "which of these is cheapest" but never
+     "is any of this worth doing". The figure is derived from the price already
+     printed on the card, so it can never disagree with it. */
+  function energyOf(label) {
+    var m = /(\d+(?:\.\d+)?)\s*k/i.exec(label || '');
+    if (m) return parseFloat(m[1]) * 1000;
+    var n = /(\d{4,})/.exec(label || '');
+    return n ? parseFloat(n[1]) : 0;
+  }
+  function priceOf(node) {
+    if (!node) return NaN;
+    var t = (node.textContent || '').replace(/[^0-9.]/g, '');
+    var v = parseFloat(t);
+    return isFinite(v) ? v : NaN;
+  }
+
+  function annotateCard(card) {
+    if (!card || card.classList.contains('nodata')) return;
+    var box = card.querySelector('.plat-price.plat-best') ||
+              card.querySelector('.plat-price.is-focus') ||
+              card.querySelector('.plat-price');
+    if (!box) return;
+    var pv = box.querySelector('.pv');
+    if (!pv || pv.classList.contains('na')) return;
+    var price = priceOf(pv), energy = energyOf((box.querySelector('.pl') || {}).textContent);
+    if (!isFinite(price) || price <= 0 || !energy) return;
+    var burn = burnCost(energy);
+    if (!burn) return;
+
+    var pct = (burn - price) / burn * 100;
+    var est = pv.classList.contains('est');
+    var old = card.querySelector('.plat-save');
+    var sig = price + '|' + energy;
+    if (old && old.getAttribute('data-sig') === sig) return;
+    if (old) old.remove();
+
+    var row = document.createElement('div');
+    row.className = 'plat-save' + (pct <= 0 ? ' is-none' : '');
+    row.setAttribute('data-sig', sig);
+    var width = Math.max(3, Math.min(100, Math.abs(pct)));
+    row.innerHTML =
+      '<span class="plat-save-bar" aria-hidden="true"><i style="width:' + width.toFixed(0) + '%"></i></span>' +
+      '<span class="plat-save-txt">' + (est ? '≈ ' : '') +
+        (pct > 0
+          ? '<b>' + Math.round(pct) + '% less</b> than burning ' + burn.toFixed(2) + ' TRX'
+          : '<b>' + Math.round(-pct) + '% more</b> than burning ' + burn.toFixed(2) + ' TRX') +
+      '</span>';
+    var prices = card.querySelector('.plat-prices');
+    if (prices && prices.parentNode) prices.parentNode.insertBefore(row, prices.nextSibling);
+  }
+
+  EPB.initBurnCompare = function () {
+    var grid = document.getElementById('platGrid');
+    if (!grid) return;
+    var queued = false;
+    function run() {
+      queued = false;
+      var cards = grid.querySelectorAll('.plat-card');
+      for (var i = 0; i < cards.length; i++) annotateCard(cards[i]);
+    }
+    run();
+    if (!window.MutationObserver) return;
+    /* The board re-renders the whole grid on every filter change and on every
+       poll, so the annotation has to be re-applied rather than done once. */
+    new MutationObserver(function () {
+      if (queued) return;
+      queued = true;
+      if (window.requestAnimationFrame) window.requestAnimationFrame(run);
+      else setTimeout(run, 0);
+    }).observe(grid, { childList: true, subtree: true });
+  };
+
+  /* ---------- horizontal scrollers ----------------------------------------
+     A table wider than its box has to say so, and has to stop saying so at the
+     end of the run. The shadow is a class on the container, never a background
+     that would slide away with the content. */
+  EPB.initScrollers = function () {
+    var sel = '.mtx-wrap,.heatmap-wrap,.table-scroll,.table-wrap';
+    var nodes = document.querySelectorAll(sel);
+    if (!nodes.length) return;
+
+    function paint(el) {
+      var over = el.scrollWidth - el.clientWidth;
+      var can = over > 4;
+      el.classList.toggle('is-scrollable', can);
+      el.classList.remove('at-start', 'at-mid', 'at-end');
+      if (can) {
+        var x = el.scrollLeft;
+        el.classList.add(x <= 2 ? 'at-start' : (x >= over - 2 ? 'at-end' : 'at-mid'));
+      }
+      var hint = el._epbHint;
+      if (can && !hint && el.parentNode) {
+        hint = document.createElement('p');
+        hint.className = 'scroll-hint';
+        hint.textContent = 'Scroll the table sideways for the longer rentals';
+        el.parentNode.insertBefore(hint, el.nextSibling);
+        el._epbHint = hint;
+      }
+      if (hint) hint.style.display = can ? '' : 'none';
+    }
+
+    for (var i = 0; i < nodes.length; i++) {
+      (function (el) {
+        el.classList.add('epb-scroller');
+        el.addEventListener('scroll', function () { paint(el); }, { passive: true });
+        if (window.ResizeObserver) new ResizeObserver(function () { paint(el); }).observe(el);
+        if (window.MutationObserver) {
+          var q = false;
+          new MutationObserver(function () {
+            if (q) return; q = true;
+            setTimeout(function () { q = false; paint(el); }, 60);
+          }).observe(el, { childList: true, subtree: true });
+        }
+        paint(el);
+      })(nodes[i]);
+    }
+    window.addEventListener('resize', function () {
+      for (var j = 0; j < nodes.length; j++) paint(nodes[j]);
+    });
+  };
+
+  /* ---------- the heatmap, made of heat -----------------------------------
+     The history page has a section called "Price heatmap" that had no heat in
+     it. Each column is scaled on its own — 15 minutes and 10 days are not the
+     same money — and the ramp is one hue at varying strength, so it reads the
+     same to a red-green colour-blind eye and in greyscale. The ★ on the
+     cheapest cell still carries the extreme as a shape. */
+  function paintHeat(table) {
+    var body = table.querySelector('tbody');
+    if (!body) return;
+    var rows = body.querySelectorAll('tr:not(.section-split)');
+    var cols = {}, r, c, cells, val;
+    for (r = 0; r < rows.length; r++) {
+      if (rows[r].classList.contains('row-nodata')) continue;
+      cells = rows[r].children;
+      for (c = 1; c < cells.length; c++) {
+        var span = cells[c].querySelector('.cell-price');
+        if (!span || span.classList.contains('na')) continue;
+        val = priceOf(span);
+        if (!isFinite(val) || val <= 0) continue;
+        (cols[c] || (cols[c] = [])).push(val);
+      }
+    }
+    Object.keys(cols).forEach(function (k) {
+      var a = cols[k];
+      cols[k] = { min: Math.min.apply(null, a), max: Math.max.apply(null, a) };
+    });
+    for (r = 0; r < rows.length; r++) {
+      cells = rows[r].children;
+      for (c = 1; c < cells.length; c++) {
+        var sp = cells[c].querySelector('.cell-price');
+        if (!sp) { cells[c].classList.remove('heat'); continue; }
+        var range = cols[c];
+        var v = priceOf(sp);
+        if (!range || !isFinite(v) || sp.classList.contains('na')) {
+          cells[c].classList.remove('heat');
+          cells[c].style.removeProperty('--h');
+          continue;
+        }
+        /* Cheap glows. On a price board the thing the reader wants is the
+           thing that should catch the eye, so intensity runs from the lowest
+           quote in the column down to nothing at the highest. */
+        var t = range.max > range.min ? (v - range.min) / (range.max - range.min) : 0;
+        cells[c].classList.add('heat');
+        cells[c].style.setProperty('--h', (1 - t).toFixed(3));
+      }
+    }
+  }
+
+  EPB.initHeat = function () {
+    var tables = document.querySelectorAll('.heatmap');
+    if (!tables.length) return;
+    for (var i = 0; i < tables.length; i++) {
+      (function (t) {
+        var q = false;
+        function run() { q = false; try { paintHeat(t); } catch (e) {} }
+        run();
+        if (!window.MutationObserver) return;
+        new MutationObserver(function () {
+          if (q) return; q = true; setTimeout(run, 30);
+        }).observe(t, { childList: true, subtree: true });
+      })(tables[i]);
+
+      /* One legend per heatmap, so the ramp means something. */
+      var wrap = tables[i].closest('.heatmap-wrap');
+      var host = wrap && wrap.parentNode;
+      if (host && !host.querySelector('.heat-key')) {
+        var key = document.createElement('p');
+        key.className = 'heat-key';
+        key.innerHTML = '<span><b>cheapest</b></span>' +
+          '<span class="heat-key-ramp" aria-hidden="true"></span>' +
+          '<span>dearest</span>' +
+          '<span>· shading runs down each column on its own, so the strongest cell in a column ' +
+          'is the cheapest quote for that duration</span>';
+        host.insertBefore(key, wrap.nextSibling);
+      }
+    }
+  };
+
+  /* ---------- Chart.js house style ----------------------------------------
+     The canvases cannot inherit anything from the stylesheet, so the few
+     defaults that decide whether a chart is legible are set here, from the
+     same tokens everything else uses. Re-applied on a theme switch, because
+     the pages rebuild their charts when the theme changes. */
+  function tok(name, fallback) {
+    try {
+      var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return v || fallback;
+    } catch (e) { return fallback; }
+  }
+  EPB.styleCharts = function () {
+    var C = window.Chart;
+    if (!C || !C.defaults) return;
+    var d = C.defaults;
+    try {
+      d.font.family = "'Inter','Golos Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
+      d.font.size = 11;
+      d.color = tok('--text-2', '#9aa4b8');
+      d.borderColor = tok('--line', 'rgba(255,255,255,.07)');
+      d.elements.point.radius = 2.5;
+      d.elements.point.hoverRadius = 5;
+      d.elements.point.hitRadius = 14;
+      d.elements.line.borderWidth = 2;
+      d.elements.line.tension = 0.25;
+      d.plugins.legend.labels.usePointStyle = true;
+      d.plugins.legend.labels.boxWidth = 8;
+      d.plugins.legend.labels.padding = 14;
+      var t = d.plugins.tooltip;
+      t.backgroundColor = tok('--surface', '#14161f');
+      t.borderColor = tok('--line-2', 'rgba(255,255,255,.11)');
+      t.borderWidth = 1;
+      t.titleColor = tok('--text', '#eef1f7');
+      t.bodyColor = tok('--text-2', '#9aa4b8');
+      t.padding = 10;
+      t.cornerRadius = 10;
+      t.usePointStyle = true;
+      t.boxPadding = 5;
+      t.displayColors = true;
+    } catch (e) { /* a chart with default styling beats no chart */ }
+  };
+
+  /* ---------- notes that landed inside a heading --------------------------
+     Pages print the note marker inside their <h1>, next to the platform name.
+     The marker itself no longer carries a letter, but the sentence beside it
+     would still be read as part of the heading — "APITRX How APITRX price is
+     read: …" — and would still turn up in anything that takes the text of the
+     page. It is moved to just after the heading, where it says the same thing
+     about the same platform. Nothing visible moves: the label is a clipped
+     1px box either way. */
+  EPB.liftHeadingNotes = function (root) {
+    var marks = (root || document).querySelectorAll('h1 .note-mark, h2 .note-mark, h3 .note-mark');
+    for (var i = 0; i < marks.length; i++) {
+      var label = marks[i].nextElementSibling;
+      if (!label || !label.classList || !label.classList.contains('sr-only')) continue;
+      var head = marks[i].closest && marks[i].closest('h1,h2,h3');
+      if (!head || !head.parentNode) continue;
+      head.parentNode.insertBefore(label, head.nextSibling);
+    }
+  };
+
+  /* The platform review fills its heading in once the board file arrives,
+     which is after this script has run, so the headings are watched rather
+     than swept once. Moving the label out is itself a change to the heading;
+     the next pass finds nothing left to move and it settles. */
+  EPB.initHeadingNotes = function () {
+    EPB.liftHeadingNotes(document);
+    if (!window.MutationObserver) return;
+    var heads = document.querySelectorAll('h1,h2,h3');
+    if (!heads.length) return;
+    var mo = new MutationObserver(function () { EPB.liftHeadingNotes(document); });
+    for (var i = 0; i < heads.length; i++) mo.observe(heads[i], { childList: true, subtree: true });
+  };
+
+  /* ---------- 404 ---------------------------------------------------------
+     "This page does not exist" is not an answer to the question the visitor
+     arrived with. The one thing this site always has is a current price, so
+     the error page carries the same live card the articles end with. */
+  EPB.init404 = function () {
+    if (EPB.placement !== 'not_found') return;
+    if (document.querySelector('[data-cta-cheapest]')) return;
+    var links = document.querySelector('.links');
+    if (!links || !links.parentNode) return;
+    var host = document.createElement('div');
+    host.className = 'cta-live epb-404-live';
+    host.setAttribute('data-cta-cheapest', '65k_1h');
+    links.parentNode.insertBefore(host, links.nextSibling);
+  };
+
+  /* ---------- boot -------------------------------------------------------- */
+  function boot() {
+    mountToggle();
+    EPB.styleCharts();
+    document.addEventListener('epb:theme', EPB.styleCharts);
+    EPB.initTracking();
+    EPB.init404();
+    EPB.initCheapestCta();
+    EPB.initBurnCompare();
+    EPB.initScrollers();
+    EPB.initHeat();
+    EPB.initDisclosure();
+    EPB.initHistoryDepth();
+    EPB.initHeadingNotes();
+    EPB.initAccordion(document);
+    EPB.initKeyboard();
+    /* Any page with a main landmark gets a skip link. */
+    var main = document.querySelector('main');
+    if (main && !document.querySelector('.epb-skip')) {
+      if (!main.id) main.id = 'main';
+      var a = document.createElement('a');
+      a.className = 'epb-skip';
+      a.href = '#' + main.id;
+      a.textContent = 'Skip to content';
+      document.body.insertBefore(a, document.body.firstChild);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+
+})(window, document);
+
+</script>
+<!--/EPB-THEME-->
+</head>
+<body class="compare">
+
+<!-- ==================== DARK CONTENT ==================== -->
+<main>
+<div class="container">
+  <nav class="nav" aria-label="Main navigation">
+    <a href="./" class="nav-brand">Energy<em>Board</em></a>
+    <div class="nav-links">
+      <a href="index.html">Board</a>
+      <a href="compare.html" class="active" aria-current="page">Compare</a>
+      <a href="history.html">History</a>
+      <a href="blog.html">Blog</a>
+      <a href="news.html">News</a>
+    </div>
+  </nav>
+
+  <div class="page-head">
+    <h1>Every platform, <span>every term</span></h1>
+    <p class="subtitle"><span class="epb-nojs-hide">One matrix. Sort any column, narrow it by
+      feature, and open a row — with the mouse or with Enter — for that platform's full
+      table.</span><span class="nojs-only">Every platform we scan, at two energy amounts across
+      five rental terms. The grid itself is drawn by a script; the note below says where the
+      same numbers sit without one.</span></p>
+    <div class="page-meta">
+      <span class="epb-live" id="hUpdated" aria-live="polite"></span>
+    </div>
+    <p class="own-note">One platform in this matrix, tronfor.me, belongs to us. The same
+      scraper reads it, the same sort ranks it, and the same filters hide it — nothing here
+      lifts it above a cheaper row.</p>
+  </div>
+
+  <div class="cta-live" data-cta-cheapest="65k_1h"></div>
+
+  <!-- ===== Feature Filters =====
+       The nine chips are written here rather than built at runtime: they never
+       depend on the scan, and an empty bar that fills after load drags the
+       whole page down with it. -->
+  <div class="feat-bar epb-nojs-hide" id="featBar" role="group" aria-label="Filter by feature">
+    <span class="feat-label">Features</span>
+    <button class="feat-chip" type="button" data-feat="api" aria-pressed="false" title="REST API for programmatic energy rental">API</button>
+    <button class="feat-chip" type="button" data-feat="telegram" aria-pressed="false" title="Telegram bot for energy orders">Telegram</button>
+    <button class="feat-chip" type="button" data-feat="marketplace" aria-pressed="false" title="Bid/ask order book pricing model">Marketplace</button>
+    <button class="feat-chip" type="button" data-feat="autotopup" aria-pressed="false" title="Automatic energy refill when balance is low">Auto-topup</button>
+    <button class="feat-chip" type="button" data-feat="usdt_trx" aria-pressed="false" title="Accepts USDT payments or auto-converts">USDT↔TRX</button>
+    <button class="feat-chip" type="button" data-feat="dapp" aria-pressed="false" title="Direct TRON dApp / browser interaction">dApp</button>
+    <button class="feat-chip" type="button" data-feat="referral" aria-pressed="false" title="Referral program with bonuses for sharing">Referral</button>
+    <button class="feat-chip" type="button" data-feat="staking" aria-pressed="false" title="Staking rewards or energy staking pools">Staking</button>
+    <button class="feat-chip" type="button" data-feat="bandwidth" aria-pressed="false" title="Also sells bandwidth points for TRON transactions">Bandwidth</button>
+    <span id="featMatchCount" role="status"></span>
+  </div>
+
+  <!-- ===== Tab Switcher ===== -->
+  <div class="tab-bar epb-nojs-hide" role="group" aria-label="View">
+    <button class="tab-btn active" type="button" data-tab="matrix" aria-pressed="true">Price matrix</button>
+    <button class="tab-btn" type="button" data-tab="chart" aria-pressed="false">History chart</button>
+  </div>
+
+  <!-- ===== TAB: Matrix ===== -->
+  <div class="tab-content active" id="tab-matrix">
+    <div class="mtx-toolbar epb-nojs-hide">
+      <div class="mtx-toolbar-group" id="mtxVolGroup" role="group" aria-label="Energy amount">
+        <span class="mtx-label">Volume</span>
+      </div>
+      <div class="mtx-toolbar-group" style="margin-left:12px" role="group" aria-label="Sort rows">
+        <span class="mtx-label">Sort</span>
+        <button class="chip active" type="button" data-sortchip="price" aria-pressed="true">Price · 1h</button>
+        <button class="chip" type="button" data-sortchip="avg" aria-pressed="false">Avg</button>
+        <button class="chip" type="button" data-sortchip="name" aria-pressed="false">Name</button>
+        <button class="chip" type="button" data-sortchip="coverage" aria-pressed="false">Coverage</button>
+      </div>
+      <div class="mtx-search">
+        <span class="search-wrap">
+          <input class="search-box" id="mtxSearch" type="search" placeholder="Search platform…"
+                 spellcheck="false" aria-label="Search platform" data-epb-search>
+          <kbd aria-hidden="true">/</kbd>
+        </span>
+        <button class="chip" type="button" id="mtxClear" aria-label="Clear search" title="Clear search">Clear</button>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="nojs-panel">
+        <p><strong>The matrix is built in your browser, and scripting is switched off.</strong>
+          It reads the same scan file the rest of the site reads, so with no script there are
+          no rows to draw and nothing here to filter.</p>
+        <p>These pages carry their numbers in the file itself:
+          <a href="index.html">the board</a> ranks every platform at one size and term,
+          and each platform has its own page with the whole term table —
+          <a href="#all-reviews">that list sits further down this page</a>.</p>
+      </div>
+    </noscript>
+
+    <div class="mtx-layout epb-nojs-hide">
+      <div>
+        <div id="mtxCount" role="status">Reading the latest scan…</div>
+        <div class="mtx-wrap">
+          <table class="mtx-table" id="mtxTable">
+            <thead id="mtxHead"><tr>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="name" title="Sort by platform name">Platform<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="term:15m" title="Sort by the 15-minute price">15m<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col" aria-sort="ascending"><button class="mtx-sort" type="button" data-sortkey="term:1h" title="Sort by the 1-hour price">1h<span class="dir" aria-hidden="true">▲</span></button></th>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="term:1d" title="Sort by the 1-day price">1d<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="term:3d" title="Sort by the 3-day price">3d<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="term:10d" title="Sort by the 10-day price">10d<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col"><button class="mtx-sort" type="button" data-sortkey="avg" title="Sort by the mean of the terms this platform quotes">Avg<span class="dir" aria-hidden="true"></span></button></th>
+              <th scope="col">trend</th>
+            </tr></thead>
+            <tbody id="mtxBody">
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+              <tr class="mtx-sk" aria-hidden="true"><td class="label"><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td><td><span class="sk"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="mtxLegend"></div>
+      </div>
+      <div class="detail-panel" id="detailPanel" tabindex="-1" role="region" aria-label="Platform details"></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: Chart ===== -->
+  <div class="tab-content" id="tab-chart">
+    <div class="chart-toolbar">
+      <div class="mtx-toolbar-group" role="group" aria-label="Energy amount">
+        <span class="mtx-label">Size</span>
+        <button class="chip active" type="button" data-csize="65k" aria-pressed="true">65k</button>
+        <button class="chip" type="button" data-csize="130k" aria-pressed="false">130k</button>
+      </div>
+      <div class="mtx-toolbar-group" role="group" aria-label="Rental term">
+        <span class="mtx-label">Term</span>
+        <button class="chip" type="button" data-cterm="15m" aria-pressed="false">15m</button>
+        <button class="chip active" type="button" data-cterm="1h" aria-pressed="true">1h</button>
+        <button class="chip" type="button" data-cterm="1d" aria-pressed="false">1d</button>
+        <button class="chip" type="button" data-cterm="3d" aria-pressed="false">3d</button>
+      </div>
+      <div class="mtx-toolbar-group" role="group" aria-label="Archive">
+        <span class="mtx-label">Archive</span>
+        <button class="chip active" type="button" data-crange="7d" aria-pressed="true"
+                title="Up to seven days back, one sample every 15 minutes">7 days · 15 min</button>
+        <button class="chip" type="button" data-crange="30d" aria-pressed="false"
+                title="Up to thirty days back, one sample an hour">30 days · 1 hour</button>
+      </div>
+      <div class="mtx-toolbar-group" role="group" aria-label="What the chart draws">
+        <span class="mtx-label">View</span>
+        <button class="chip" type="button" data-cmetric="median" aria-pressed="false">Median</button>
+        <button class="chip active" type="button" data-cmetric="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-cmetric="min" aria-pressed="false">Min</button>
+        <button class="chip" type="button" data-cmetric="max" aria-pressed="false">Max</button>
+      </div>
+    </div>
+
+    <div class="stat-row" id="cStatRow">
+      <div class="stat-card"><div class="sl">Current Median</div><div class="sv" id="cstMedian">—</div><div class="sb">middle of the latest scan</div></div>
+      <div class="stat-card"><div class="sl">Cheapest</div><div class="sv" id="cstMin" style="color:var(--good)">—</div><div class="sb" id="cstMinName">—</div></div>
+      <div class="stat-card"><div class="sl">Most expensive</div><div class="sv" id="cstMax" style="color:var(--bad)">—</div><div class="sb" id="cstMaxName">—</div></div>
+      <div class="stat-card"><div class="sl">Platforms charted</div><div class="sv" id="cstCount">—</div><div class="sb" id="cstCountSub">—</div></div>
+    </div>
+
+    <div class="service-tags" id="cSvcTags" role="group" aria-label="Platforms on the chart"></div>
+    <p id="cSvcNote"></p>
+
+    <div class="chart-card">
+      <h3 id="cChartTitle">Price comparison</h3>
+      <div class="chart-hint" id="cChartHint"></div>
+      <div class="chart-wrap"><canvas id="cMainChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HEAD-TO-HEAD ==================== -->
+<div class="container">
+  <section class="h2h" id="head-to-head" aria-labelledby="h2hTitle">
+    <h2 id="h2hTitle">Head to head</h2>
+    <ul class="h2h-list">
+      <li><a href="vs/apitrx-vs-catfee.html">APITRX vs CatFee</a></li>
+      <li><a href="vs/apitrx-vs-energyfather.html">APITRX vs EnergyFather</a></li>
+      <li><a href="vs/apitrx-vs-feesaver.html">APITRX vs FeeSaver</a></li>
+      <li><a href="vs/apitrx-vs-itrx.html">APITRX vs iTRX</a></li>
+      <li><a href="vs/apitrx-vs-netts.html">APITRX vs NETTS</a></li>
+      <li><a href="vs/apitrx-vs-tr_energy.html">APITRX vs TR Energy</a></li>
+      <li><a href="vs/apitrx-vs-tronmax.html">APITRX vs TronMax</a></li>
+      <li><a href="vs/catfee-vs-energyfather.html">CatFee vs EnergyFather</a></li>
+      <li><a href="vs/catfee-vs-feesaver.html">CatFee vs FeeSaver</a></li>
+      <li><a href="vs/catfee-vs-itrx.html">CatFee vs iTRX</a></li>
+      <li><a href="vs/catfee-vs-netts.html">CatFee vs NETTS</a></li>
+      <li><a href="vs/catfee-vs-tr_energy.html">CatFee vs TR Energy</a></li>
+      <li><a href="vs/catfee-vs-tronmax.html">CatFee vs TronMax</a></li>
+      <li><a href="vs/energyfather-vs-feesaver.html">EnergyFather vs FeeSaver</a></li>
+      <li><a href="vs/energyfather-vs-itrx.html">EnergyFather vs iTRX</a></li>
+      <li><a href="vs/energyfather-vs-netts.html">EnergyFather vs NETTS</a></li>
+      <li><a href="vs/energyfather-vs-tr_energy.html">EnergyFather vs TR Energy</a></li>
+      <li><a href="vs/energyfather-vs-tronmax.html">EnergyFather vs TronMax</a></li>
+      <li><a href="vs/feesaver-vs-itrx.html">FeeSaver vs iTRX</a></li>
+      <li><a href="vs/feesaver-vs-netts.html">FeeSaver vs NETTS</a></li>
+      <li><a href="vs/feesaver-vs-tr_energy.html">FeeSaver vs TR Energy</a></li>
+      <li><a href="vs/feesaver-vs-tronmax.html">FeeSaver vs TronMax</a></li>
+      <li><a href="vs/itrx-vs-netts.html">iTRX vs NETTS</a></li>
+      <li><a href="vs/itrx-vs-tr_energy.html">iTRX vs TR Energy</a></li>
+      <li><a href="vs/itrx-vs-tronmax.html">iTRX vs TronMax</a></li>
+      <li><a href="vs/netts-vs-tr_energy.html">NETTS vs TR Energy</a></li>
+      <li><a href="vs/netts-vs-tronmax.html">NETTS vs TronMax</a></li>
+      <li><a href="vs/tr_energy-vs-tronmax.html">TR Energy vs TronMax</a></li>
+    </ul>
+    <!-- No count in the heading: the roster changes with the scan, and a number
+         typed here goes stale the day a platform is added. -->
+    <h2 id="all-reviews" style="margin-top:32px">All platform reviews</h2>
+    <ul class="h2h-list">
+      <li><a href="platforms/apitrx.html">APITRX</a></li>
+      <li><a href="platforms/brutus.html">Brutus.finance</a></li>
+      <li><a href="platforms/catfee.html">CatFee</a></li>
+      <li><a href="platforms/energyfather.html">EnergyFather</a></li>
+      <li><a href="platforms/ergon.html">Ergon</a></li>
+      <li><a href="platforms/feee.html">Feee.io</a></li>
+      <li><a href="platforms/feesaver.html">FeeSaver</a></li>
+      <li><a href="platforms/itrx.html">iTRX</a></li>
+      <li><a href="platforms/justlend_dao.html">JustLend DAO</a></li>
+      <li><a href="platforms/mefree.html">MeFree</a></li>
+      <li><a href="platforms/netts.html">NETTS</a></li>
+      <li><a href="platforms/refee.html">re:Fee</a></li>
+      <li><a href="platforms/renttron.html">RentTron</a></li>
+      <li><a href="platforms/tr_energy.html">TR Energy</a></li>
+      <li><a href="platforms/tofee.html">Tron Fee Energy Rental</a></li>
+      <li><a href="platforms/tronex.html">Tronex Energy</a></li>
+      <li><a href="platforms/tronfor.html">tronfor.me</a></li>
+      <li><a href="platforms/tronify.html">Tronify</a></li>
+      <li><a href="platforms/tronmax.html">TronMax</a></li>
+      <li><a href="platforms/tronzap.html">TronZap</a></li>
+    </ul>
+  </section>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+</main>
+<div class="footer-wrap">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Energy Price Board. Prices are collected automatically and may be delayed.</span>
+      <span>v3.2 · <a href="index.html">Board</a> · <a href="news.html">News</a> ·
+        <a href="terms.txt">Terms</a> · <a href="privacy.txt">Privacy</a></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+
+/* ================================================================
+   DATA
+   ================================================================ */
+
+var FEATURES = [
+  {id:'api',       label:'API', desc:'REST API for programmatic energy rental'},
+  {id:'telegram',  label:'Telegram', desc:'Telegram bot for energy orders'},
+  {id:'marketplace',label:'Marketplace',desc:'Bid/ask order book pricing model'},
+  {id:'autotopup', label:'Auto-topup', desc:'Automatic energy refill when balance is low'},
+  {id:'usdt_trx',  label:'USDT↔TRX', desc:'Accepts USDT payments or auto-converts'},
+  {id:'dapp',      label:'dApp', desc:'Direct TRON dApp / browser interaction'},
+  {id:'referral',  label:'Referral', desc:'Referral program with bonuses for sharing'},
+  {id:'staking',   label:'Staking', desc:'Staking rewards or energy staking pools'},
+  {id:'bandwidth', label:'Bandwidth', desc:'Also sells bandwidth points for TRON transactions'}
+];
+
+var PLATFORM_FEATURES = {
+  apitrx:       ['api','autotopup'],
+  brutus:       ['marketplace','dapp'],
+  catfee:       ['autotopup'],
+  energyfather: ['api','referral'],
+  ergon:        ['dapp','staking'],
+  feee:         ['api','referral','usdt_trx'],
+  feesaver:     ['telegram','referral','autotopup'],
+  itrx:         ['api','referral'],
+  justlend_dao: ['dapp','staking'],
+  mefree:       ['api'],
+  netts:        [],
+  refee:        ['telegram','referral'],
+  renttron:     [],
+  tofee:        ['dapp'],
+  tr_energy:    ['referral'],
+  tronex:       ['api','telegram','referral'],
+  tronfor:      [],
+  tronify:      ['api','referral'],
+  tronmax:      ['marketplace','api','referral'],
+  tronzap:      ['referral']
+};
+
+var COLORS = ['#2F6BFA','#5936FA','#7A36FA','#1A8FE5','#E5484D','#0D9488','#D97706','#7C3AED','#DB2777','#4B5563',
+  '#1A8FE5','#E5484D','#0D9488','#D97706','#7C3AED','#DB2777','#4B5563','#2F6BFA','#5936FA','#7A36FA'];
+
+var $ = function(id){ return document.getElementById(id); };
+var fmt = function(n){ return (typeof n==='number'&&isFinite(n))?n.toFixed(2):'—'; };
+var E = window.EPB;
+var setFresh = E.freshness($('hUpdated'), 'updated');
+
+/* Chart colours come from the live design tokens, so both themes read well and
+   a theme switch just redraws. */
+function tok(name, fallback){
+  var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+function chartTheme(){
+  return {tick: tok('--text-3','#69738a'), grid: tok('--line','rgba(255,255,255,.07)'),
+          text: tok('--text-2','#9aa4b8'), accent: tok('--accent','#5b8cff'),
+          good: tok('--good','#3ecf94'), bad: tok('--bad','#f0736f')};
+}
+
+var data = null;
+var allPlatforms = [];
+var terms = ['15m','1h','1d','3d','10d'];
+var volumes = ['65k','130k'];
+
+/* ===== Data contract helpers (tolerate missing fields) =====
+   platform.age_min / .stale / .has_prices / .estimated_keys are optional;
+   missing => stale:false, has_prices derived from prices, estimated_keys:[]. */
+var EST_TITLE = 'Estimated from market ratios, not a quoted price';
+
+function isNum(v){ return typeof v === 'number' && isFinite(v); }
+function isStale(p){ return !!(p && p.stale === true); }
+function hasPrices(p){
+  if (!p) return false;
+  if (typeof p.has_prices === 'boolean') return p.has_prices;
+  for (var v = 0; v < volumes.length; v++)
+    for (var t = 0; t < terms.length; t++)
+      if (isNum(p[volumes[v] + '_' + terms[t] + '_price'])) return true;
+  return false;
+}
+function isEstimated(p, key){
+  var keys = (p && p.estimated_keys) || [];
+  return keys.indexOf(key) !== -1;
+}
+function isRankable(p){ return hasPrices(p) && !isStale(p); }
+function staleLabel(p){
+  var m = null;
+  if (isNum(p.age_min)) m = p.age_min;
+  else if (p.ts) m = Math.floor((Date.now() - new Date(p.ts).getTime()) / 60000);
+  if (m === null || !isFinite(m)) return 'stale';
+  return m < 60 ? 'stale · ' + Math.round(m) + 'm' : 'stale · ' + Math.round(m / 60) + 'h';
+}
+function chartMissing(msg){
+  var hint = $('cChartHint');
+  if (hint) hint.textContent = msg;
+}
+function plural(n, one, many){ return n === 1 ? one : many; }
+
+/* Thousands separators, the same shape the platform pages print. */
+function groupDigits(v){ return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+/* The note marker carries no text node at all: the "i" is drawn in CSS, so the
+   cell's text is the platform name and nothing else — "APITRX", not "APITRXi".
+   The sentence reaches a reader three ways instead: the tooltip on hover, the
+   accessible name of the marker, and the panel's own paragraph in full. */
+function noteMark(p){
+  var n = E.priceNote(p);
+  if (!n) return '';
+  var t = E.esc(n);
+  return '<span class="note-mark" role="img" title="'+t+'" aria-label="How this price is read: '+t+'"></span>';
+}
+
+// Feature filter state
+var activeFeats = {}; // {featId: true|false} — true = filter ON (show only platforms WITH this feature)
+FEATURES.forEach(function(f){ activeFeats[f.id] = false; });
+
+// Matrix state.
+// mtxSort always names a column the reader can see: 'term:<t>' is that term's
+// price column, 'avg' the Avg column, 'name' the first column, 'coverage' the
+// count of terms a platform quotes. Nothing sorts by a hidden number.
+var mtxVol = '65k';
+var mtxSort = 'term:1h';
+var mtxDir = 1;               // 1 ascending, -1 descending
+var mtxPriceTerm = '1h';      // the price column the Price chip points at
+var mtxSearch = '';
+var mtxSelected = null;
+
+// Chart state
+var cSize='65k', cTerm='1h', cRange='7d', cMetric='all';
+var cServices = {}; // {pid: true|false}
+var history7d=null, history30d=null, hist7=null;
+var chart = null;
+
+/* ================================================================
+   FEATURE FILTERS (shared)
+   ================================================================ */
+
+/* The chips are in the markup already; this only wires them up, so nothing
+   about the filter bar moves once the scan arrives. */
+function buildFeatBar(){
+  var bar = $('featBar');
+  if (!bar) return;
+  bar.querySelectorAll('.feat-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var fid = chip.dataset.feat;
+      activeFeats[fid] = !activeFeats[fid];
+      chip.classList.toggle('on', activeFeats[fid]);
+      chip.setAttribute('aria-pressed', activeFeats[fid] ? 'true' : 'false');
+      updateFeatCounts();
+      refreshActiveTab();
+    });
+  });
+  updateFeatCounts();
+}
+
+function updateFeatCounts(){
+  var el = $('featMatchCount');
+  if (!el) return;
+  var activeList = Object.keys(activeFeats).filter(function(k){ return activeFeats[k]; });
+  if (activeList.length === 0 || !allPlatforms.length) { el.textContent = ''; return; }
+  var matching = allPlatforms.filter(function(p){ return platformMatchesFeats(p.platform_id); });
+  el.textContent = matching.length + ' of ' + allPlatforms.length;
+}
+
+function platformMatchesFeats(pid){
+  var pfeats = PLATFORM_FEATURES[pid] || [];
+  var activeList = Object.keys(activeFeats).filter(function(k){ return activeFeats[k]; });
+  if (activeList.length === 0) return true;
+  return activeList.every(function(fid){ return pfeats.indexOf(fid) !== -1; });
+}
+
+function getFilteredPlatforms(){
+  return allPlatforms.filter(function(p){ return platformMatchesFeats(p.platform_id); });
+}
+
+/* ================================================================
+   TAB SWITCHING
+   ================================================================ */
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){
+      b.classList.remove('active'); b.setAttribute('aria-pressed','false');
+    });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+    document.querySelectorAll('.tab-content').forEach(function(tc){ tc.classList.remove('active'); });
+    $('tab-'+btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'chart') refreshChart();
+  });
+});
+
+function refreshActiveTab(){
+  var activeTab = document.querySelector('.tab-btn.active');
+  if (!activeTab) return;
+  if (activeTab.dataset.tab === 'matrix') renderMatrix();
+  else refreshChart();
+}
+
+/* ================================================================
+   MATRIX TAB
+   ================================================================ */
+
+function getPrice(p, vol, term){
+  var v = p[vol+'_'+term+'_price'];
+  return (typeof v==='number'&&v>=0)?v:null;
+}
+
+function buildVolumeChips(){
+  var group = $('mtxVolGroup');
+  if (!group) return;
+  // Remove existing vol chips
+  var chips = group.querySelectorAll('.chip[data-vol]');
+  chips.forEach(function(c){ c.remove(); });
+  // Only volumes actually declared in meta.volumes (fallback: 65k/130k)
+  var vols = volumes.slice();
+  if (data && data.meta && data.meta.volumes) {
+    var declared = Object.keys(data.meta.volumes);
+    if (declared.length) vols = declared;
+  }
+  if (vols.indexOf(mtxVol) === -1) mtxVol = vols[0];
+
+  vols.forEach(function(vk){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip' + (vk===mtxVol?' active':'');
+    btn.dataset.vol = vk;
+    btn.textContent = vk;
+    btn.setAttribute('aria-pressed', vk===mtxVol ? 'true' : 'false');
+    btn.addEventListener('click',function(){
+      group.querySelectorAll('.chip[data-vol]').forEach(function(b){
+        b.classList.remove('active'); b.setAttribute('aria-pressed','false');
+      });
+      btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+      mtxVol = vk;
+      renderMatrix();
+      if (mtxSelected) renderDetail(mtxSelected);
+    });
+    group.appendChild(btn);
+  });
+}
+
+/* ---------- sorting -------------------------------------------------------
+   One click picks a column, a second click on the same column turns it round.
+   The header carries aria-sort, the chip row mirrors it; there is no third
+   state and no hidden key. */
+function defaultDir(key){ return key === 'coverage' ? -1 : 1; }
+
+function setSort(key){
+  if (key === mtxSort) mtxDir = -mtxDir;
+  else { mtxSort = key; mtxDir = defaultDir(key); }
+  if (key.indexOf('term:') === 0) mtxPriceTerm = key.slice(5);
+  renderMatrix();
+}
+
+function sortValue(s, key){
+  if (key === 'avg') return s.avg;
+  if (key.indexOf('term:') === 0){
+    var i = terms.indexOf(key.slice(5));
+    return i === -1 ? null : s.prices[i];
+  }
+  return null;
+}
+
+function sortRows(list){
+  var key = mtxSort, dir = mtxDir;
+  if (key === 'name'){
+    list.sort(function(a,b){
+      return (a.platform.platform_name||'').localeCompare(b.platform.platform_name||'') * dir;
+    });
+    return list;
+  }
+  if (key === 'coverage'){
+    list.sort(function(a,b){
+      var d = (a.validCount - b.validCount) * dir;
+      if (d) return d;
+      if (a.avg === null) return 1;
+      if (b.avg === null) return -1;
+      return a.avg - b.avg;
+    });
+    return list;
+  }
+  /* A missing price is not a cheap one and not an expensive one: rows without
+     a number in the sorted column stay at the bottom in both directions. */
+  list.sort(function(a,b){
+    var av = sortValue(a, key), bv = sortValue(b, key);
+    if (av === null && bv === null)
+      return (a.platform.platform_name||'').localeCompare(b.platform.platform_name||'');
+    if (av === null) return 1;
+    if (bv === null) return -1;
+    if (av !== bv) return (av - bv) * dir;
+    return (a.platform.platform_name||'').localeCompare(b.platform.platform_name||'');
+  });
+  return list;
+}
+
+var SORT_CHIP_KEY = {avg:'avg', name:'name', coverage:'coverage'};
+function chipKey(chip){
+  var c = chip.dataset.sortchip;
+  return c === 'price' ? 'term:' + mtxPriceTerm : SORT_CHIP_KEY[c];
+}
+function paintSortChips(){
+  var arrow = mtxDir > 0 ? '▲' : '▼';
+  document.querySelectorAll('.chip[data-sortchip]').forEach(function(chip){
+    var on = chipKey(chip) === mtxSort;
+    var base = chip.dataset.sortchip === 'price' ? 'Price · ' + mtxPriceTerm
+             : chip.dataset.sortchip.charAt(0).toUpperCase() + chip.dataset.sortchip.slice(1);
+    chip.textContent = on ? base + ' ' + arrow : base;
+    chip.classList.toggle('active', on);
+    chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+    chip.title = on
+      ? 'Sorted by this column — press again to turn the order round'
+      : 'Sort the matrix by this column';
+  });
+}
+
+function renderMatrix(){
+  if (!data) return;
+  /* The body is rebuilt from scratch, including on the 60-second refresh, so
+     a row that had the keyboard gets it back afterwards. */
+  var focusPid = null;
+  try {
+    var ae = document.activeElement;
+    if (ae && ae.matches && ae.matches('#mtxBody tr[data-pid]')) focusPid = ae.dataset.pid;
+  } catch (e) {}
+
+  var rows = getFilteredPlatforms().map(function(p){
+    var prices = terms.map(function(t){ return getPrice(p, mtxVol, t); });
+    var valid = prices.filter(function(v){ return v!==null; });
+    var avg = valid.length>0 ? valid.reduce(function(a,b){return a+b;},0)/valid.length : null;
+    return {platform:p, prices:prices, avg:avg, validCount:valid.length,
+            stale:isStale(p), noData:!hasPrices(p)};
+  });
+
+  /* Trim first: a trailing space is a typing artefact, not a query, and an
+     empty box after trimming means no filter at all. */
+  if (mtxSearch){
+    var q = mtxSearch.toLowerCase();
+    rows = rows.filter(function(s){
+      return (s.platform.platform_name||'').toLowerCase().indexOf(q)!==-1 ||
+             (s.platform.platform_id||'').toLowerCase().indexOf(q)!==-1;
+    });
+  }
+
+  // live rows first, then stale, then no-data at the bottom
+  var live   = sortRows(rows.filter(function(s){ return !s.noData && !s.stale; }));
+  var stale  = sortRows(rows.filter(function(s){ return !s.noData && s.stale; }));
+  var noData = rows.filter(function(s){ return s.noData; })
+                   .sort(function(a,b){ return (a.platform.platform_name||'').localeCompare(b.platform.platform_name||''); });
+
+  // Per-column minimums — live (non-stale) rows only
+  var colMins = {};
+  for (var i=0;i<terms.length;i++){
+    var vals = live.map(function(s){return s.prices[i];}).filter(function(v){return v!==null;});
+    colMins[i] = vals.length>0 ? Math.min.apply(null,vals) : null;
+  }
+
+  var head = $('mtxHead');
+  var arrow = mtxDir > 0 ? '▲' : '▼';
+  function th(key, label, title){
+    var on = key === mtxSort;
+    return '<th scope="col"' + (on ? ' aria-sort="' + (mtxDir>0?'ascending':'descending') + '"' : '') +
+      '><button class="mtx-sort" type="button" data-sortkey="' + key + '" title="' + title + '">' +
+      label + '<span class="dir" aria-hidden="true">' + (on ? arrow : '') + '</span></button></th>';
+  }
+  var h = '<tr>' + th('name', 'Platform', 'Sort by platform name');
+  terms.forEach(function(t){ h += th('term:'+t, t, 'Sort by the ' + t + ' price'); });
+  h += th('avg', 'Avg', 'Sort by the mean of the terms this platform quotes');
+  h += '<th scope="col">trend</th></tr>';
+  if (head) head.innerHTML = h;
+  paintSortChips();
+
+  var body = $('mtxBody');
+  body.innerHTML = '';
+  var colSpan = terms.length + 3;
+  var anyEst = false;
+
+  function rowHtml(s){
+    var p = s.platform;
+    var pid = p.platform_id||'?';
+    var name = p.platform_name||pid;
+    var isSel = pid===mtxSelected;
+    var cls = (isSel?'selected ':'') + (s.noData?'row-nodata':(s.stale?'row-stale':''));
+
+    var html = '<tr class="'+cls.trim()+'" data-pid="'+pid+'" tabindex="0"' +
+      ' aria-expanded="'+(isSel?'true':'false')+'" aria-controls="detailPanel">';
+    var nameHtml = pid && pid !== '?'
+      ? '<a href="platforms/'+pid+'.html" class="mtx-plat-link" title="'+name+' review and live prices">'+name+'</a>'
+      : name;
+    html += '<td class="label">'+nameHtml+noteMark(p)+
+      (s.stale?'<span class="badge-stale" title="Last successful scrape is older than 3 hours">'+staleLabel(p)+'</span>':'')+
+      (s.noData?'<span class="badge-nodata">no prices</span>':'')+'</td>';
+
+    s.prices.forEach(function(price,ci){
+      if (price===null){
+        html += '<td><span class="cell-price na">—</span></td>';
+        return;
+      }
+      var est = isEstimated(p, mtxVol+'_'+terms[ci]+'_price');
+      if (est) anyEst = true;
+      var isMin = !s.stale && colMins[ci]!==null && price===colMins[ci];
+      html += '<td><span class="cell-price'+(isMin?' best':'')+(est?' est':'')+'"'+
+        (est?' title="'+EST_TITLE+'"':'')+'>'+(isMin?'★ ':'')+(est?'≈ ':'')+fmt(price)+'</span></td>';
+    });
+
+    html += s.avg!==null
+      ? '<td><span class="cell-price">'+fmt(s.avg)+'</span></td>'
+      : '<td><span class="cell-price na">—</span></td>';
+    /* 7-day shape at the selected volume, 1-hour term. Empty below 3 samples. */
+    var spark = hist7 ? E.sparkline(E.series(hist7, pid, mtxVol + '_1h_price'),
+      {label: mtxVol + ' 1-hour trend for ' + name, area:false}) : '';
+    html += '<td class="spark-cell">' + (spark || '<span class="faint">—</span>') + '</td>';
+    html += '</tr>';
+    return html;
+  }
+
+  live.forEach(function(s){ body.insertAdjacentHTML('beforeend', rowHtml(s)); });
+  if (stale.length){
+    body.insertAdjacentHTML('beforeend','<tr class="section-split"><td colspan="'+colSpan+'">Stale — last scrape older than 3h, excluded from “best price”</td></tr>');
+    stale.forEach(function(s){ body.insertAdjacentHTML('beforeend', rowHtml(s)); });
+  }
+  if (noData.length){
+    body.insertAdjacentHTML('beforeend','<tr class="section-split"><td colspan="'+colSpan+'">No data right now</td></tr>');
+    noData.forEach(function(s){ body.insertAdjacentHTML('beforeend', rowHtml(s)); });
+  }
+
+  var legend = $('mtxLegend');
+  if (legend) legend.textContent = anyEst ? '≈ — estimated from market ratios, not a quoted price' : '';
+
+  $('mtxCount').textContent = live.length + plural(live.length, ' platform', ' platforms') +
+    ' with live prices' +
+    (stale.length ? ' · ' + stale.length + ' stale' : '') +
+    (noData.length ? ' · ' + noData.length + ' without data' : '');
+
+  if (focusPid){
+    var back = rowEl(focusPid);
+    if (back) { try { back.focus({preventScroll:true}); } catch(e){ back.focus(); } }
+  }
+}
+
+function renderDetail(pid){
+  if (!data) return;
+  var p = data.platforms.find(function(x){return x.platform_id===pid;});
+  var panel = $('detailPanel');
+  if (!p){ panel.innerHTML=''; return; }
+
+  var name = p.platform_name||pid;
+  var url = p.url||'';
+  var host = ''; try{ host = new URL(url).hostname; }catch(e){}
+
+  var priceHtml = '';
+  function dpRow(vol, t){
+    var v = getPrice(p, vol, t);
+    if (v === null) return '';
+    var key = vol+'_'+t+'_price';
+    var est = isEstimated(p, key);
+    return '<div class="dp-price-row"><span class="lbl">'+vol+' · '+t+'</span>'+
+      '<span class="val'+(est?' est':'')+'"'+(est?' title="'+EST_TITLE+'"':'')+'>'+
+      (est?'≈ ':'')+fmt(v)+' TRX</span></div>';
+  }
+  terms.forEach(function(t){ priceHtml += dpRow('65k', t) + dpRow('130k', t); });
+  if (isStale(p)) priceHtml = '<div style="margin-bottom:6px"><span class="badge-stale" style="margin-left:0" title="Last successful scrape is older than 3 hours">'+staleLabel(p)+'</span></div>' + priceHtml;
+  if (!hasPrices(p)) priceHtml = '<div style="color:var(--ink-secondary);font-size:12px">No price data in the latest scan</div>';
+
+  /* The panel is where a reader lands after choosing a platform, so it carries
+     the button rather than a decorative chip. The button exists only where we
+     hold an arrangement or the shop is our own; everywhere else the reader is
+     sent to our own review page, which carries the same live price. */
+  var buyUrl = E.outUrl(p);
+  var refBtn = buyUrl
+    ? '<a class="btn btn-primary" href="' + buyUrl + '" target="_blank" ' +
+      'rel="' + E.outRel(p) + '"' +
+      ' data-platform-id="' + E.esc(pid) + '" style="margin-bottom:10px;width:100%">' +
+      'Rent at ' + E.esc(name) + '</a>'
+    : (pid ? '<a class="btn btn-secondary" href="platforms/' + E.esc(pid) + '.html"' +
+             ' style="margin-bottom:10px;width:100%">' + E.esc(name) + ' prices and review</a>' : '');
+
+  /* Feature badges. ✓/✗ and a spelled-out state, matching the platform pages —
+     colour on its own says nothing to a reader who cannot see it, and grey on
+     grey read as "supported" here for every platform with no features listed. */
+  var pfeats = PLATFORM_FEATURES[pid] || [];
+  var featHtml = '';
+  FEATURES.forEach(function(f){
+    var has = pfeats.indexOf(f.id)!==-1;
+    featHtml += '<span class="dp-feat-tag'+(has?' has':' no')+'">' +
+      '<span class="mk" aria-hidden="true">'+(has?'✓':'✗')+'</span>' + f.label +
+      '<span class="sr-only">: '+(has?'supported':'not supported')+'</span></span>';
+  });
+
+  var spark7 = hist7 ? E.sparkline(E.series(hist7, pid, '65k_1h_price'),
+    {label:'65k 1-hour price for ' + name + ', everything recorded so far'}) : '';
+  var delta = hist7 ? E.deltaHtml(E.delta24(E.series(hist7, pid, '65k_1h_price'))) : '';
+  var trendBlock = spark7
+    ? '<div class="dp-section"><div class="dp-section-title">65k · 1 hour · recorded so far ' + delta +
+      '</div><div class="dp-spark">' + spark7 + '</div></div>' : '';
+
+  /* Scraper note about how this platform's quote is read, when there is one. */
+  var noteBlock = E.priceNote(p)
+    ? '<div class="dp-section"><div class="dp-section-title">How this price is read</div>' +
+      '<p class="price-note" style="margin:0">' + E.esc(E.priceNote(p)) + '</p></div>' : '';
+
+  /* Order limits are energy counts, printed the way every platform page prints
+     them: grouped digits and the unit spelled out. */
+  function limitBadge(label, v){
+    if (v === undefined || v === null || v === '' || v === 'N/A') return '';
+    return '<span class="dp-badge limit">' + label + ': ' + groupDigits(v) + ' energy</span>';
+  }
+  var limitsHtml = limitBadge('Min', p.minimum_order_energy) +
+                   limitBadge('Max', p.maximum_order_energy) +
+                   limitBadge('Cap', p.platform_max_energy) +
+                   limitBadge('Avail', p.available_energy) +
+                   (p.has_referral?'<span class="dp-badge ref">Referral link</span>':'');
+
+  panel.innerHTML =
+    '<div class="dp-header"><div><div class="dp-name">'+name+noteMark(p)+'</div>'+
+    (host? (E.outUrl(p)?'<a class="dp-url" href="'+E.outUrl(p)+'" target="_blank" rel="'+E.outRel(p)+'">'+host+(p.is_ours?' (our shop)':' (referral)')+'</a>':'<span style="font-size:11px;color:var(--ink-secondary)">'+host+'</span>'):'')+
+    '</div><button type="button" class="dp-close" onclick="window._closeDetail()" aria-label="Close details" title="Close (Esc)">✕</button></div>'+
+    refBtn+ trendBlock +
+    (limitsHtml ? '<div class="dp-section"><div class="dp-section-title">Limits</div><div>' +
+      limitsHtml + '</div></div>' : '')+
+    '<div class="dp-section"><div class="dp-section-title">Features</div><div class="dp-features">'+featHtml+'</div></div>'+
+    '<div class="dp-section"><div class="dp-section-title">Prices</div>'+(priceHtml||'<div style="color:var(--ink-secondary);font-size:12px">No price data</div>')+'</div>'+
+    noteBlock;
+}
+
+/* ---------- opening and closing the panel ---------------------------------
+   A row is a control, so it takes focus, answers Enter and Space, and says
+   whether it is open. Opening hands focus to the panel and, when the panel is
+   off screen — which is where it always lands on a phone — scrolls to it.
+   Closing puts focus back on the row it came from. */
+function rowEl(pid){
+  return pid ? $('mtxBody').querySelector('tr[data-pid="'+pid+'"]') : null;
+}
+
+/* Scroll only when the panel is genuinely off screen. On a wide window it is
+   sticky under the navbar and already there; on a phone it lands a screen or
+   two below the row that was tapped, which is what made a tap look like a
+   no-op. */
+function bringIntoView(el){
+  if (!el) return;
+  var r = el.getBoundingClientRect();
+  var visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 76);
+  if (visible >= Math.min(r.height, 120)) return;
+  try { el.scrollIntoView({block:'start', behavior: E.reduced ? 'auto' : 'smooth'}); }
+  catch(err){ el.scrollIntoView(true); }
+}
+
+function openDetail(pid, moveFocus){
+  mtxSelected = pid;
+  var layout = document.querySelector('.mtx-layout');
+  if (layout) layout.classList.add('has-detail');
+  renderMatrix();
+  renderDetail(pid);
+  var panel = $('detailPanel');
+  if (!panel) return;
+  if (moveFocus){
+    try { panel.focus({preventScroll:true}); } catch(e){ panel.focus(); }
+  }
+  bringIntoView(panel);
+}
+
+function closeDetail(moveFocus){
+  if (mtxSelected === null) return;
+  var pid = mtxSelected;
+  mtxSelected = null;
+  $('detailPanel').innerHTML = '';
+  var layout = document.querySelector('.mtx-layout');
+  if (layout) layout.classList.remove('has-detail');
+  renderMatrix();
+  if (moveFocus){
+    var row = rowEl(pid);
+    if (row) row.focus();
+  }
+}
+window._closeDetail = function(){ closeDetail(true); };
+
+/* Escape: the shared runtime fires this for the whole site. In the search box
+   it clears the query and leaves the panel alone; anywhere else it closes the
+   panel and returns focus to the row. */
+document.addEventListener('epb:escape', function(){
+  syncSearch();
+  if (escFromSearch) return;
+  closeDetail(true);
+});
+
+document.addEventListener('click',function(e){
+  /* real links inside a row (platform review page) must navigate, not just select */
+  if (e.target.closest('a')) return;
+  if (e.target.closest('.detail-panel')) return;
+  var row = e.target.closest('.mtx-table tr[data-pid]');
+  if (!row) return;
+  if (row.dataset.pid === mtxSelected) closeDetail(true);
+  else openDetail(row.dataset.pid, true);
+});
+
+$('mtxBody').addEventListener('keydown', function(e){
+  var row = e.target && e.target.closest ? e.target.closest('tr[data-pid]') : null;
+  /* Only the row itself: Enter on the platform link has to follow the link. */
+  if (!row || row !== e.target) return;
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+    e.preventDefault();
+    if (row.dataset.pid === mtxSelected) closeDetail(true);
+    else openDetail(row.dataset.pid, true);
+  }
+});
+
+/* ================================================================
+   CHART TAB
+   ================================================================ */
+
+function renderChartStats(){
+  if (!data) return;
+  // rankings/stats: live platforms only (no stale, no "no data")
+  var filtered = getFilteredPlatforms().filter(isRankable);
+  var key = cSize+'_'+cTerm+'_price';
+  var vals = filtered.map(function(p){return p[key];}).filter(function(v){return isNum(v);});
+  /* Three tiles read the latest scan; the fourth belongs to the chart and is
+     written by paintChartCounters, so nothing here touches it. */
+  if (!vals.length){
+    $('cstMedian').textContent='—'; $('cstMin').textContent='—'; $('cstMinName').textContent='';
+    $('cstMax').textContent='—'; $('cstMaxName').textContent='';
+  }
+  if (vals.length){
+    vals.sort(function(a,b){return a-b;});
+    var min=vals[0], max=vals[vals.length-1];
+    var mid = Math.floor(vals.length/2);
+    var median = vals.length%2 ? vals[mid] : (vals[mid-1]+vals[mid])/2;
+    var minP = filtered.find(function(p){return p[key]===min;});
+    var maxP = filtered.find(function(p){return p[key]===max;});
+    $('cstMedian').textContent = fmt(median)+' TRX';
+    $('cstMin').textContent = fmt(min)+' TRX';
+    $('cstMinName').textContent = minP ? (minP.platform_name||minP.platform_id) : '';
+    $('cstMax').textContent = fmt(max)+' TRX';
+    $('cstMaxName').textContent = maxP ? (maxP.platform_name||maxP.platform_id) : '';
+  }
+}
+
+/* ---------- one source for every chart number -----------------------------
+   The tile, the caption and the legend used to count three different sets, so
+   they disagreed and none of them moved when a platform was switched off.
+   chartSeries is built once per redraw and everything reads from it. */
+var chartSeries = [];       // [{pid, name, points}] — one entry per drawn line
+var chartNoData = [];       // filtered platforms with no sample at this size/term
+var chartSamples = 0;
+var chartSpanH = null;      // hours between the first and last sample drawn
+
+function seriesOn(s){ return cServices[s.pid] !== false; }
+
+function renderServiceTags(){
+  var el = $('cSvcTags');
+  var note = $('cSvcNote');
+  if (!el) return;
+  /* Aggregate views draw a single line, so there is nothing to switch on and
+     off; the legend belongs to the per-platform view only. */
+  if (cMetric !== 'all'){
+    el.innerHTML = '';
+    el.hidden = true;
+    if (note) note.textContent = '';
+    return;
+  }
+  el.hidden = false;
+  /* Seventeen lines on one chart is a hairball. Switching them off one by one
+     is sixteen clicks, so the group gets a single control that clears the lot
+     and then puts them all back — the fastest way to look at two platforms. */
+  var anyOn = chartSeries.some(seriesOn);
+  el.innerHTML =
+    '<button class="svc-tag svc-tag-all" type="button" id="cSvcAll">' +
+      (anyOn ? 'Hide all' : 'Show all') + '</button>' +
+    chartSeries.map(function(s){
+    var on = seriesOn(s);
+    return '<button class="svc-tag '+(on?'on':'off')+'" type="button" data-pid="'+E.esc(s.pid)+
+      '" aria-pressed="'+(on?'true':'false')+'">'+E.esc(s.name.substring(0,20))+'</button>';
+  }).join('');
+  var allBtn = document.getElementById('cSvcAll');
+  if (allBtn) allBtn.addEventListener('click', function(){
+    var turnOn = !chartSeries.some(seriesOn);
+    chartSeries.forEach(function(s){ cServices[s.pid] = turnOn; });
+    renderChartVis();
+  });
+  el.querySelectorAll('.svc-tag[data-pid]').forEach(function(tag){
+    tag.addEventListener('click',function(){
+      var pid = tag.dataset.pid;
+      cServices[pid] = cServices[pid]===false?true:false;
+      var on = cServices[pid] !== false;
+      tag.classList.toggle('on', on);
+      tag.classList.toggle('off', !on);
+      tag.setAttribute('aria-pressed', on ? 'true' : 'false');
+      renderChartVis();          // redraws, then recounts from the same list
+    });
+  });
+  if (note){
+    if (!chartNoData.length){ note.textContent = ''; return; }
+    var shownNames = chartNoData.slice(0, 4).join(', ');
+    var rest = chartNoData.length - 4;
+    note.textContent = chartNoData.length +
+      plural(chartNoData.length, ' platform has', ' platforms have') +
+      ' no sample at this size and term: ' + shownNames +
+      (rest > 0 ? ' and ' + rest + ' more.' : '.');
+  }
+}
+
+function paintChartCounters(){
+  var total = chartSeries.length;
+  var shown = chartSeries.filter(seriesOn).length;
+  var depth = chartSpanH === null ? ''
+    : ' · ' + (chartSpanH < 48 ? Math.round(chartSpanH) + ' hours recorded'
+                               : Math.round(chartSpanH / 24) + ' days recorded');
+
+  if (cMetric !== 'all'){
+    $('cstCount').textContent = total ? '1' : '0';
+    $('cstCountSub').textContent = total
+      ? 'one line over ' + total + plural(total, ' platform', ' platforms')
+      : 'nothing to draw';
+    $('cChartHint').textContent = total
+      ? 'Market ' + cMetric + ' of ' + total + plural(total, ' platform', ' platforms') +
+        ' · ' + chartSamples + plural(chartSamples, ' sample', ' samples') + depth
+      : 'No history for this size and term yet.';
+    return;
+  }
+  $('cstCount').textContent = String(shown);
+  $('cstCountSub').textContent = total
+    ? (shown === total ? 'every platform with samples here' : 'of ' + total + ' with samples here')
+    : 'nothing to draw';
+  $('cChartHint').textContent = total
+    ? shown + ' of ' + total + plural(total, ' platform drawn', ' platforms drawn') +
+      ' · ' + chartSamples + plural(chartSamples, ' sample', ' samples') + depth
+    : 'No history for this size and term yet.';
+}
+
+/* Window is measured from the LATEST timestamp present in the data (not Date.now()),
+   so archived/late data still renders. Falls back to "now" when the file is empty. */
+function latestTs(sd, key){
+  var max = null;
+  Object.keys(sd).forEach(function(pid){
+    var series = sd[pid] && sd[pid][key];
+    if (!series) return;
+    for (var i = series.length - 1; i >= 0; i--){
+      var e = series[i];
+      if (e && e[1] !== null && e[1] !== undefined){ if (max === null || e[0] > max) max = e[0]; break; }
+    }
+  });
+  return max === null ? Date.now() : max;
+}
+
+function renderChartVis(){
+  var hist = cRange==='30d'?history30d:history7d;
+  if (!hist) return;
+  if (typeof Chart === 'undefined'){
+    chartMissing('Chart library could not be loaded (CDN blocked?) — data is still available in the Matrix tab.');
+    return;
+  }
+  var sd = hist.services_data||{};
+  var key = cSize+'_'+cTerm+'_price';
+  var cutoff = latestTs(sd, key) - (cRange==='30d'?30:7)*86400000;
+  var filtered = getFilteredPlatforms();
+
+  /* Build the series list first. Everything the reader sees — the line, the
+     legend tag, the tile and the caption — is derived from this one array. */
+  chartSeries = [];
+  chartNoData = [];
+  var allTs = new Set();
+
+  filtered.forEach(function(p){
+    var pid = p.platform_id;
+    var name = p.platform_name||pid;
+    var raw = sd[pid] ? sd[pid][key] : null;
+    var points = [];
+    (raw||[]).forEach(function(entry){
+      var ts=entry[0], val=entry[1];
+      if (val!==null&&val!==undefined&&ts>=cutoff){
+        allTs.add(ts);
+        points.push({x:ts,y:val});
+      }
+    });
+    if (!points.length){ chartNoData.push(name); return; }   // one sample is enough to draw
+    if (!(pid in cServices)) cServices[pid] = true;
+    chartSeries.push({pid:pid, name:name, points:points});
+  });
+
+  var sortedTs = Array.from(allTs).sort(function(a,b){return a-b;});
+  chartSamples = sortedTs.length;
+  chartSpanH = sortedTs.length > 1
+    ? (sortedTs[sortedTs.length-1] - sortedTs[0]) / 3600000 : null;
+
+  var datasets = [];
+  var ct = chartTheme();
+
+  if (cMetric === 'all'){
+    chartSeries.forEach(function(s, i){
+      var on = seriesOn(s);
+      datasets.push({label:s.name, points:s.points, borderColor:COLORS[i%COLORS.length],
+        borderWidth:2, hidden:!on});
+    });
+  } else {
+    /* One line, drawn from the same platforms the legend would have listed —
+       so "median" means the median of what this page is showing, not of every
+       row in the file. */
+    var timeMap = {};
+    chartSeries.forEach(function(s){
+      s.points.forEach(function(pt){
+        (timeMap[pt.x] || (timeMap[pt.x] = [])).push(pt.y);
+      });
+    });
+    var aggPts = Object.keys(timeMap).map(Number).sort(function(a,b){return a-b;}).map(function(ts){
+      var vs = timeMap[ts].slice().sort(function(a,b){return a-b;});
+      var n = vs.length;
+      var v = cMetric==='min' ? vs[0]
+            : cMetric==='max' ? vs[n-1]
+            : (n%2 ? vs[(n-1)/2] : (vs[n/2-1]+vs[n/2])/2);
+      return {x:ts, y:v};
+    });
+    datasets.push({
+      label: 'Market ' + cMetric,
+      points: aggPts,
+      borderColor: cMetric==='min' ? ct.good : cMetric==='max' ? ct.bad : ct.text,
+      borderWidth: cMetric==='median' ? 3 : 2,
+      dash: cMetric==='median' ? null : [4,3],
+      hidden: false
+    });
+  }
+
+  var labels = sortedTs.map(function(ts,i){
+    var d = new Date(ts);
+    if (i===0||i===sortedTs.length-1||i%Math.ceil(sortedTs.length/10)===0) return d.toISOString().slice(5,10);
+    return '';
+  });
+
+  var fewPoints = sortedTs.length <= 3;
+  var lineDs = datasets.map(function(ds){
+    var dm = {};
+    ds.points.forEach(function(p){dm[p.x]=p.y;});
+    return {label:ds.label, data:sortedTs.map(function(ts){var v=dm[ts];return (v===undefined?null:v);}),
+      borderColor:ds.borderColor,pointRadius:fewPoints?3:0,borderWidth:ds.borderWidth||1,
+      borderDash:ds.dash||[],tension:0.2,spanGaps:true,hidden:ds.hidden};
+  });
+
+  $('cChartTitle').textContent = cSize + ' · ' + cTerm + ' — ' +
+    (cRange==='30d' ? 'hourly samples, up to 30 days back'
+                    : '15-minute samples, up to 7 days back');
+  renderServiceTags();
+  paintChartCounters();
+
+  if (chart) chart.destroy();
+  var ctx = $('cMainChart').getContext('2d');
+  var c = chartTheme();
+  chart = new Chart(ctx,{type:'line',data:{labels:labels,datasets:lineDs},options:{
+    responsive:true,maintainAspectRatio:false,
+    animation:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:cMetric==='all',position:'bottom',labels:{color:c.text,font:{size:10},boxWidth:12,padding:12,usePointStyle:true}}},
+    scales:{
+      x:{grid:{color:c.grid},ticks:{color:c.tick,font:{size:9},maxTicksLimit:14,autoSkip:true}},
+      y:{grid:{color:c.grid},ticks:{color:c.tick,font:{size:10},callback:function(v){return v.toFixed(2)}}}
+    }
+  }});
+}
+
+function refreshChart(){
+  if (!data) return;
+  renderChartStats();
+  var hist = cRange==='30d'?history30d:history7d;
+  if (hist) renderChartVis();
+  else {
+    $('cstCount').textContent = '—';
+    $('cstCountSub').textContent = 'reading the archive';
+    loadHistory(cRange==='30d'?30:7);
+  }
+}
+
+function loadHistory(days){
+  var url = days<=7 ? 'history_7d.json' : 'history_30d.json';
+  fetch(url,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(h){
+    if (!h||!h.services_data) return;
+    if (days<=7){ history7d=h; hist7=h; renderMatrix(); } else history30d=h;
+    if (cRange===String(days)+'d' || (cRange==='30d'&&days===30)) renderChartVis();
+  }).catch(function(){});
+}
+
+/* ================================================================
+   CHART EVENT BINDINGS
+   ================================================================ */
+
+/* Every chart control is a button with a pressed state, the same as the sort
+   chips beside them — one toolbar, one kind of control. */
+function bindChipGroup(attr, apply){
+  var sel = '.chip[data-' + attr + ']';
+  document.querySelectorAll(sel).forEach(function(c){
+    c.addEventListener('click',function(){
+      document.querySelectorAll(sel).forEach(function(x){
+        x.classList.remove('active'); x.setAttribute('aria-pressed','false');
+      });
+      c.classList.add('active'); c.setAttribute('aria-pressed','true');
+      apply(c.dataset[attr]);
+    });
+  });
+}
+bindChipGroup('csize',   function(v){ cSize = v;   refreshChart(); });
+bindChipGroup('cterm',   function(v){ cTerm = v;   refreshChart(); });
+bindChipGroup('crange',  function(v){ cRange = v;  refreshChart(); });
+bindChipGroup('cmetric', function(v){ cMetric = v; refreshChart(); });
+
+/* ================================================================
+   MATRIX EVENT BINDINGS
+   ================================================================ */
+
+document.querySelectorAll('.chip[data-sortchip]').forEach(function(btn){
+  btn.addEventListener('click', function(){ setSort(chipKey(btn)); });
+});
+
+/* The header row is rebuilt on every render, so the listener sits on the
+   container rather than on buttons that stop existing. */
+$('mtxHead').addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('.mtx-sort') : null;
+  if (b) setSort(b.dataset.sortkey);
+});
+
+/* Escape inside a search input clears it natively without firing `input`, and
+   the shared runtime blurs the field before anything else sees the key. Read
+   the box back on every event that can change it and recompute from that. */
+var escFromSearch = false;
+function syncSearch(){
+  var v = (($('mtxSearch') && $('mtxSearch').value) || '').trim();
+  if (v === mtxSearch) return;
+  mtxSearch = v;
+  renderMatrix();
+}
+['input','search','change','keyup'].forEach(function(ev){
+  $('mtxSearch').addEventListener(ev, syncSearch);
+});
+$('mtxSearch').addEventListener('keydown', function(e){
+  if (e.key !== 'Escape') return;
+  escFromSearch = true;
+  $('mtxSearch').value = '';
+  syncSearch();
+  setTimeout(function(){ escFromSearch = false; }, 0);
+});
+$('mtxClear').addEventListener('click',function(){
+  $('mtxSearch').value = '';
+  syncSearch();
+  $('mtxSearch').focus();
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+
+var BOOTED = false;
+function init(json){
+  data = json;
+  if (!data.platforms) data.platforms = [];
+  allPlatforms = data.platforms.slice();
+  setFresh(data.generated_at);
+  if (BOOTED){
+    renderMatrix();
+    if (mtxSelected) renderDetail(mtxSelected);
+    updateFeatCounts();
+    if (document.querySelector('.tab-btn.active').dataset.tab === 'chart') refreshChart();
+    return;
+  }
+  BOOTED = true;
+
+  // Terms from meta when present, restricted to the canonical set we render
+  if (data.meta && Array.isArray(data.meta.terms)){
+    var canon = ['15m','1h','1d','3d','10d'];
+    var fromMeta = canon.filter(function(t){ return data.meta.terms.indexOf(t) !== -1; });
+    if (fromMeta.length) terms = fromMeta;
+  }
+
+  // Init cServices
+  allPlatforms.forEach(function(p){ cServices[p.platform_id] = true; });
+
+  // Build UI
+  buildFeatBar();
+  buildVolumeChips();
+  renderMatrix();
+  renderChartStats();
+  loadHistory(7);
+}
+
+function pull(){
+  return fetch('result.json',{cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(init)
+    .catch(function(){
+      if (!BOOTED) $('mtxBody').innerHTML =
+        '<tr><td colspan="8" style="padding:36px;text-align:center;color:var(--text-2)">' +
+        'Live prices could not be loaded right now — try reloading in a moment.</td></tr>';
+    });
+}
+pull();
+setInterval(pull, 60000);
+document.addEventListener('visibilitychange', function(){ if (!document.hidden) pull(); });
+
+/* Chart.js bakes colours in, so a theme switch has to redraw. */
+document.addEventListener('epb:theme', function(){
+  if (data && (cRange==='30d'?history30d:history7d)) renderChartVis();
+});
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Energy Price Board — TRON Energy Rental Blog</title>
+  <link>https://energypriceboard.com/blog.html</link>
+  <description>Latest guides, news and analysis about TRON energy rental. Platform reviews, price trends, and tips to minimize transaction costs.</description>
+  <language>en</language>
+  <lastBuildDate>Sun, 06 Sep 2026 21:20:41 +0000</lastBuildDate>
+  <atom:link href="https://energypriceboard.com/rss.xml" rel="self" type="application/rss+xml"/>
+
+  <item>
+    <title>65k vs 130k vs 200k Energy — Which Amount Saves You Money?</title>
+    <link>https://energypriceboard.com/blog/65k-vs-130k-vs-200k.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/65k-vs-130k-vs-200k.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>65k or 130k energy for a USDT transfer? What each size is actually for, why 130k costs almost exactly double on every platform we track, and what the board can and cannot tell you about 200k.</description>
+  </item>
+  <item>
+    <title>Build Your Own Energy Bot — API Comparison 5 Platforms</title>
+    <link>https://energypriceboard.com/blog/build-energy-bot-api.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/build-energy-bot-api.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>How five TRON energy platforms authenticate — iTRX, Tronex, MeFree, Feee.io, Tronify — described from the code we run against them every 15 minutes, with live prices and a Python wrapper.</description>
+  </item>
+  <item>
+    <title>Burning TRX Is Dead — Rent Energy and Keep Your Money</title>
+    <link>https://energypriceboard.com/blog/burning-trx-is-dead.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/burning-trx-is-dead.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Burning 6.5 TRX for every USDT transfer is money thrown away. The arithmetic of renting instead, measured against the live 65k prices on our board of 20 platforms.</description>
+  </item>
+  <item>
+    <title>How TRON Energy Platforms Actually Sell: Five Models</title>
+    <link>https://energypriceboard.com/blog/how-platforms-sell-energy.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/how-platforms-sell-energy.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Per unit, per transfer, through a dApp, on a marketplace or through a bot with member tiers. How the 20 TRON energy platforms on our board differ in how they sell, and what each model costs a buyer.</description>
+  </item>
+  <item>
+    <title>How SUN Rates Work — TRON Energy Pricing Engine</title>
+    <link>https://energypriceboard.com/blog/how-sun-rates-work.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/how-sun-rates-work.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Every energy rental platform prices in SUN, not TRX. What a SUN is, the formula that turns it into the price you pay, and why the same 65k rental costs several times more on one platform than another.</description>
+  </item>
+  <item>
+    <title>TronBid's Two-Sided Energy Marketplace, Checked Against Our Own Prices</title>
+    <link>https://energypriceboard.com/blog/tronbid-order-book-checked.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/tronbid-order-book-checked.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Four outlets carried one press release about TronBid</description>
+  </item>
+  <item>
+    <title>What a USDT Transfer Really Costs on TRON</title>
+    <link>https://energypriceboard.com/blog/usdt-transfer-cost-tron.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/usdt-transfer-cost-tron.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>64,285 energy, 345 bytes of bandwidth, 6.7735 TRX burned. The chain parameters, the receipt fields and the two commands that let you verify a TRON USDT transfer fee for yourself.</description>
+  </item>
+  <item>
+    <title>What Moves TRON Energy Prices? A Day of 15-Minute Scans</title>
+    <link>https://energypriceboard.com/blog/what-moves-energy-prices.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/what-moves-energy-prices.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Seven TRON energy platforms did not change their price once in a day. One repriced at almost every 15-minute scan. What our own archive shows about which prices move, and which only look like they do.</description>
+  </item>
+  <item>
+    <title>An Hour Is the Most Expensive Way to Rent TRON Energy</title>
+    <link>https://energypriceboard.com/blog/what-rental-terms-cost.html</link>
+    <guid isPermaLink="true">https://energypriceboard.com/blog/what-rental-terms-cost.html</guid>
+    <category>Guides</category>
+    <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Compare each platform</description>
+  </item>
+  <item>
+    <title>Rent TRON Energy and Reduce USDT Fees: TronBid Expands Marketplace - CryptoPotato</title>
+    <link>https://news.google.com/articles/CBMilgFBVV95cUxOblZkVVc2TndBMExKWXp6VFdUVWNvOUhUbkpuSFZrMElBMUJoUlpZQnE4eTFjYlFsY1Q2ZGhoc0xocG9zT1lJZkpDTFlUQldwUnl3UWR4ekZYemFIOEVKaG5RV1JGeW5oN1pITDNkdVBHc0MzTVZCVDFYdWJBZjZEUTA1V2N6U1AyTGM0S3Q1LWYyMVNWMGc</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMilgFBVV95cUxOblZkVVc2TndBMExKWXp6VFdUVWNvOUhUbkpuSFZrMElBMUJoUlpZQnE4eTFjYlFsY1Q2ZGhoc0xocG9zT1lJZkpDTFlUQldwUnl3UWR4ekZYemFIOEVKaG5RV1JGeW5oN1pITDNkdVBHc0MzTVZCVDFYdWJBZjZEUTA1V2N6U1AyTGM0S3Q1LWYyMVNWMGc</guid>
+    <category>TRON News</category>
+    <pubDate>Wed, 26 Aug 2026 13:53:00 +0000</pubDate>
+    <description>Rent TRON Energy and Red</description>
+  </item>
+  <item>
+    <title>TronBid Launches Two-Sided Marketplace for TRON Energy and Bandwidth Trading - finance.biggo.com</title>
+    <link>https://news.google.com/articles/CBMidkFVX3lxTE1ZWkRQQzRRSDRSRFpSc2lFV21vVDlwNk5TWkhKYmtXMkpDcURUMzhHc3FsSFpZUG9iSllwaUxXU1BKQlI0V3JiQ2tYQk9ndTdjQ0JiUDlQZ2VkdnJzQVRjOFZYcjZ3SGF3eFRVeDNSVnl5Unk1MlE</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMidkFVX3lxTE1ZWkRQQzRRSDRSRFpSc2lFV21vVDlwNk5TWkhKYmtXMkpDcURUMzhHc3FsSFpZUG9iSllwaUxXU1BKQlI0V3JiQ2tYQk9ndTdjQ0JiUDlQZ2VkdnJzQVRjOFZYcjZ3SGF3eFRVeDNSVnl5Unk1MlE</guid>
+    <category>TRON News</category>
+    <pubDate>Wed, 26 Aug 2026 07:00:00 +0000</pubDate>
+    <description>TronBid Launches Two-Sided Marketplace for TRON Energy and Bandwidth</description>
+  </item>
+  <item>
+    <title>Renta TRON Energy kwaye kuzalisa izibalo zemali ya USDT: TronBid kufanele umaketa - HackerNoon</title>
+    <link>https://news.google.com/articles/CBMinAFBVV95cUxNT1BBdXh0Wl85WXg2RThhUFdBTU5DdDdNemJqUzlZSHNCRHh6b3EzNGRiY3h5SG9CV1JkLW1wTFRHX3pGWVZDZVZSS3VXbEpyMjNhNUp4TDhycmhkaUV5Z3ZyY0dGb2pGQVlIN2lZcmhSLTJpQTFQbzk0RWRhRkx5Q0JZUmVkaTBuVEtvMk15TDd1MDhLVUJBNzZtMFU</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMinAFBVV95cUxNT1BBdXh0Wl85WXg2RThhUFdBTU5DdDdNemJqUzlZSHNCRHh6b3EzNGRiY3h5SG9CV1JkLW1wTFRHX3pGWVZDZVZSS3VXbEpyMjNhNUp4TDhycmhkaUV5Z3ZyY0dGb2pGQVlIN2lZcmhSLTJpQTFQbzk0RWRhRkx5Q0JZUmVkaTBuVEtvMk15TDd1MDhLVUJBNzZtMFU</guid>
+    <category>TRON News</category>
+    <pubDate>Wed, 26 Aug 2026 07:00:00 +0000</pubDate>
+    <description>Renta TRON Energ</description>
+  </item>
+  <item>
+    <title>Reduce USDT Fees: A Practical Framework for Lower-Cost Stablecoin Transfers - Sostav.ru</title>
+    <link>https://news.google.com/articles/CBMiU0FVX3lxTE85dWw3VE5JQV9oekhkWUEtcEl3cEZySWFoby1xOGtWdDdvc0JpME9NUDZfdWIzZHh0QWFic1lDSUtrekdTb0E4VjhvT3BYc0hHZzVN</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMiU0FVX3lxTE85dWw3VE5JQV9oekhkWUEtcEl3cEZySWFoby1xOGtWdDdvc0JpME9NUDZfdWIzZHh0QWFic1lDSUtrekdTb0E4VjhvT3BYc0hHZzVN</guid>
+    <category>TRON News</category>
+    <pubDate>Mon, 24 Aug 2026 14:37:19 +0000</pubDate>
+    <description>Reduce USDT Fees: A Practical Framework for Lower-Cost Stablecoin Transfers So</description>
+  </item>
+  <item>
+    <title>Rent Tron Energy: Why On-Chain Resources Are Becoming a Cost-Management Tool - Sostav.ru</title>
+    <link>https://news.google.com/articles/CBMiU0FVX3lxTFB0QmZJbElEcXRwNWJNSHp4dE9rcnFjNnFZbWUtYXNwdDdXdnFEUjZmN21odkxMT1pocWFpc0VYcXJhRG9VYUtrQWt1cnhJb0kzRUV3</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMiU0FVX3lxTFB0QmZJbElEcXRwNWJNSHp4dE9rcnFjNnFZbWUtYXNwdDdXdnFEUjZmN21odkxMT1pocWFpc0VYcXJhRG9VYUtrQWt1cnhJb0kzRUV3</guid>
+    <category>TRON News</category>
+    <pubDate>Sun, 23 Aug 2026 06:12:04 +0000</pubDate>
+    <description>Rent Tron Energy: Why On-Chain Resources Are Becoming a Cost-Management Tool S</description>
+  </item>
+  <item>
+    <title>TronBid: A Flexible Marketplace to Rent and Sell TRON Energy - CryptoPotato</title>
+    <link>https://news.google.com/articles/CBMijgFBVV95cUxOVXVoSDBsSU1vOVBmellCZENuNGhHUXVwV0lmMXlISFdWaDRTbHV2MHhoSXVraGJoWHROR0hPQXZUcUZKM3B3dkYzZVJ3WjFQMkpwejFiZWo0cTRkR04wbUd2Rk9tajU5d0dMN2FNc3lMZlZFVXZGOUpZVUxobGcwY01OUkQ2RF81LU1KSTJR</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMijgFBVV95cUxOVXVoSDBsSU1vOVBmellCZENuNGhHUXVwV0lmMXlISFdWaDRTbHV2MHhoSXVraGJoWHROR0hPQXZUcUZKM3B3dkYzZVJ3WjFQMkpwejFiZWo0cTRkR04wbUd2Rk9tajU5d0dMN2FNc3lMZlZFVXZGOUpZVUxobGcwY01OUkQ2RF81LU1KSTJR</guid>
+    <category>TRON News</category>
+    <pubDate>Fri, 14 Aug 2026 07:00:00 +0000</pubDate>
+    <description>TronBid: A Flexible Marketplace to</description>
+  </item>
+  <item>
+    <title>Tron Blockchain Crypto Future: Why More Users Are Choosing Other Networks Instead - Bitcoin Foundation</title>
+    <link>https://news.google.com/articles/CBMiwwFBVV95cUxPeEpyMGdoWmNhN0MxWjU0dnJPU3NBN1JrUnFWdkVSRk9ycUdhRmNudTlkaVV6NHoxNmdjeVNkV0UtSXVSS0xEeFNIc2tzNTBwUjBRWkEtOV9zY3A3NFFfOWFVVGhlaXBTTlZUV2c5RVJOVURYa1BMNE55THRialVaTkh2a1hjWlZIN0FWNkViZDV1bzVSNmtFS3ZHekRLLXRWazRJSWI4YVEySFFPVFd3XzdoM2xud2tsOEotRmlKUDRaWW8</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMiwwFBVV95cUxPeEpyMGdoWmNhN0MxWjU0dnJPU3NBN1JrUnFWdkVSRk9ycUdhRmNudTlkaVV6NHoxNmdjeVNkV0UtSXVSS0xEeFNIc2tzNTBwUjBRWkEtOV9zY3A3NFFfOWFVVGhlaXBTTlZUV2c5RVJOVURYa1BMNE55THRialVaTkh2a1hjWlZIN0FWNkViZDV1bzVSNmtFS3ZHekRLLXRWazRJSWI4YVEySFFPVFd3XzdoM2xud2tsOEotRmlKUDRaWW8</guid>
+    <category>TRON News</category>
+    <pubDate>Sat, 25 Jul 2026 07:00:00 +0000</pubDate>
+    <description>&lt;a href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxPeEpyMGdoWmNhN0MxWjU0dnJPU3NBN1JrUnFWdkVSRk9ycUdhRmNudTlkaVV6NHoxNmdjeVNkV0UtSXVSS0xEeFNIc2tzNTBwUjBRWkEtOV9zY3A3NFFfOWFVVGhlaXBTTlZUV2c5RVJOVURYa1BMNE55THRialVaTkh2a1hjWlZIN0FWNkViZDV1bzVSNmtFS3ZHekRLLXRWazRJSWI4YVEySFFPVFd3XzdoM2xud2tsOE</description>
+  </item>
+  <item>
+    <title>What Is Tron (TRX)? - Binance</title>
+    <link>https://news.google.com/articles/CBMibEFVX3lxTFB1TDkwSGpVMlZHeEdPTDl1SUp4dHAteU5ha2xNN256RHdFcHFCYnJLNTVmejlwV18tZThrQlh5S1pvcWNpQjB6YW5seTZLZktIRVJvbnkwSHgtcVYxR2R1RVJqb2RXUW9fUEdZVQ</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMibEFVX3lxTFB1TDkwSGpVMlZHeEdPTDl1SUp4dHAteU5ha2xNN256RHdFcHFCYnJLNTVmejlwV18tZThrQlh5S1pvcWNpQjB6YW5seTZLZktIRVJvbnkwSHgtcVYxR2R1RVJqb2RXUW9fUEdZVQ</guid>
+    <category>TRON News</category>
+    <pubDate>Mon, 20 Jul 2026 07:00:00 +0000</pubDate>
+    <description>What Is Tron (TRX)? Binance</description>
+  </item>
+  <item>
+    <title>TronBid Review: Reducing USDT TRC-20 Fees With Zero-Cost Energy Rental - CoinGape</title>
+    <link>https://news.google.com/articles/CBMinAFBVV95cUxONVpiRkRiSGFMSTF4Z081V0docG9NZGRaS1gwZnlLVjJ1eXhjemg4U05aUjduelhGbHdwM1FwSWQ4dlB5b3k0bTZXVnA1TVYycTU5Vkx5V1BSdWhfOU16N255VXYtZlNXMldjMkE0MTRMSUZybGtVUTVTMzY4cUtWdkJCRnNxdjhZNVktN2lUUVhFWmZmYkw5a0p4R3c</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMinAFBVV95cUxONVpiRkRiSGFMSTF4Z081V0docG9NZGRaS1gwZnlLVjJ1eXhjemg4U05aUjduelhGbHdwM1FwSWQ4dlB5b3k0bTZXVnA1TVYycTU5Vkx5V1BSdWhfOU16N255VXYtZlNXMldjMkE0MTRMSUZybGtVUTVTMzY4cUtWdkJCRnNxdjhZNVktN2lUUVhFWmZmYkw5a0p4R3c</guid>
+    <category>TRON News</category>
+    <pubDate>Wed, 08 Jul 2026 07:00:00 +0000</pubDate>
+    <description>TronBid Review:</description>
+  </item>
+  <item>
+    <title>How small businesses cut crypto payment fees with stablecoins on TRON - London Business News</title>
+    <link>https://news.google.com/articles/CBMipAFBVV95cUxNNTZmazgtTDhQRDdTMjMzYWNOVl9UTUk2eEh2YWtIRDJ2a1Zpc2Q1TjhCN19OdjhaZ3hBbGtnN1lNXzhCZEgyN0w5VmVrYjNxVGlPVTBOc3dWeXoxeWhGSm9pM0NfQkdhc0JBVk1sMVplb3pzTDFxcC1XMWtNdWVZWWV0bWJaTUdxOUJjSkU1dXRBU3lobXpPVW5MWDJZbXlVeWNIOA</link>
+    <guid isPermaLink="true">https://news.google.com/articles/CBMipAFBVV95cUxNNTZmazgtTDhQRDdTMjMzYWNOVl9UTUk2eEh2YWtIRDJ2a1Zpc2Q1TjhCN19OdjhaZ3hBbGtnN1lNXzhCZEgyN0w5VmVrYjNxVGlPVTBOc3dWeXoxeWhGSm9pM0NfQkdhc0JBVk1sMVplb3pzTDFxcC1XMWtNdWVZWWV0bWJaTUdxOUJjSkU1dXRBU3lobXpPVW5MWDJZbXlVeWNIOA</guid>
+    <category>TRON News</category>
+    <pubDate>Fri, 19 Jun 2026 07:00:00 +0000</pubDate>
+    <description>How s</description>
+  </item>
+</channel>
+</rss>

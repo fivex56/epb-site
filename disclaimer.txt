@@ -1,0 +1,23 @@
+Disclaimer for energypriceboard.com
+Last Updated: 08.06.2026
+
+1. No Financial Advice
+The information provided on energypriceboard.com (the "Service") is for general informational purposes only. It is not intended as, and shall not be construed as, financial, investment, trading, or any other type of professional advice. You should not make any decision based solely on the information found on this Service.
+
+2. Data Accuracy
+Our Service is an automated aggregator. We collect data from various sources, including API feeds from specific suppliers and publicly available data from the internet. While we strive to provide accurate and up-to-date information, we cannot and do not guarantee the accuracy, completeness, or timeliness of any data displayed. All prices and information are presented "as is."
+
+3. Third-Party Links & Services
+Our Service contains links to external websites and services. We provide these links for convenience and informational purposes only. Some of these links may be referral or affiliate links, which means we may receive a commission or other benefit if you use or make a purchase through such links. This does not affect the price you pay and does not influence our ranking or display of platform data — all platforms are sorted by price, regardless of referral status. We have no control over the content, policies, or practices of any third-party sites. We do not endorse and are not responsible for any transactions, losses, or damages incurred from using these external services.
+
+4. Assumption of Risk
+You acknowledge and agree that any use of the information on this Service is at your own risk. You are solely responsible for any decisions you make regarding the purchase, sale, or trade of energy on the TRON network or any other blockchain. The owner and operator of this Service shall not be held liable for any financial losses, damages, or other harms resulting from your reliance on the information provided here or your interaction with any linked third-party services.
+
+5. No Warranty
+The Service is provided on an "as available" and "as is" basis without any warranties of any kind.
+
+6. Changes to the Service
+We reserve the right to modify, update, or discontinue the Service, including the terms of this disclaimer, at any time without prior notice.
+
+7. Contact
+For any questions regarding this disclaimer, you may contact us at: fivex56@gmail.com

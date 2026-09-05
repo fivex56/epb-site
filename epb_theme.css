@@ -1,0 +1,1781 @@
+/* ============================================================================
+   Energy Price Board — shared design system (2026)
+   SOURCE FILE. It is never linked from a page: apply_theme.py inlines it into
+   every .html between the EPB-THEME markers, and the two page generators
+   embed it as well. Nothing here needs a build step at publish time.
+   ========================================================================= */
+
+/* ---------- 1. Tokens ---------------------------------------------------- */
+:root{
+  color-scheme:dark;
+
+  /* Four grounds, in order of lift. --band is the alternating full-bleed
+     section ground: a long page is a sequence of places, not one sheet, and
+     the seam between two places is a hairline, never a gradient. */
+  --bg:#08090d;
+  --band:#0b0d13;
+  --bg-raised:#101219;
+  --surface:#14161f;
+  --surface-2:#191c26;
+  --surface-3:#1f2331;
+
+  --line:rgba(255,255,255,.07);
+  --line-2:rgba(255,255,255,.11);
+  --line-3:rgba(255,255,255,.18);
+
+  --text:#eef1f7;
+  --text-2:#9aa4b8;
+  --text-3:#858fa6;
+
+  --accent:#6d99ff;
+  --accent-2:#9b8cff;
+  --accent-ink:#05070d;
+  --accent-soft:rgba(109,153,255,.14);
+  --accent-line:rgba(109,153,255,.36);
+  --accent-strong:var(--accent);   /* accent set on its own tinted background */
+
+  --good:#3ecf94;
+  --good-soft:rgba(62,207,148,.13);
+  --warn:#e3a94f;
+  --warn-soft:rgba(227,169,79,.13);
+  --bad:#f0736f;
+  --bad-soft:rgba(240,115,111,.13);
+
+  /* Identity tiles (platform logo / author avatar). Deliberately NOT theme
+     colours and deliberately NOT theme-switched: the twelve logo files are
+     opaque rasters with a near-black ground baked in, so the tile that holds
+     them has to stay dark in both themes or the light theme shows a row of
+     black redaction bars. One ground for every tile means a letter fallback
+     and a real mark sit at the same optical weight, and no platform is ever
+     drawn in --good / --warn / --bad by a hash accident. */
+  --tile:#181b24;
+  --tile-line:rgba(255,255,255,.10);
+  --tile-ink:#b3bccd;
+  --mono-l1:32%;--mono-l2:21%;--mono-s:30%;
+
+  --header-bg:rgba(8,9,13,.78);
+  --skeleton:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.09),rgba(255,255,255,.04));
+
+  /* Edges are not elevation. These are 1px inset rules drawn as a shadow
+     because a real border would change the box. Everything else that lifts
+     uses --sh-1/2/3 and nothing else. */
+  --card-top:inset 0 1px 0 rgba(255,255,255,.05);   /* a card's lit top edge */
+  --edge-accent:inset 0 0 0 1px var(--accent-line);
+  --edge-good:inset 0 0 0 1px var(--good);
+  --edge-warn:inset 0 0 0 1px var(--warn-soft);
+
+  /* Haloes: a 3px soft collar that says "this dot / this tick is the live one".
+     Three of them, one per meaning, so the census of shadows in this file does
+     not grow another entry every time something needs to glow quietly. */
+  --halo-good:0 0 0 3px var(--good-soft);
+  --halo-warn:0 0 0 3px var(--warn-soft);
+  --halo-accent:0 0 0 3px var(--accent-soft);
+  --ring:0 0 0 4px rgba(109,153,255,.3);
+
+  /* Atmosphere. Three washes painted behind everything, fixed to the viewport,
+     so a 4,000px page is lit rather than flat. They are air, never a surface:
+     nothing is ever read against them at less contrast than it would have on
+     plain --bg, because the strongest of them is 5% of one accent. */
+  --atmos-1:rgba(109,153,255,.13);
+  --atmos-2:rgba(155,140,255,.08);
+
+  /* An estimate is an annotation, not a warning, and about half of every price
+     table is one. Full --warn amber turned that half into a hazard stripe, so
+     the estimate ink is amber desaturated two steps: still unmistakably not
+     the quoted-price ink, still over 4.5:1, no longer shouting. */
+  --est-ink:#c2a065;
+
+  --zebra:rgba(255,255,255,.03);
+  --heat:62,207,148;              /* single hue, so the ramp is lightness only */
+  --scroll-fade:linear-gradient(90deg,rgba(8,9,13,0),rgba(8,9,13,.9));
+
+  /* Five radii, each with a job. Nothing else may round a corner.
+       --r-xs   inset cells, code, keycaps, rank chips
+       --r-sm   chips, buttons, inputs
+       --r      identity tiles, logos, media
+       --r-lg   cards, panels, tables
+       --r-pill status pills, and any bar or tick whose ends are round
+     --r-xl was a sixth roundness used by exactly one panel on the home page,
+     next to cards at --r-lg. It is kept as an alias so no page breaks. */
+  --r-xs:8px;
+  --r-sm:10px;
+  --r:14px;
+  --r-lg:20px;
+  --r-xl:var(--r-lg);
+  --r-pill:999px;
+
+  /* Three elevations and no more. A thing either sits on the page (--sh-1),
+     is being lifted by the pointer or is pinned over its neighbours (--sh-2),
+     or floats free of the document (--sh-3). Rings and hairlines are edges,
+     not elevation — see --edge-* above. */
+  --sh-1:0 1px 2px rgba(0,0,0,.35);
+  --sh-2:0 6px 24px -12px rgba(0,0,0,.7);
+  --sh-3:0 18px 50px -24px rgba(0,0,0,.8);
+
+  /* The two edges of a sideways scroller. Not elevation either — they say
+     "there is more table this way", and they are tokens so that four states
+     across two themes are two strings instead of eight. */
+  --fade-l:inset 36px 0 26px -18px rgba(0,0,0,.72);
+  --fade-r:inset -36px 0 26px -18px rgba(0,0,0,.72);
+
+  /* ---- Type: six steps, each with a job -------------------------------
+     There was no scale at all before this: 40 sizes and 80 size/weight pairs
+     were painted across the site, six of them inside a 1.5px band. A size
+     that is not on this ladder is a bug.
+
+       --t-micro  eyebrow, column head, badge, rank chip   (uppercase, tracked)
+       --t-meta   caption, timestamp, chip, button, table cell, legend
+       --t-body   UI prose, and the body default
+       --t-lead   page subtitle, h3, accordion head, verdict
+       --t-h2     section title
+       --t-h1     page title, on all thirteen page types
+
+     No two adjacent steps are closer than 2px, which is the point: the old
+     12.5 / 12.6 / 13 / 13.5 / 13.95 / 14 band was six sizes nobody could tell
+     apart, and their only effect was to put the page slightly out of register.
+     An earlier pass in this same file left 12.5 and 13 one step apart; they
+     are one step now.
+
+     Three exceptions, each with a written reason:
+       --t-read     the article measure, where 15px is too tight to read long
+       --t-display  the board's front page, and the 404 numeral. Nowhere else.
+       --t-num      the ONE size a headline figure is allowed to be, so that a
+                    price on the board, a price on a review and a price in a
+                    stat tile are the same size.                            */
+  --t-micro:11px;
+  --t-meta:13px;
+  --t-body:15px;
+  --t-lead:17px;
+  --t-h2:22px;
+  --t-h1:clamp(30px,3.4vw,40px);
+  --t-read:16.5px;
+  --t-display:clamp(38px,4.4vw,52px);
+  --t-num:clamp(28px,3.2vw,36px);
+
+  /* One page width, for every page. The brand used to land at five different
+     x-positions because six containers disagreed; the header, the footer and
+     the page head are now measured from one edge everywhere. */
+  --page-max:1240px;
+
+  --pad:32px;
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --dur:180ms;
+
+  /* One spacing scale for the whole site. Sections breathe at --sp-8, blocks
+     inside them at --sp-5, items at --sp-3. */
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:18px;
+  --sp-5:26px; --sp-6:36px; --sp-7:52px; --sp-8:72px;
+
+  /* Three aliases with a job each, so a page author reaches for a name rather
+     than for a number. Fifteen distinct gap values on the front page alone is
+     what happens without them. */
+  --gap-item:var(--sp-3);         /* between things inside one card         */
+  --gap-block:var(--sp-5);        /* between blocks inside one section      */
+  --gap-section:var(--sp-7);      /* between sections                       */
+  --pad-head:var(--sp-7) 0 var(--sp-5);   /* the ONE page-header padding    */
+
+  --measure:60ch;                 /* reading width for running prose */
+
+  --font:'Inter','Golos Text','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+
+:root[data-theme="light"]{
+  color-scheme:light;
+
+  /* The light theme bands DOWN from the page ground where the dark theme
+     bands UP: on white, a band that is lighter than the page is invisible. */
+  --bg:#f5f6fa;
+  --band:#eceff5;
+  --bg-raised:#ffffff;
+  --surface:#ffffff;
+  --surface-2:#f2f4f9;
+  --surface-3:#e9ecf4;
+
+  --line:rgba(16,22,38,.09);
+  --line-2:rgba(16,22,38,.14);
+  --line-3:rgba(16,22,38,.22);
+
+  --text:#111725;
+  --text-2:#57617a;
+  --text-3:#636b7f;
+
+  --accent:#3059d6;
+  --accent-2:#6a4fd8;
+  --accent-ink:#ffffff;
+  /* At .09 a selected chip, an open tab and a chosen table row were "slightly
+     paler than the one next to it". The tint has to be visible from arm's
+     length for the control to say which one is on. */
+  --accent-soft:rgba(48,89,214,.14);
+  --accent-line:rgba(48,89,214,.28);
+  /* The accent printed ON the accent tint is the one place the light theme
+     runs out of contrast: 4.45:1 for a selected chip at 12.5px. Two steps
+     darker clears 4.5 and is indistinguishable from the link blue elsewhere. */
+  --accent-strong:#2a4cb8;
+
+  /* Two points darker than the green the dark theme uses: on the pale green
+     chip background it was 4.33:1, and small bold text needs 4.5. */
+  --good:#07694a;
+  --good-soft:rgba(15,143,99,.1);
+  --warn:#77510a;
+  --warn-soft:rgba(154,101,16,.1);
+  --bad:#b3352f;
+  --bad-soft:rgba(179,53,47,.1);
+
+  /* Same neutral tile as the dark theme, lightened: a platform mark still
+     never sits on --good/--warn/--bad here either. */
+  --tile:#e9ecf4;
+  --tile-line:rgba(16,22,38,.10);
+  --tile-ink:#57617a;
+  --mono-l1:90%;--mono-l2:83%;--mono-s:34%;
+
+  --header-bg:rgba(245,246,250,.8);
+  --skeleton:linear-gradient(90deg,rgba(16,22,38,.05),rgba(16,22,38,.1),rgba(16,22,38,.05));
+
+  --card-top:inset 0 1px 0 rgba(255,255,255,.9);
+  --edge-accent:inset 0 0 0 1px var(--accent-line);
+  --edge-good:inset 0 0 0 1px var(--good);
+  --edge-warn:inset 0 0 0 1px var(--warn-soft);
+  --halo-good:0 0 0 3px var(--good-soft);
+  --halo-warn:0 0 0 3px var(--warn-soft);
+  --halo-accent:0 0 0 3px var(--accent-soft);
+  --ring:0 0 0 4px rgba(48,89,214,.22);
+
+  /* On white the same three washes have to be weaker still: a tint that reads
+     as depth on near-black reads as a stain on paper. */
+  --atmos-1:rgba(48,89,214,.10);
+  --atmos-2:rgba(106,79,216,.07);
+  --est-ink:#8a6a2e;
+
+  --zebra:rgba(16,22,38,.032);
+  --heat:10,122,83;
+  --scroll-fade:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.92));
+
+  --sh-1:0 1px 2px rgba(16,22,38,.06);
+  --sh-2:0 6px 20px -12px rgba(16,22,38,.22);
+  --sh-3:0 18px 44px -24px rgba(16,22,38,.28);
+  --fade-l:inset 36px 0 26px -20px rgba(16,22,38,.42);
+  --fade-r:inset -36px 0 26px -20px rgba(16,22,38,.42);
+}
+
+/* ---------- 2. Legacy aliases -------------------------------------------
+   Every page written before this redesign styles itself with these names.
+   Pointing them at the new tokens re-skins those pages, in both themes,
+   without touching a single one of their rules.                           */
+:root,:root[data-theme="light"]{
+  --bg-dark:var(--bg);
+  --bg-light:var(--bg);
+  --card-dark:var(--surface);
+  --ink-white:var(--text);
+  --ink-secondary:var(--text-2);
+  --ink-primary-light:var(--text);
+  --ink-secondary-light:var(--text-2);
+  --blue:var(--accent);
+  --purple:var(--accent-2);
+  --violet:var(--accent-2);
+  --green:var(--good);
+  --amber:var(--warn);
+  --red:var(--bad);
+  --line-dark:var(--line);
+  --line-light:var(--line);
+  --radius-lg:var(--r-xl);
+  --radius-card:var(--r-lg);
+  --radius-btn:var(--r);
+  --radius-sm:var(--r-sm);
+}
+
+/* ---------- 3. Base ------------------------------------------------------ */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{height:100%;-webkit-text-size-adjust:100%}
+html,body{overflow-x:clip}
+body{
+  margin:0;min-height:100%;
+  background:var(--bg);color:var(--text);
+  font:400 var(--t-body)/1.6 var(--font);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+img,svg,video{max-width:100%;height:auto}
+::selection{background:var(--accent-soft);color:var(--text)}
+
+/* ONE page width. There used to be six — 1440 on compare, 1240 on the board,
+   1080 on api, 1000 on articles, 984 on the review pages — chosen by which
+   components a page happened to contain, and the visible result was that the
+   site logo landed at five different x-positions inside a header bar that
+   never moved. The theme owns this measurement now, hence the !important:
+   two pages set a container width in their own stylesheet at a specificity
+   no theme selector can reach. A narrow COLUMN is still narrow — that is
+   --measure's job, applied to the prose, not to the page. */
+.container{max-width:var(--page-max)!important;margin:0 auto;padding:0 var(--pad);width:100%}
+/* An article is one column of prose, centred, at a length a person can read
+   without losing the line. The container stays wide so the header and the
+   footer still look like the rest of the site. */
+article:has(> .article-body),.read-more{max-width:604px;margin-left:auto;margin-right:auto}
+/* The one sanctioned exception: the compare matrix is a wide table and may
+   run past the page column inside its own scroller rather than hiding half
+   its data behind a fade. The header, footer and page head do not move. */
+@media(min-width:1100px){
+  .mtx-layout{
+    --bleed:min(1440px,100vw - 2 * var(--pad));
+    width:var(--bleed);max-width:var(--bleed);
+    margin-left:calc(50% - var(--bleed) / 2);
+  }
+}
+@media(max-width:900px){:root{--pad:20px}}
+@media(max-width:420px){:root{--pad:16px}}
+
+/* ---------- 3b. Bands ----------------------------------------------------
+   The front page was one flat rectangle 4,670px tall, and the only place on
+   the whole site where the ground changed colour was the footer. A page that
+   long has to read as a sequence of places, and the way to do that on a price
+   board is banding, not wallpaper: a full-bleed tint, a hairline seam, and
+   nothing else. No gradient, no grain, no vignette — the numbers are the
+   picture and they sit on plain ground.
+
+   A band is drawn as a pseudo-element rather than as a background because the
+   sections live inside .container, and a band that stops at the page column
+   reads as a very wide card. --band is one step off --bg in both themes: up
+   in the dark, down in the light, because a lighter band on white is nothing.
+
+   .epb-band is also a utility: any page that wants a section on the second
+   ground adds the class, and gets the seam for free.                       */
+.epb-band{position:relative;z-index:0}
+.epb-band::before{
+  content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);
+  width:100vw;z-index:-1;pointer-events:none;
+  background:var(--band);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+/* A band that opens or closes the page only needs the seam facing the content. */
+.epb-band.band-open::before{border-top:0}
+.epb-band.band-close::before{border-bottom:0}
+.epb-band + .epb-band::before{border-top:0}
+
+/* The masthead. Every page opens with a title and a line explaining it, and
+   until now that title sat on the same flat ground as the data below it. The
+   band runs from the very top of the document — so the sticky header is part
+   of the same place — down to the bottom of the page head. epb_theme.js
+   measures where that is and sets --band-h; with no script there is no band
+   and the page looks exactly as it did, which is the right fallback.
+   Nothing moves: this paints, it does not lay out. */
+body{position:relative}
+body::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:var(--band-h,0);z-index:-1;pointer-events:none;
+  background:var(--band);
+  border-bottom:1px solid var(--line);
+}
+/* The header floats over the masthead band, so at rest its own translucent
+   ground has to be nothing at all, or the top 60px reads as a third surface
+   sitting on a second one. The moment the page scrolls, content starts
+   passing underneath and the bar takes its ground back. */
+:root.epb-banded .nav::before{
+  background:transparent;border-bottom-color:transparent;
+  transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);
+}
+:root.epb-banded.epb-scrolled .nav::before{
+  background:var(--header-bg);border-bottom-color:var(--line)}
+
+/* The three sections that close a page — the FAQ on the board, the
+   head-to-head index on compare, the full platform list on a review — are the
+   ones that earn the second ground: they are reference material sitting under
+   the thing the visitor came for, and a change of ground says so without a
+   word. The page-local padding on the board wins on specificity, so it is
+   matched here rather than fought. The old border-top goes: the band brings
+   its own seam and two hairlines in one place is a mistake. */
+.faq-section,.board .faq-section,.all-plats,.h2h{
+  position:relative;z-index:0;
+  padding:var(--sp-7) 0;margin-top:var(--gap-section);border-top:0;
+}
+.faq-section::before,.all-plats::before,.h2h::before{
+  content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);
+  width:100vw;z-index:-1;pointer-events:none;
+  background:var(--band);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+
+/* The footer is the last place. It has always been the one banded thing on
+   the site; now it is banded on purpose, full bleed, on the third ground. */
+.footer{position:relative;z-index:0}
+.footer::before{
+  content:'';position:absolute;inset:0;left:50%;transform:translateX(-50%);
+  width:100vw;z-index:-1;pointer-events:none;
+  background:var(--bg-raised);border-top:1px solid var(--line);
+}
+
+h1,h2,h3,h4,h5{margin:0;letter-spacing:-.022em;color:var(--text);font-weight:700;line-height:1.18}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+
+/* Prices, counters, anything numeric */
+.num,.price,.mono-num,
+.plat-price .pv,.cell-price,.rank-price,.stat-num,.stat-card .value,
+.stat-card .sv,.price-box .value,.cr-price-val{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* Focus: always visible, never colour-only */
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.epb-skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--surface);color:var(--text);
+  padding:10px 16px;border-radius:var(--r-sm);border:1px solid var(--line-2)}
+.epb-skip:focus{left:8px;top:8px}
+
+/* ---------- 4. Sticky header -------------------------------------------- */
+.nav{
+  position:sticky;top:0;z-index:60;
+  display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;gap:10px;
+  padding:9px 0!important;margin-bottom:0;
+  border-bottom:0!important;
+  flex-direction:row!important;
+  min-height:60px;
+}
+.nav::before{
+  content:'';position:absolute;inset:0 0 0 0;left:50%;transform:translateX(-50%);
+  width:100vw;z-index:-1;
+  background:var(--header-bg);
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);
+  border-bottom:1px solid var(--line);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .nav::before{background:var(--bg)}
+}
+.nav-brand{
+  font-size:var(--t-lead);font-weight:800;letter-spacing:-.03em;text-decoration:none;color:var(--text);
+  white-space:nowrap;display:inline-flex;align-items:center;min-height:44px;
+}
+.nav-brand em{font-style:normal;color:var(--accent)}
+.nav-links{
+  display:flex!important;gap:2px;flex-wrap:nowrap!important;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+  justify-content:flex-end;
+  mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{
+  display:inline-flex;align-items:center;white-space:nowrap;
+  min-height:44px;padding:0 13px;border-radius:var(--r-sm);
+  text-decoration:none;color:var(--text-2);font-size:var(--t-meta);font-weight:500;
+  transition:color var(--dur) var(--ease),background var(--dur) var(--ease);
+}
+.nav-links a:hover{color:var(--text);background:var(--surface-2)}
+.nav-links a.active,.nav-links a[aria-current="page"]{
+  color:var(--text);background:var(--accent-soft);
+  box-shadow:var(--edge-accent);font-weight:600;
+}
+/* Below the desktop breakpoint the link row scrolls, so it has to start at the
+   left edge — otherwise the current page scrolls out of sight. */
+@media(max-width:900px){.nav-links{justify-content:flex-start}}
+@media(max-width:640px){
+  .nav-links{mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%)}
+  .nav-links a{padding:0 10px}
+  .nav-brand{font-size:var(--t-body)}
+}
+
+/* Theme toggle (injected by epb_theme.js into every .nav) */
+.epb-toggle{
+  -webkit-appearance:none;appearance:none;
+  width:44px;height:44px;flex:0 0 44px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:var(--r-sm);cursor:pointer;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);
+  font:inherit;line-height:1;padding:0;
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease);
+}
+.epb-toggle:hover{color:var(--text);border-color:var(--line-3)}
+.epb-toggle svg{width:18px;height:18px;display:block}
+.epb-toggle .epb-i-sun{display:none}
+:root[data-theme="light"] .epb-toggle .epb-i-sun{display:block}
+:root[data-theme="light"] .epb-toggle .epb-i-moon{display:none}
+
+/* ---------- 5. Freshness dot + live badge -------------------------------- */
+.epb-live{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 12px 5px 10px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);
+  font-size:var(--t-meta);font-weight:500;color:var(--text-2);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.epb-dot{
+  width:8px;height:8px;border-radius:50%;flex:0 0 8px;
+  background:var(--text-3);box-shadow:0 0 0 0 transparent;position:relative;
+}
+.epb-live.is-fresh{color:var(--text);border-color:var(--good-soft)}
+.epb-live.is-fresh .epb-dot{background:var(--good);box-shadow:0 0 0 3px var(--good-soft);animation:epb-pulse 2.4s var(--ease) infinite}
+/* An hours-old scan was quieter than a fresh one: the fresh pill took full
+   strength text and the stale pill kept the dim grey. The one that has
+   something to say is the one that gets read. */
+.epb-live.is-stale{color:var(--text);border-color:var(--warn-soft);background:var(--warn-soft)}
+.epb-live.is-stale .epb-dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
+@keyframes epb-pulse{
+  0%{box-shadow:0 0 0 3px var(--good-soft)}
+  50%{box-shadow:0 0 0 6px transparent}
+  100%{box-shadow:0 0 0 3px var(--good-soft)}
+}
+
+/* ---------- 6. Surfaces & buttons ---------------------------------------- */
+.panel,.card,.stat-card,.chart-card,.chart-container,.rank-card,.insight-card,
+.detail-panel,.price-box,.info-item,.update,.article,.review,.sidebar-block,
+.platform-mini,.mtx-wrap,.heatmap-wrap,.plat-card,.cr-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--sh-1);
+}
+.price-box,.info-item,.update,.platform-mini,.cr-card{border-radius:var(--r)}
+
+/* ONE button system. Three skins, and the skin follows the MEANING of the
+   action, never the position of the box on a grid:
+
+     primary    the one thing this page wants you to do. At most one per view.
+                Solid accent. Never repeated down a list.
+     secondary  a real action that repeats — "Go to site" on twenty cards,
+                "Compare", "Read the review". Accent on an accent tint.
+     quiet      a side door: details, back, cancel, "all platforms".
+                No fill, a hairline, secondary ink.
+
+   The board used to paint eighteen button skins on its front page, three of
+   them for the identical label "Go to site" at the identical size, chosen by
+   :nth-child position in the grid — so the loudest call to action on the page
+   belonged to whichever card happened to sort first, and the card with no
+   prices at all got the solid fill. Position is not meaning. */
+.btn,.cta-btn,.links a,.details-btn,.instant-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:0 20px;border-radius:var(--r-sm);
+  font:600 var(--t-meta)/1 var(--font);letter-spacing:-.01em;
+  text-decoration:none;cursor:pointer;border:1px solid transparent;
+  transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),
+             color var(--dur) var(--ease),transform var(--dur) var(--ease);
+}
+/* primary */
+.btn-primary,.cta-primary,.links .btn-primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn-primary:hover,.cta-primary:hover{background:var(--accent);filter:brightness(1.08);transform:translateY(-1px)}
+/* secondary */
+.btn-secondary,.cta-secondary,.btn-outline,.links .btn-secondary,.instant-btn{
+  background:var(--accent-soft);color:var(--accent);border-color:var(--accent-line);
+}
+.btn-secondary:hover,.cta-secondary:hover,.btn-outline:hover,.instant-btn:hover{
+  border-color:var(--accent);background:var(--accent-soft);filter:brightness(1.12);
+}
+:root[data-theme="light"] .btn-secondary,:root[data-theme="light"] .cta-secondary,
+:root[data-theme="light"] .btn-outline,:root[data-theme="light"] .instant-btn{color:var(--accent-strong)}
+/* quiet */
+.btn-ghost,.details-btn{background:transparent;color:var(--text-2);border-color:var(--line-2)}
+.btn-ghost:hover,.details-btn:hover{color:var(--text);border-color:var(--line-3);background:var(--surface-2)}
+
+/* ---------- 7. Chips ----------------------------------------------------- */
+.chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag{
+  -webkit-appearance:none;appearance:none;
+  display:inline-flex;align-items:center;gap:6px;
+  min-height:36px;padding:0 14px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);
+  font:600 var(--t-meta)/1 var(--font);cursor:pointer;user-select:none;white-space:nowrap;
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease);
+  box-shadow:none;
+}
+.chip:hover,.feat-chip:hover,.calc-chip:hover,.tab:hover,.tab-btn:hover,.svc-tag:hover{
+  color:var(--text);border-color:var(--line-3);
+}
+.chip.active,.feat-chip.on,.calc-chip.active,.tab.active,.tab-btn.active,.svc-tag.on{
+  background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent);box-shadow:none;
+}
+:root[data-theme="light"] .chip.active,:root[data-theme="light"] .feat-chip.on,
+:root[data-theme="light"] .calc-chip.active,:root[data-theme="light"] .tab.active,
+:root[data-theme="light"] .tab-btn.active,:root[data-theme="light"] .svc-tag.on{color:var(--accent-strong)}
+.svc-tag.off{opacity:.45;background:transparent}
+.tab-bar,.tabs{
+  display:inline-flex;gap:4px;padding:4px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);width:fit-content;max-width:100%;
+  overflow-x:auto;scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+.tab-bar .tab-btn,.tabs .tab{border-color:transparent;background:transparent}
+.tab-bar .tab-btn.active,.tabs .tab.active{background:var(--accent-soft);border-color:var(--accent-line)}
+
+/* ---------- 8. Inputs ---------------------------------------------------- */
+.search-box,input[type="text"],input[type="email"],input[type="search"],select,.controls select{
+  min-height:40px;padding:0 12px;border-radius:var(--r-sm);
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text);
+  font:500 var(--t-meta)/1 var(--font);
+  transition:border-color var(--dur) var(--ease);
+}
+.search-box::placeholder,input::placeholder{color:var(--text-3)}
+.search-box:focus,input:focus,select:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+.controls select,select{cursor:pointer;min-height:40px;padding:0 30px 0 12px;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 15px) 17px,calc(100% - 10px) 17px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+  -webkit-appearance:none;appearance:none;color:var(--text);
+}
+.search-wrap{position:relative;display:inline-flex;align-items:center}
+.search-wrap kbd{
+  position:absolute;right:8px;pointer-events:none;
+  font:600 var(--t-micro)/1 var(--mono);color:var(--text-3);
+  border:1px solid var(--line-2);border-radius:var(--r-xs);padding:3px 5px;background:var(--surface);
+}
+
+/* ---------- 9. Badges ---------------------------------------------------- */
+.badge-stale,.badge-nodata,.badge-est,.badge-ours,.plat-best-badge,.dp-badge,.f-chip,.feature-tag,
+.article .meta .tag,.hero-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:var(--r-pill);
+  font:700 var(--t-micro)/1.4 var(--font);letter-spacing:.02em;
+  border:1px solid transparent;white-space:nowrap;
+}
+.badge-stale{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-soft);text-transform:uppercase}
+.badge-nodata{background:var(--surface-3);color:var(--text-3);text-transform:uppercase}
+.badge-est{background:var(--warn-soft);color:var(--warn)}
+/* One row on the board belongs to the people who run it. The badge is quiet on
+   purpose: it is a disclosure, not a recommendation, and it must not read as a
+   mark of approval next to the price. */
+.badge-ours{background:var(--surface-3);color:var(--text-2);border-color:var(--line-2);
+  text-transform:uppercase;letter-spacing:.02em}
+.plat-best-badge{background:var(--good-soft);color:var(--good);text-transform:uppercase}
+.plat-best-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--good)}
+.hero-badge{background:var(--surface-2);border-color:var(--line);color:var(--text-2);
+  font-size:var(--t-meta);font-weight:500;padding:6px 14px;text-transform:none;letter-spacing:0}
+.hero-badge b{color:var(--text);font-weight:700}
+.feature-tag{background:var(--accent-soft);color:var(--accent);text-transform:uppercase;padding:4px 12px}
+.f-chip{padding:4px 12px}
+.f-chip.has{background:var(--good-soft);color:var(--good)}
+.f-chip.no{background:var(--surface-2);color:var(--text-3)}
+/* Supported / not supported must not rest on colour alone. */
+.f-chip.has::before{content:"\2713";font-weight:800}
+.f-chip.no::before{content:"\2717";opacity:.75}
+.dp-badge{padding:4px 10px;font-weight:600;background:var(--surface-2);color:var(--text-2)}
+.dp-badge.ref{background:var(--accent-soft);color:var(--accent)}
+
+/* Estimated values: amber, never colour alone — the ≈ prefix carries it, and a
+   dotted rule under the figure carries it a third time, in shape. The amber
+   FILL is deliberately gone: roughly half of every price table is an
+   estimate, and a table that is half warning-coloured reads as broken rather
+   than as annotated. Elsewhere on the site amber means "stale", so the more
+   channels an estimate carried, the more it looked like a warning; the
+   prefix says it, the amber ink repeats it, that is enough. */
+.est,.pv.est,.cell-price.est,td.est,.value.est{color:var(--warn)!important}
+/* No background of its own, so an estimated cell still takes the heatmap
+   shading — otherwise a cheap estimate would read as an expensive quote. */
+
+/* Pricing note marker: platforms whose quote needs a sentence of explanation
+   (a per-day rate, a rescaled bundle, a members-only tier). The note itself is
+   the title attribute, and epb_theme.js prints the sentence next to the marker
+   as visually hidden text; the marker never replaces the ≈ / stale / no-data
+   conventions. */
+.note-mark{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:15px;height:15px;flex:0 0 15px;margin-left:6px;
+  border-radius:50%;border:1px solid var(--line-3);
+  background:var(--surface-2);color:var(--text-2);
+  font:700 var(--t-micro)/1 var(--font);font-style:normal;letter-spacing:0;
+  text-transform:none;cursor:help;vertical-align:middle;
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease);
+}
+.note-mark:hover,.note-mark:focus{color:var(--accent);border-color:var(--accent-line)}
+/* The letter is drawn, not written: inside an <h1> or a table cell a real "i"
+   makes the APITRX review read as "APITRXi" to anything that takes the text
+   instead of the picture. Pages that still write their own letter keep it —
+   :empty only paints the ones the theme itself emits. */
+.note-mark:empty::before{content:"i"}
+/* 15px is the right size for a footnote next to a price and the wrong size for
+   a thumb. The pressable area is grown to 25px over the top of the layout, so
+   WCAG 2.2 SC 2.5.8 is met without anything moving. */
+.note-mark::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+.price-note{
+  margin:10px 0 0;font-size:var(--t-meta);line-height:1.65;color:var(--text-2);
+  padding:10px 14px;border-radius:var(--r-sm);
+  background:var(--surface-2);border:1px solid var(--line);
+}
+.price-note b{color:var(--text);font-weight:700}
+
+/* ---------- 10. 24h change ----------------------------------------------- */
+.delta{
+  display:inline-flex;align-items:center;gap:3px;
+  font:700 var(--t-micro)/1 var(--font);font-variant-numeric:tabular-nums;
+  padding:3px 7px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.delta-down{background:var(--good-soft);color:var(--good)}   /* cheaper than 24h ago */
+.delta-up{background:var(--bad-soft);color:var(--bad)}       /* dearer  than 24h ago */
+.delta-flat{background:var(--surface-2);color:var(--text-3)}
+
+/* ---------- 11. Sparkline ------------------------------------------------
+   A 20px line with no scale is decoration. These carry two dashed guides at
+   the high and low of the series, so a flat line reads as "this barely moved"
+   rather than as "no data", and an end dot that says which way is now.      */
+.spark{display:block;width:100%;height:28px;overflow:visible}
+.spark-line{fill:none;stroke:var(--text-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.spark-area{fill:var(--accent-soft);stroke:none}
+.spark-guide{stroke:var(--line-3);stroke-width:1;stroke-dasharray:2 3;vector-effect:non-scaling-stroke;fill:none}
+/* A zero-length path with a round cap draws a true circle even though the
+   viewBox is stretched by preserveAspectRatio="none". */
+.spark-end{fill:none;stroke:var(--text-2);stroke-width:3.4;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.spark.is-down .spark-line{stroke:var(--good)}
+.spark.is-down .spark-end{stroke:var(--good)}
+.spark.is-up .spark-line{stroke:var(--bad)}
+.spark.is-up .spark-end{stroke:var(--bad)}
+.spark-dot{fill:currentColor}
+.spark-wrap{display:flex;align-items:center;gap:8px;min-width:0}
+.spark-wrap .spark{flex:1;min-width:0}
+td .spark{height:22px;width:72px}
+/* The one place a sparkline is big enough to be read as a chart gets a grid. */
+.trend-card .spark,.chart-card .spark,.dp-spark .spark{
+  height:56px;padding:2px 0;
+  background-image:repeating-linear-gradient(to bottom,var(--line) 0 1px,transparent 1px 25%);
+  background-size:100% 100%;
+}
+
+/* ---------- 12. Tables ---------------------------------------------------
+   The matrix, the heatmap and the price lists are the product. They are set
+   like a printed price list: hairline rules, a quiet zebra so the eye can
+   travel a long row, tabular figures, a header that stays put, and a first
+   column that stays put while the terms scroll under it.                   */
+.mtx-wrap,.heatmap-wrap,.table-scroll,.table-wrap{
+  position:relative;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;                 /* never drags the page sideways */
+  border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--sh-1),var(--card-top);
+  scrollbar-width:thin;scrollbar-color:var(--line-3) transparent;
+}
+.mtx-wrap::-webkit-scrollbar,.heatmap-wrap::-webkit-scrollbar,
+.table-scroll::-webkit-scrollbar,.table-wrap::-webkit-scrollbar{height:8px}
+.mtx-wrap::-webkit-scrollbar-thumb,.heatmap-wrap::-webkit-scrollbar-thumb,
+.table-scroll::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb{
+  background:var(--line-3);border-radius:var(--r-pill)}
+.mtx-table,.heatmap,table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--t-meta)}
+.mtx-table th,.heatmap th,table.data th{
+  position:sticky;top:0;z-index:3;
+  padding:12px 12px;text-align:right;background:var(--surface);
+  color:var(--text-2);font:700 var(--t-micro)/1.3 var(--font);
+  text-transform:uppercase;letter-spacing:.06em;
+  border-bottom:1px solid var(--line-2);white-space:nowrap;
+}
+.mtx-table th:first-child,.heatmap th:first-child,table.data th:first-child{text-align:left}
+.mtx-table td,.heatmap td,table.data td{
+  padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums;
+}
+.mtx-table tr:last-child td,.heatmap tr:last-child td{border-bottom:0}
+.mtx-table td.label,.heatmap td.label{text-align:left;padding:9px 14px;font-weight:600;color:var(--text)}
+.mtx-table td.spark-cell,.heatmap td.spark-cell{text-align:center}
+
+/* Zebra: two ticks of light, enough to hold a row together across 8 columns
+   and not enough to compete with the values. */
+.mtx-table tbody tr:nth-child(even) td,.heatmap tbody tr:nth-child(even) td{background:var(--zebra)}
+.mtx-table tbody tr:hover td,.heatmap tbody tr:hover td{background:var(--surface-2)}
+.mtx-table tr.selected td,.mtx-table tr.selected:hover td{background:var(--accent-soft)}
+.mtx-table tr.selected td.label{box-shadow:inset 3px 0 0 var(--accent);color:var(--accent)}
+
+/* The platform name column stays while the terms scroll under it — without it
+   a wide matrix on a phone is a grid of numbers belonging to nobody. */
+/* The rule down the right of the sticky column was drawn as a box-shadow, and
+   it was the single most-painted shadow on the site: 42 instances of
+   "rgba(255,255,255,.07) 1px 0 0 0" in one screenshot. A rule is a border. */
+.mtx-table th:first-child,.mtx-table td.label,
+.heatmap th:first-child,.heatmap td.label{
+  position:sticky;left:0;z-index:2;background:var(--surface);
+  border-right:1px solid var(--line);
+}
+.mtx-table th:first-child,.heatmap th:first-child{z-index:4}
+/* The sticky column has to be opaque or the scrolling numbers slide through it,
+   so the zebra tint is painted as a layer over the solid surface instead of
+   being left translucent. */
+.mtx-table tbody tr:nth-child(even) td.label,.heatmap tbody tr:nth-child(even) td.label{
+  background:linear-gradient(var(--zebra),var(--zebra)),var(--surface)}
+.mtx-table tbody tr:hover td.label,.heatmap tbody tr:hover td.label{background:var(--surface-2)}
+.mtx-table tr.selected td.label{background:linear-gradient(var(--accent-soft),var(--accent-soft)),var(--surface)}
+
+.mtx-table tr.section-split td,.heatmap tr.section-split td{
+  background:transparent!important;padding:22px 14px 6px;border-bottom:0;text-align:left;
+  font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);opacity:1;
+  position:static;box-shadow:none;
+}
+.mtx-table tr.row-stale td,.mtx-table tr.row-nodata td,
+.heatmap tr.row-stale td,.heatmap tr.row-nodata td{opacity:.62}
+
+.cell-price{
+  display:inline-block;min-width:58px;padding:5px 9px;border-radius:var(--r-xs);
+  font:600 var(--t-meta)/1.2 var(--font);font-variant-numeric:tabular-nums;
+  background:transparent;color:var(--text);white-space:nowrap;
+}
+.cell-price.na{background:transparent;color:var(--text-3);font-weight:400}
+/* Cheapest in its column. Three carriers, so it survives any colour vision and
+   a black-and-white printout: the ★ the renderer already writes, the green,
+   and a ring. */
+.cell-price.best{background:var(--good-soft);color:var(--good);font-weight:800;
+  box-shadow:var(--edge-good)}
+.cell-price.price-neutral{background:var(--surface-2);color:var(--text)}
+.cell-price.price-down{background:var(--good-soft);color:var(--good)}
+.cell-price.price-up{background:var(--bad-soft);color:var(--bad)}
+.cell-delta{display:block;font-size:var(--t-micro);line-height:1.3;margin-top:2px}
+
+/* ---------- 13. Skeletons ------------------------------------------------ */
+.sk{
+  display:block;border-radius:var(--r-xs);
+  background:var(--surface-2);background-image:var(--skeleton);
+  background-size:200% 100%;background-repeat:no-repeat;
+  animation:epb-shimmer 1.4s linear infinite;
+  color:transparent!important;
+}
+@keyframes epb-shimmer{0%{background-position:150% 0}100%{background-position:-50% 0}}
+.sk-line{height:12px;margin:6px 0}
+.sk-card{height:190px;border-radius:var(--r-lg)}
+.sk-row{height:38px;margin:6px 0;border-radius:var(--r-xs)}
+.sk-w40{width:40%}.sk-w60{width:60%}.sk-w80{width:80%}
+
+/* ---------- 14. Footer --------------------------------------------------- */
+.footer{
+  border-top:1px solid var(--line);padding:44px 0 32px;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:36px;
+}
+.footer-brand{font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em}
+.footer-brand em{font-style:normal;color:var(--accent)}
+.footer-desc{font-size:var(--t-meta);color:var(--text-2);line-height:1.6;margin:0;max-width:300px}
+.footer-col h5{font:700 var(--t-micro)/1.4 var(--font);color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin:0 0 12px}
+.footer-col a{display:block;color:var(--text-2);text-decoration:none;padding:5px 0;transition:color var(--dur) var(--ease)}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{
+  border-top:1px solid var(--line);padding:18px 0;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  font-size:var(--t-meta);color:var(--text-3);
+}
+.footer-bottom a{color:var(--text-3);text-decoration:none}
+.footer-bottom a:hover{color:var(--text-2)}
+@media(max-width:900px){.footer{grid-template-columns:1fr 1fr;gap:28px}}
+@media(max-width:560px){.footer{grid-template-columns:1fr;gap:24px}}
+
+/* Dead newsletter widgets are removed from the markup; kill any leftover. */
+.footer-newsletter{display:none!important}
+
+/* ---------- 15. Legacy page rules that hardcoded light colours ----------- */
+/* The old pages painted headings with a white->blue gradient clipped to the
+   text. It vanished in light mode and read as 2019 crypto; one flat accent
+   colour is both calmer and theme-proof. */
+h1 span,.error-num{
+  background:none!important;
+  -webkit-background-clip:border-box!important;background-clip:border-box!important;
+  -webkit-text-fill-color:currentColor!important;
+  color:inherit;
+}
+/* One accent word per page headline — used sparingly, on purpose. The bare-h1
+   pages (news, blog index, feature pages) carry the same convention; the
+   badges that also live inside an h1 set their own colour and win on
+   specificity, so they are unaffected. */
+.hero h1 span,.page-head h1 span,h1 > span,.error-num{color:var(--accent)}
+.section-light,.section-dark{background:transparent!important;color:var(--text)!important}
+.article-body{color:var(--text-2)!important}
+.article-body strong,.article-body h2,.article-body h3{color:var(--text)!important}
+.breadcrumb,.breadcrumb a{color:var(--text-3)}
+.breadcrumb a:hover{color:var(--accent)}
+.breadcrumb span{color:var(--text-2)}
+.subtitle,.hint,.disclaimer,.feed-meta{color:var(--text-2)}
+.cta-primary,.btn-primary{color:var(--accent-ink)!important}
+.f-chip.has,.info-item .iv.yes,.price-box .best{color:var(--good)!important}
+.info-item .iv.no{color:var(--text-3)!important}
+.loading{text-align:center;padding:48px 20px;color:var(--text-2);font-size:var(--t-body)}
+.loading .spinner{
+  display:inline-block;width:26px;height:26px;border:2px solid var(--line-2);
+  border-top-color:var(--accent);border-radius:50%;animation:epb-spin .8s linear infinite;margin-bottom:10px;
+}
+@keyframes epb-spin{to{transform:rotate(360deg)}}
+.tooltip{
+  position:fixed;z-index:120;pointer-events:none;opacity:0;
+  background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-sm);
+  padding:8px 12px;font-size:var(--t-meta);color:var(--text);box-shadow:var(--sh-3);
+}
+.tooltip.show{opacity:1}
+.tooltip .tt-price{font-size:var(--t-lead);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+
+/* Pill link lists (all-platforms / head-to-head / compare-with) */
+.all-plats-list a,.h2h-list a,.vs-list a{
+  display:inline-flex;align-items:center;min-height:36px;
+  padding:0 14px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text-2);text-decoration:none;font-size:var(--t-meta);font-weight:600;
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease);
+}
+.all-plats-list a:hover,.h2h-list a:hover,.vs-list a:hover{color:var(--text);border-color:var(--accent-line);background:var(--accent-soft)}
+.all-plats h2,.h2h h2{font-weight:700;margin:0 0 6px}
+.all-plats p,.h2h p{font-size:var(--t-meta);color:var(--text-2);margin:0 0 14px}
+
+/* ---------- 16. Accordion ------------------------------------------------ */
+.accordion-item{border-bottom:1px solid var(--line)}
+.accordion-item:last-child{border-bottom:0}
+.accordion-trigger{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:100%;min-height:56px;padding:18px 0;
+  background:none;border:0;cursor:pointer;text-align:left;
+  font:600 var(--t-lead)/1.4 var(--font);letter-spacing:-.015em;color:var(--text);
+  transition:color var(--dur) var(--ease);
+}
+.accordion-trigger:hover{color:var(--accent)}
+.accordion-trigger .chevron{
+  flex:0 0 26px;width:26px;height:26px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text-2);font-size:var(--t-micro);
+  transition:transform var(--dur) var(--ease);
+}
+.accordion-trigger[aria-expanded="true"] .chevron,.accordion-trigger.open .chevron{
+  transform:rotate(180deg);color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft);
+}
+.accordion-content{
+  overflow:hidden;
+  color:var(--text-2);font-size:var(--t-body);line-height:1.75;
+  transition:max-height var(--dur) var(--ease);
+}
+.accordion-content > .accordion-inner{padding:0 0 20px;max-width:78ch}
+@media(max-width:640px){.accordion-trigger{padding:15px 0}}
+
+/* ---------- 17. Misc utilities ------------------------------------------- */
+.eyebrow{font:700 var(--t-micro)/1.4 var(--font);text-transform:uppercase;letter-spacing:.09em;color:var(--text-3)}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.section-head h2{font-size:var(--t-h2)}
+.muted{color:var(--text-2)}
+.faint{color:var(--text-3)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.epb-flash{animation:epb-flash 700ms var(--ease) 1}
+@keyframes epb-flash{0%{color:var(--accent)}100%{color:inherit}}
+
+/* ---------- 18. Reduced motion ------------------------------------------- */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
+  .epb-live.is-fresh .epb-dot{animation:none;box-shadow:0 0 0 3px var(--good-soft)}
+  .sk{animation:none}
+}
+
+/* The hero tile that answers "who is cheapest" is a link, so it must look like
+   one you can press: same card, but with a hover state and a focus ring. */
+.stat-tile-link{text-decoration:none;color:inherit;display:flex;flex-direction:column;
+  transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease),
+  transform var(--dur) var(--ease)}
+.stat-tile-link:hover{border-color:var(--accent-line);background:var(--accent-soft);
+  transform:translateY(-1px)}
+.stat-tile-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stat-tile-link .stat-label::after{content:"\2192";margin-left:6px;color:var(--accent);
+  font-weight:700;opacity:.7}
+
+/* Narrow screens: the header folds into two rows instead of pushing half the
+   sections past the right edge behind a fade. Nothing to swipe, nothing hidden. */
+@media(max-width:820px){
+  .nav{grid-template-columns:1fr auto;grid-template-areas:"brand toggle" "links links";
+    row-gap:2px;padding-bottom:8px!important;min-height:0}
+  .nav-brand{grid-area:brand}
+  .epb-toggle{grid-area:toggle;justify-self:end}
+  .nav-links{grid-area:links;flex-wrap:wrap!important;overflow:visible;mask-image:none;
+    justify-content:flex-start;gap:2px 4px}
+  .nav-links a{padding:0 10px;min-height:40px}
+}
+
+/* The "cheapest right now" card that ends an article: a real offer, not a
+   decoration, so it gets a card, a number people can read across the room and
+   one button. The disclosure sits under it because a board that takes referral
+   money and hides that fact is worth nothing. */
+.cta-live{margin:28px 0 8px}
+.cta-live-in{display:flex;align-items:center;justify-content:space-between;gap:18px;
+  flex-wrap:wrap;padding:18px 20px;border-radius:var(--r-lg);background:var(--surface);
+  border:1px solid var(--line-2);box-shadow:var(--sh-1)}
+.cta-live-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cta-live-lbl{font:700 var(--t-micro)/1.4 var(--font);text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-3)}
+.cta-live-num{font:800 var(--t-num)/1.05 var(--font);letter-spacing:-.03em;color:var(--good);
+  font-variant-numeric:tabular-nums}
+.cta-live-sub{font-size:var(--t-meta);color:var(--text-2)}
+.cta-live-note{margin:10px 2px 0;font-size:var(--t-meta);line-height:1.65;color:var(--text-2);max-width:74ch}
+/* The article stylesheet underlines every link inside the body, which turned
+   the one button in the piece into underlined text. */
+.article-body .btn,.article-body .cta-btn,.cta-live .btn,.read-more a,
+.article-body .all-plats-list a,.article-body .vs-list a{text-decoration:none}
+@media(max-width:560px){
+  .cta-live-in{flex-direction:column;align-items:stretch;gap:14px}
+  .cta-live-in .btn{width:100%}
+}
+.footer-disclosure{flex-basis:100%;color:var(--text-3);font-size:var(--t-meta);line-height:1.6;
+  padding-top:6px}
+
+/* ==========================================================================
+   PART II — hierarchy, states and the things people actually came for.
+   Everything below is deliberately last in the file: at equal specificity it
+   settles arguments with the per-page stylesheets, which are inlined earlier.
+   ========================================================================== */
+
+/* ---------- 19. One type scale ------------------------------------------
+   The complaint that started this pass was that every page reads at one
+   weight. There is now a ladder: a page has exactly one display line, section
+   titles a third of its size, an eyebrow above them, and body text below.   */
+h1{font-size:var(--t-h1);line-height:1.06;letter-spacing:-.03em;font-weight:800}
+h2{font-size:var(--t-h2);letter-spacing:-.026em;line-height:1.2}
+h3{font-size:var(--t-lead);letter-spacing:-.018em}
+h4{font-size:var(--t-body);letter-spacing:-.012em}
+
+/* Rhythm for the pages that lay their sections straight into the container
+   (platform review, head-to-head, feature pages, articles). The shared reset
+   zeroes heading margins, so without this the sections run together. */
+.container > h2,.article-body > h2,article > h2,section > h2:first-child{
+  margin:var(--sp-7) 0 var(--sp-3)}
+.container > h3,.article-body > h3,article > h3{margin:var(--sp-5) 0 var(--sp-2)}
+.container > h2:first-of-type{margin-top:var(--sp-6)}
+.article-body > h2::before{
+  content:'';display:block;width:34px;height:2px;border-radius:var(--r-pill);
+  background:var(--accent);margin-bottom:14px;opacity:.85}
+.container > p,.article-body > p{margin:0 0 var(--sp-4)}
+.breadcrumb{padding:var(--sp-3) 0 var(--sp-5);font-size:var(--t-meta)}
+
+/* Running prose has a measure. 110 characters a line was the single biggest
+   readability problem on the article pages. */
+.article-body,.snapshot,.accordion-content,
+.article-body > p,.article-body > ul,.article-body > ol,
+.container > p.subtitle{max-width:var(--measure)}
+.intro-p,.intro-p > p{max-width:56ch}
+.article-body{font-size:var(--t-read);line-height:1.75}
+.article-body p{margin:0 0 var(--sp-4)}
+.article-body li{margin-bottom:8px}
+.article-body code{font:600 .88em/1 var(--mono);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:var(--r-xs);padding:2px 6px;color:var(--text)}
+.article-body table,.article-body .cta-live,.article-body .table-wrap{max-width:none}
+/* Tables inside an article were bare rows of text. Same frame as every other
+   table on the site, so a reader does not have to work out that it is one. */
+.article-body table{border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--surface);box-shadow:var(--sh-1),var(--card-top);overflow:hidden;
+  font-size:var(--t-meta);margin:0 0 var(--sp-4)}
+.article-body th{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line-2);
+  font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.06em;color:var(--text-2)}
+.article-body td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--text)}
+.article-body tbody tr:nth-child(even) td{background:var(--zebra)}
+.article-body tbody tr:last-child td{border-bottom:0}
+.article-header{padding-bottom:var(--sp-5);margin-bottom:var(--sp-5);border-bottom:1px solid var(--line)}
+.article-header h1{margin:12px 0 10px}
+.article-header .meta{font-size:var(--t-meta);color:var(--text-3)}
+
+/* An eyebrow is a label, not a sentence — keep it short and let it lead. */
+.eyebrow,.page-head .eyebrow{color:var(--accent);opacity:.95}
+
+/* ---------- 20. Surfaces get an edge ------------------------------------- */
+.panel,.card,.stat-card,.chart-card,.chart-container,.rank-card,.insight-card,
+.detail-panel,.price-box,.info-item,.update,.review,.sidebar-block,
+.platform-mini,.plat-card,.cr-card,.stat-tile,.read-card,.api-card,.verdict{
+  box-shadow:var(--sh-1),var(--card-top);
+}
+
+/* ---------- 21. The board ------------------------------------------------ */
+/* Hero: the cheapest 65k price is the reason the page exists, so its tile is
+   wider than the two that give it context, and the button that spends it is
+   the tallest thing in the row. */
+/* Three tiles, three equal tracks. The first used to be 1.3fr — 343.5px
+   against 264.25px twins — and its number was painted four pixels larger in
+   a different colour, so a row of three peers read as one card and two
+   also-rans. The hero tile is a LINK; that is what makes it special. */
+.stat-grid{gap:var(--sp-3);grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:820px){.stat-grid{grid-template-columns:1fr}}
+.stat-tile{padding:20px 22px;gap:7px}
+.stat-num{font-size:var(--t-num);line-height:1.02;letter-spacing:-.035em}
+.hero-actions .btn-primary,.hero-actions .cta-primary{min-height:48px;padding:0 24px}
+.stat-tile-link{position:relative}
+.stat-tile-link::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  box-shadow:var(--edge-accent);opacity:0;transition:opacity var(--dur) var(--ease)}
+.stat-tile-link:hover::after{opacity:1}
+/* The third tile is our own shop rather than a measurement, so it is set
+   apart the way a shelf edge is: a quiet tint and a marked edge, not a louder
+   number. The label carries the ownership badge, which is what makes the tint
+   readable instead of decorative. */
+.stat-tile-shop{background:linear-gradient(180deg,var(--accent-soft),transparent 78%),var(--surface);
+  border-color:var(--accent-line)}
+.stat-tile-shop .stat-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-tile-shop .badge-ours{margin:0}
+.stat-tile-shop .stat-num{color:var(--text)}
+.stat-tile-shop .stat-sub{color:var(--text-2)}
+/* Cards: rank, then price, then everything else. The ordinal comes from a CSS
+   counter, so it always matches the order the grid is actually in — the board
+   is sorted by price and re-rendered on every filter change. Stale and
+   no-data cards never take a number because they never enter a ranking. */
+.plat-grid{counter-reset:epbrank;gap:14px}
+.plat-card{position:relative;padding:18px 20px 17px;gap:12px}
+.plat-card:not(.stale):not(.nodata){counter-increment:epbrank}
+.plat-card:not(.stale):not(.nodata)::before{
+  content:counter(epbrank);
+  position:absolute;top:15px;right:16px;
+  min-width:22px;height:22px;padding:0 5px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-xs);background:var(--surface-2);border:1px solid var(--line);
+  font:800 var(--t-micro)/1 var(--font);color:var(--text-3);font-variant-numeric:tabular-nums;
+}
+.plat-card:first-child:not(.stale):not(.nodata)::before{
+  background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.plat-card .plat-top{padding-right:30px}
+.plat-card:first-child:not(.stale):not(.nodata){border-color:var(--good);
+  box-shadow:var(--sh-2),var(--card-top),inset 0 0 0 1px var(--good-soft)}
+.plat-name{font-size:var(--t-body)}
+/* The chosen cell is the number people came for. Everything else on the card
+   is context, and now looks like it. */
+.plat-prices{grid-template-columns:1.25fr 1fr;gap:8px;align-items:stretch}
+.plat-price{padding:11px 13px;gap:4px;justify-content:center}
+.plat-price .pl{letter-spacing:.07em}
+.plat-price .pv{font-size:var(--t-body)}
+.plat-price.is-focus .pv,.plat-price.plat-best .pv{font-size:var(--t-h2);letter-spacing:-.03em;line-height:1.05}
+.plat-price.is-focus,.plat-price.plat-best{padding:11px 14px}
+.plat-price.plat-best{border-color:var(--good)}
+/* Vs burning — added by epb_theme.js from the price already on the card. */
+.plat-save{display:flex;align-items:center;gap:9px;min-height:16px}
+.plat-save-bar{flex:0 0 62px;height:5px;border-radius:var(--r-pill);background:var(--surface-3);
+  overflow:hidden;position:relative}
+.plat-save-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r-pill);background:var(--good);display:block}
+.plat-save-txt{font-size:var(--t-meta);color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plat-save-txt b{color:var(--good);font-weight:800;font-variant-numeric:tabular-nums}
+.plat-save.is-none .plat-save-bar i{background:var(--bad)}
+.plat-save.is-none .plat-save-txt b{color:var(--bad)}
+.plat-card .plat-trend{min-height:26px}
+.plat-actions{gap:8px}
+.details-btn,.instant-btn{min-height:42px}
+/* "Go to site" is the same action on every card, so it wears the same skin on
+   every card: secondary. It is deliberately NOT the loudest thing on the
+   board — the loudest thing on the board is the price. The three rules that
+   used to repaint this button by grid position (first-child green, n+4 ghost)
+   are gone; the cheapest card is already marked by its border, its rank chip,
+   its green price cell and its badge, which was four signals before the
+   button made it five. */
+/* A card with no prices is the weakest row on the page and used to carry the
+   strongest button on it. Dashed at --line-2 so the border is actually
+   visible — 7% white was not — and a quiet call to action. */
+.plat-card.nodata{border-style:dashed;border-color:var(--line-2);background:transparent;box-shadow:none}
+.plat-card.nodata .instant-btn{background:transparent;color:var(--text-2);border-color:var(--line-2)}
+.plat-card.nodata .instant-btn:hover{color:var(--text);border-color:var(--line-3);background:var(--surface-2);filter:none}
+.plat-nodata-note{font-size:var(--t-meta);line-height:1.55}
+
+/* Feature filter bar reads as a control strip, not as loose confetti. */
+.feat-bar{padding:10px 12px;border-radius:var(--r-pill);background:var(--surface);
+  border:1px solid var(--line);gap:6px}
+@media(max-width:640px){.feat-bar{border-radius:var(--r-lg);padding:12px}}
+
+/* Explore-more cards get somewhere to look. */
+.read-card{padding:20px 22px}
+.read-icon{border-radius:var(--r)}
+.read-title{font-size:var(--t-body)}
+
+/* ---------- 22. Compare / matrix ---------------------------------------- */
+/* An empty detail panel was taking a quarter of the widest table on the site.
+   While nothing is selected the matrix gets the whole width and the panel
+   becomes one line of instruction under it. */
+.mtx-layout:has(> .detail-panel:empty){grid-template-columns:minmax(0,1fr)}
+.detail-panel:empty{min-height:0;padding:11px 16px;border-style:dashed;
+  background:transparent;justify-content:flex-start;position:static}
+.detail-panel:empty::after{text-align:left;padding:0;font-size:var(--t-meta)}
+.mtx-toolbar{padding-bottom:2px}
+.mtx-label{color:var(--text-2)}
+#mtxCount,#featMatchCount{color:var(--text-2);font-weight:500}
+#mtxLegend,#hmLegend,.est-legend{color:var(--text-2);font-size:var(--t-meta)}
+
+/* Scroll affordance: a table that scrolls sideways has to look like one, and
+   has to stop looking like one at the end of the run. epb_theme.js sets the
+   classes; an inset shadow is used because it is painted on the scroll
+   container itself and therefore does not slide away with the content.
+   Two strings, one per side, held in tokens so both themes and all four
+   states are the same edge. At -26px spread on a #14161f ground the old fade
+   was about fifteen pixels of barely-visible darkening while 53% of the table
+   was off-screen; it is drawn at half that spread now, so a phone can see
+   there is more to the right. */
+.epb-scroller.is-scrollable,.epb-scroller.is-scrollable.at-start{
+  box-shadow:var(--sh-1),var(--card-top),var(--fade-r)}
+.epb-scroller.is-scrollable.at-end{
+  box-shadow:var(--sh-1),var(--card-top),var(--fade-l)}
+.epb-scroller.is-scrollable.at-mid{
+  box-shadow:var(--sh-1),var(--card-top),var(--fade-l),var(--fade-r)}
+.scroll-hint{margin:9px 2px 0;font-size:var(--t-meta);color:var(--text-3);
+  display:inline-flex;align-items:center;gap:6px}
+.scroll-hint::after{content:'\2192';font-weight:800;color:var(--text-2)}
+
+/* ---------- 23. History -------------------------------------------------- */
+/* The section is called a heatmap, so it is one. The ramp is a single hue at
+   varying strength — deuteranopia and protanopia safe, and it still reads in
+   greyscale — and the ★ on the cheapest cell carries the extreme in shape. */
+.heatmap td.heat{position:relative}
+/* The ring around every heat cell used to be drawn at the cell's own heat
+   alpha. One rule, but it painted 50-odd distinct box-shadow strings per page
+   — an alpha ramp from .00 to .34, of which everything under about .15 is
+   invisible. The fill already carries the value; the ring carried nothing but
+   a number in a devtools panel. Only the cheapest cell keeps an edge. */
+.heatmap td.heat .cell-price{background:rgba(var(--heat),calc(var(--h,0) * .26));
+  box-shadow:none}
+.heatmap td.heat .cell-price.best{background:var(--good-soft);box-shadow:var(--edge-good)}
+.heatmap td.heat .cell-price.na{background:transparent;box-shadow:none}
+/* A direction beats a level: a cell that says "dearer than yesterday" is
+   painted in the direction tint, not in the heat green underneath it, which
+   is also what stopped --bad reaching 4.5:1 on the history heatmap. */
+.heatmap td.heat .cell-price.price-up{background:var(--bad-soft);color:var(--bad)}
+.heatmap td.heat .cell-price.price-down{background:var(--good-soft);color:var(--good)}
+.heat-key{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;
+  font-size:var(--t-meta);color:var(--text-3)}
+.heat-key-ramp{display:inline-block;width:120px;height:8px;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,rgba(var(--heat),.26),rgba(var(--heat),.02));
+  border:1px solid var(--line)}
+
+.stat-card .value{font-size:var(--t-num)}
+.rank-item{padding:10px 0;gap:11px;align-items:center}
+.rank-item:hover .rank-name{color:var(--accent)}
+.rank-pos{width:24px;height:24px;flex:0 0 24px;font-size:var(--t-micro)}
+.rank-price{font-size:var(--t-body)}
+/* The cheapest-platforms ranking is the one place on the site where ten prices
+   are read straight down, and they did not line up: the width of the "+120%"
+   beside each one, and whether the row had an outbound arrow at all, decided
+   where the number ended — 53px of drift over ten rows. Fixed columns, set to
+   the right, put every decimal point on one vertical, and the arrow gets a
+   gutter of its own so a row without one keeps the shape of a row with one. */
+.rank-right{margin-left:auto;position:relative;padding-right:38px}
+.rank-price{min-width:52px;text-align:right}
+.rank-diff{min-width:46px;text-align:right;font-variant-numeric:tabular-nums}
+.rank-right .rank-ref-link{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0}
+/* On a phone the ranking was already wider than its card — the grid track is
+   sized to the longest platform name, so "JustLend DAO — Energy Rental" pushed
+   the prices past the right edge of the screen, where html{overflow-x:clip}
+   quietly swallowed them. The track is held to the card and the name gives way
+   instead, because the price is what the row is for. */
+@media(max-width:560px){
+  .rank-layout{grid-template-columns:minmax(0,1fr)}
+  .rank-item{min-width:0}
+  .rank-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+.chart-container h3,.chart-card h3,.rank-card h3{font-size:var(--t-lead)}
+.chart-container,.chart-card,.rank-card{padding:22px 24px}
+/* Chart.js draws into a canvas, so it cannot inherit anything: what CSS can do
+   is stop the canvas from being a mystery box. */
+.chart-container canvas,.chart-card canvas{max-height:300px}
+[data-hist-depth],.hist-depth{display:block;padding:11px 14px;border-radius:var(--r-sm);
+  background:var(--warn-soft);border:1px solid var(--warn-soft);color:var(--text-2);
+  font-size:var(--t-meta);line-height:1.6}
+.insight-card .ic-icon{font-size:var(--t-lead)}
+
+/* ---------- 24. Platform review + head to head --------------------------- */
+/* Two centred numbers in two wide boxes read as a placeholder. Left-aligned,
+   with the figure at display size, they read as the answer. */
+.price-box{padding:18px 20px;text-align:left;position:relative;overflow:hidden}
+.price-box .amount{margin-bottom:8px}
+.price-box .value{font-size:var(--t-num);line-height:1.02;letter-spacing:-.035em}
+.price-box::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;
+  background:var(--line-2)}
+.price-box:first-child::after{background:linear-gradient(90deg,var(--accent),transparent)}
+.prices-grid{gap:12px}
+.trend-card{padding:18px 20px}
+.info-item{padding:14px 16px}
+.info-grid{gap:10px}
+.best-flag{font:700 var(--t-micro)/1.4 var(--font);letter-spacing:.02em;text-transform:uppercase;
+  padding:5px 11px;display:inline-flex;align-items:center;gap:5px}
+.best-flag::before{content:'\2605'}
+
+/* The whole point of a two-column price list is the second column. Framed as
+   a card so it reads as one object instead of two lonely columns of text. */
+#livePrices table{max-width:620px;border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--surface);box-shadow:var(--sh-1),var(--card-top);overflow:hidden}
+#livePrices th:last-child,#livePrices td:last-child{text-align:right;padding-right:18px}
+#livePrices th:first-child,#livePrices td:first-child{padding-left:18px}
+#livePrices th,#livePrices td{padding-top:11px;padding-bottom:11px}
+#livePrices table,.article-body table,.snapshot table{
+  border-collapse:separate;border-spacing:0;width:100%}
+#livePrices tbody tr:nth-child(even) td{background:var(--zebra)}
+#livePrices tbody tr:last-child td{border-bottom:0}
+#livePrices + .disclaimer{margin-top:12px}
+.table-wrap table tbody tr:nth-child(even) td{background:var(--zebra)}
+/* The wrapper is a card and the table has to fill it. Without this the head-to-head
+   tables sat in the left two thirds of their own card with a blank third beside them. */
+.table-wrap>table{width:100%}
+.table-wrap th,.table-wrap td{white-space:nowrap}
+.table-wrap td:first-child,.table-wrap th:first-child{white-space:normal}
+
+/* Yes / no in a comparison table must not be colour alone. */
+.f-chip.f-yes::before{content:'\2713';font-weight:800}
+.f-chip.f-no::before{content:'\2717';opacity:.75}
+.f-chip.f-yes{background:var(--good-soft);color:var(--good)}
+.f-chip.f-no{background:var(--surface-2);color:var(--text-2)}
+.info-item .iv.yes::before{content:'\2713\00a0';font-weight:800}
+.info-item .iv.no::before{content:'\2717\00a0';opacity:.75}
+td.win::before{content:'\2605\00a0';color:var(--good)}
+.verdict{padding:var(--sp-4) 22px;font-size:var(--t-lead);line-height:1.5;border-left-width:4px}
+.verdict b,.verdict strong{color:var(--accent)}
+.cta-row{gap:10px}
+.disclaimer{max-width:var(--measure)}
+
+/* ---------- 25. Lists of links ------------------------------------------
+   These were rendering as bulleted lists of pills — a bullet AND a pill for
+   every item. They are a set of doors, so they lay out as one. */
+.all-plats-list,.h2h-list,.vs-list{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.all-plats-list li,.h2h-list li,.vs-list li{margin:0;display:contents}
+.all-plats h2,.h2h h2{font-size:var(--t-h2)}
+
+/* Feature pages */
+.api-card{display:flex;flex-direction:column;padding:20px 22px}
+.api-card .price{font-size:var(--t-h2);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.api-card .link{margin-top:auto;padding-top:14px}
+.api-card .desc{font-size:var(--t-meta);line-height:1.6}
+
+/* News / changelog */
+.update{padding:18px 20px;margin-bottom:10px}
+.update .date{font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.08em;
+  color:var(--accent);margin-bottom:6px}
+.update h3{font-size:var(--t-body);margin-bottom:5px}
+.update p{margin:0;font-size:var(--t-body);color:var(--text-2);max-width:var(--measure)}
+.feed-meta{font-size:var(--t-meta)}
+
+/* Blog list avatars were white on a pale disc — 1.8:1. */
+.av,.avatar-sm,.author-av{color:#0a0c12!important;font-weight:800}
+
+/* Read-next block on articles */
+.read-more{margin-top:var(--sp-7);padding-top:var(--sp-5);border-top:1px solid var(--line)}
+.read-more h3{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);
+  margin-bottom:12px}
+.read-more a{display:block;padding:13px 16px;margin-bottom:8px;border-radius:var(--r-sm);
+  background:var(--surface);border:1px solid var(--line);color:var(--text);
+  text-decoration:none;font-weight:600;font-size:var(--t-body);
+  transition:border-color var(--dur) var(--ease),color var(--dur) var(--ease)}
+.read-more a:hover{border-color:var(--accent-line);color:var(--accent)}
+
+/* ---------- 26. 404 ------------------------------------------------------ */
+body:has(> .container > .error-num){display:flex;align-items:center;min-height:100vh}
+.error-num{font-size:var(--t-display);font-weight:800;line-height:1;
+  letter-spacing:-.04em;margin-bottom:var(--sp-2);font-variant-numeric:tabular-nums}
+.container > .error-num ~ h1,.err h1{font-size:var(--t-h2);margin-bottom:10px}
+.container > .error-num ~ p{color:var(--text-2);max-width:56ch;margin-left:auto;margin-right:auto}
+.links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.links a{text-decoration:none}
+.epb-404-live{max-width:560px;margin:28px auto 0;text-align:left}
+.epb-404-live .cta-live-in{justify-content:space-between}
+
+/* ---------- 27. States --------------------------------------------------
+   A price board that shows nothing while it thinks looks broken, and one that
+   shows yesterday's number is worse. Each state says which it is.          */
+.sk-num{height:30px;width:120px;border-radius:var(--r-xs);margin:4px 0}
+.plat-grid[aria-busy="true"]{position:relative}
+.plat-grid[aria-busy="true"]::after{
+  /* Escaped, like every other glyph in this file: an editor that saves the
+     stylesheet as cp1251 turns a literal ellipsis into a question mark. */
+  content:'Loading live prices\2026';display:block;grid-column:1/-1;
+  padding:16px;text-align:center;color:var(--text-3);font-size:var(--t-meta)}
+.epb-empty{padding:34px 24px;text-align:center;border:1px dashed var(--line-2);
+  border-radius:var(--r-lg);color:var(--text-2);font-size:var(--t-body);background:transparent}
+.epb-empty b{display:block;color:var(--text);font-size:var(--t-body);margin-bottom:5px}
+.grid-empty,.calc-empty{padding:22px;border:1px dashed var(--line-2);border-radius:var(--r-lg);
+  text-align:center;color:var(--text-2);font-size:var(--t-body)}
+.epb-failed{border-color:var(--warn-soft);background:var(--warn-soft);color:var(--text-2)}
+.badge-stale::before{content:'\26A0'}
+.badge-nodata::before{content:'\2014';font-weight:800}
+.plat-card.stale{opacity:1}
+.plat-card.stale .plat-price{opacity:.6}
+.plat-card.stale::after{content:'';position:absolute;inset:0;border-radius:inherit;
+  box-shadow:var(--edge-warn);pointer-events:none}
+
+/* No JavaScript. epb_theme.js marks the root the moment it parses, so this
+   only ever paints when the script really did not run. */
+:root:not(.epb-js) .epb-nojs-hide,
+:root:not(.epb-js) .epb-live,
+:root:not(.epb-js) .loading .spinner{display:none!important}
+:root:not(.epb-js) #livePrices > .disclaimer,
+:root:not(.epb-js) #verdict,
+:root:not(.epb-js) .loading{
+  font-size:0!important;line-height:0!important;color:transparent!important;
+  /* the ch-based measure would collapse to nothing at font-size 0 */
+  max-width:620px!important;width:auto;text-align:left!important;
+  display:block;padding:15px 17px;border-radius:var(--r-sm);
+  background:var(--warn-soft);border:1px solid var(--warn-soft)}
+:root:not(.epb-js) #livePrices > .disclaimer::after,
+:root:not(.epb-js) #verdict::after,
+:root:not(.epb-js) .loading::after{
+  /* No comma and no dash in this sentence on purpose: the minifier in
+     epb_theme.py strips whitespace around punctuation without looking at
+     string boundaries, and a literal dash is what the cp1251 accidents ate. */
+  content:'JavaScript is switched off. This page cannot read the live board without it. Turn it on to see the current numbers.';
+  display:block;font-size:var(--t-meta);line-height:1.6;color:var(--text-2)}
+
+/* ---------- 28. Detail --------------------------------------------------- */
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--ring)}
+.btn,.cta-btn,.links a,.details-btn,.instant-btn,.read-more a,.all-plats-list a,
+.h2h-list a,.vs-list a,.nav-links a,.footer-col a{text-decoration:none}
+.btn:active,.cta-btn:active,.details-btn:active,.instant-btn:active{transform:translateY(1px)}
+/* The primary button used to carry "rgb(109,153,255) 0 6px 18px -10px" — a
+   full-saturation accent glow, the only one on the site, and on white it
+   bloomed. A solid fill on a quiet page is already the loudest object there
+   is; it does not need to leak light. What is left is the 1px lit top edge
+   every other raised surface has. */
+.btn-primary,.cta-primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+a:hover{text-decoration-thickness:1.5px}
+
+/* Footer: the last thing on the page should still be worth reading. */
+.footer{padding:var(--sp-8) 0 var(--sp-6);gap:40px}
+/* The single-column pages put their whole footer inside one .container child.
+   The four-column grid above was squashing that container into the first
+   track, which is why the footer on every platform, vs and article page hugged
+   the left edge of the window instead of lining up with the page. */
+.footer:has(> .container){display:block;padding:var(--sp-6) 0}
+.footer > .container{max-width:var(--page-max,1240px)}
+.footer-brand{font-size:var(--t-lead)}
+.footer-desc{line-height:1.65}
+.footer-col h5{color:var(--text-2)}
+.footer-col a{font-size:var(--t-meta);padding:6px 0}
+.footer-social a{padding:6px 0;display:inline-flex;align-items:center;min-height:32px}
+.footer-bottom{padding:20px 0;font-size:var(--t-meta)}
+.footer-disclosure{border-top:1px dashed var(--line);margin-top:8px;padding-top:12px}
+
+/* The link row is a horizontal scroller between 821px and the desktop layout,
+   and a scroller clips at its padding box — which was cutting the top and
+   bottom off the focus ring of whichever link was tabbed to. Five pixels of
+   vertical padding is exactly the ring. */
+.nav-links{padding:5px 0}
+.nav-links a.active,.nav-links a[aria-current="page"]{position:relative}
+
+/* ---------- 29. Touch targets and small print ---------------------------
+   Controls people press get 40px, and 44px once there is a thumb involved.
+   The tiny "↗" that opens a platform from inside a table row was an 18x16
+   target — the smallest thing on the site and the one that earns the money. */
+.chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag,.seg .calc-chip{min-height:40px}
+.all-plats-list a,.h2h-list a,.vs-list a{min-height:40px}
+.hm-ref-link,.rank-ref-link,.mtx-ref-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:30px;min-height:30px;border-radius:var(--r-xs);margin:-6px 0;
+  transition:background var(--dur) var(--ease)}
+.hm-ref-link:hover,.rank-ref-link:hover{background:var(--accent-soft);text-decoration:none}
+.mtx-plat-link,.hm-plat-link,.rank-plat-link{
+  display:inline-flex;align-items:center;min-height:34px;margin:-8px 0}
+.footer-col a{min-height:36px;display:flex;align-items:center}
+.footer-social a{min-height:40px}
+/* Rows of small links — the four footers, the legal line, breadcrumbs, the
+   site address under a platform name, the "Read the blog" tails on the news
+   cards — sit in a line of text, so growing them would move everything around
+   them. The pressable area is laid over the top instead: the type keeps its
+   size and its place, and the box a thumb has to find is 26px tall.
+   WCAG 2.2 SC 2.5.8. Links inside running prose are deliberately left alone;
+   the rule exempts a target that sits in a sentence. */
+.footer a,.status a,.breadcrumb a,.site-url a,.link-item a,
+.update h3 a,.update p a{position:relative}
+.footer a::after,.status a::after,.breadcrumb a::after,.site-url a::after,
+.link-item a::after,.update h3 a::after,.update p a::after{
+  content:"";position:absolute;left:0;right:0;top:50%;height:26px;transform:translateY(-13px)}
+/* Column labels on a board card were 9.5px at --text-3 — 4.4:1. */
+.plat-price .pl{font-size:var(--t-micro);color:var(--text-2)}
+
+/* A card with no quote in the cell the board is ranked on is not in the
+   ranking, so it does not get an ordinal either. */
+.plat-card:has(.plat-prices > .plat-price:first-child .pv.na){counter-increment:none}
+.plat-card:has(.plat-prices > .plat-price:first-child .pv.na)::before{display:none}
+/* The :nth-child(n+4) repaint of "Go to site" used to live here. Deleted:
+   see section 6. A grid position is not a meaning. */
+/* The end dot of a sparkline sits on the last x, so the cell needs the room. */
+.mtx-table td.spark-cell,.heatmap td.spark-cell{padding-right:16px}
+.heat-key{justify-content:flex-start;text-align:left}
+.heat-key b{color:var(--good);font-weight:700}
+#hmLegend,#mtxLegend{text-align:left!important}
+/* Standalone paragraph links that act as a call to action are targets, not
+   prose, so they get a target's height. */
+.h2h-cta a,.vs-list + p > a,.all-plats-list + p > a{
+  display:inline-flex;align-items:center;min-height:44px}
+
+/* ---------- 30. Finish pass ----------------------------------------------
+   Everything above builds the system. This section is the pass that makes the
+   system look built: the page gets air to sit in, the twenty identity tiles
+   become one set instead of twenty accidents, and the handful of measurements
+   that were still off the scale are put on it. Nothing here invents a new
+   colour, a new radius or a new elevation — it only spends the ones already
+   declared at the top of this file.
+   ------------------------------------------------------------------------ */
+
+/* 30.1 A ground to sit on.
+   The complaint was accurate: the page was one flat rectangle with cards
+   floating on it, top to bottom, and the only change of ground on 4,000px was
+   the footer. Banding fixed the structure; this fixes the air. Two washes,
+   painted behind every band and every card:
+     one accent bloom anchored above the masthead, which is where the eye
+       enters the page and the only place on the site with no data in it,
+     one cooler bloom off the top-right corner so the first is not a symmetric
+       spotlight, which always reads as a template,
+   Both are anchored to the top of the DOCUMENT, not to the viewport: a wash
+   that is glued to the window follows the reader down the page and turns
+   into wallpaper, and it also has an edge exactly one screen down in any
+   full-page capture. This one belongs to the masthead, fades out over 820px
+   and never comes back. Both sit below z-index 0, so no figure is ever read
+   against a gradient — the card, the band and the table all paint their own
+   opaque ground on top. Turning this block off changes nothing but the mood,
+   which is the test a backdrop has to pass. */
+body::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:820px;
+  z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(92% 100% at 50% -20%,var(--atmos-1),transparent 64%),
+    radial-gradient(48% 78% at 92% -8%,var(--atmos-2),transparent 76%);
+}
+/* The masthead band is the one place the seam should not be a hard line: it
+   is the top of the document, there is nothing above it, and the bloom is
+   sitting on it. It fades out instead. Every other band keeps its hairline. */
+body::before{border-bottom:0;
+  -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);
+          mask-image:linear-gradient(180deg,#000 62%,transparent 100%)}
+
+/* 30.2 One identity tile, twenty times.
+   The twelve raster marks were never a set. Four of them are the wrong file
+
+   one is a photograph, three are the same TRON diamond, and the eight
+   platforms with no file at all fell back to a letter. A grid drawn from that
+   mixture cannot look like one system at any size, so every row on the board
+   is drawn as a monogram: same tile, same radius, same ink, same optical
+   weight, and the platform's name is the thing that distinguishes it.
+   The <img> stays in the DOM for its alt text; it is only not painted here. */
+.plat-avatar,.plat-avatar.sm{
+  border-radius:var(--r-sm);overflow:hidden;
+  background:linear-gradient(180deg,var(--surface-3),var(--tile));
+  box-shadow:inset 0 0 0 1px var(--tile-line),var(--card-top);
+}
+.plat-avatar{width:36px;height:36px;flex:0 0 36px}
+.plat-avatar.sm{width:30px;height:30px;flex:0 0 30px}
+.plat-avatar img{display:none!important}
+/* The fallback is the mark now, so it is shown even where the renderer hid it
+   behind an image that loaded. */
+.plat-avatar .plat-avatar-fb[hidden]{display:flex!important}
+.plat-avatar-fb{
+  display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+  font:800 var(--t-body)/1 var(--font);letter-spacing:.01em;
+  color:var(--tile-ink);text-transform:uppercase;
+}
+.plat-avatar.sm .plat-avatar-fb{font-size:var(--t-meta)}
+/* A hue per platform, set inline from the platform id. Low saturation on
+   purpose: twenty tiles have to be tellable apart at a glance without the
+   column turning into a paint chart, and the ink stays the one colour. */
+.plat-avatar[style*="--mono-h"]{
+  background:linear-gradient(180deg,
+    hsl(var(--mono-h) var(--mono-s) var(--mono-l1)),
+    hsl(var(--mono-h) var(--mono-s) var(--mono-l2)))}
+
+/* 30.3 One vertical rhythm on the board.
+   The grid gap was 12px in the page stylesheet and 14px here, the cards were
+   padded 18/20/17, and the gap inside a card was 13. Four numbers, none of
+   them on the scale. One number now: --sp-4 between cards and around their
+   contents, --sp-3 between the things inside them. */
+.plat-grid{gap:var(--sp-4)}
+.plat-card{padding:var(--sp-4);gap:var(--sp-3)}
+.plat-card .plat-top{padding-right:34px}
+.plat-card:not(.stale):not(.nodata)::before{top:var(--sp-4);right:var(--sp-4)}
+/* Two buttons or one, the action row is the same height and fills the card. */
+.plat-actions{gap:var(--sp-2)}
+.plat-actions .details-btn,.plat-actions .instant-btn{min-height:40px;padding:0 12px}
+
+/* 30.4 One hover for a clickable card, and the same one the tables use.
+   The card used to lift 2px and change to the accent hairline, which is the
+   selected state elsewhere on the site. A hover is a lift and a brighter
+   edge; selection is the accent. */
+.plat-card.clickable:hover{
+  border-color:var(--line-3);transform:translateY(-1px);
+  box-shadow:var(--sh-2),var(--card-top)}
+.plat-card:first-child:not(.stale):not(.nodata).clickable:hover{border-color:var(--good)}
+.read-card,.rank-card,a.cr-card{transition:border-color var(--dur) var(--ease),
+  transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+.read-card:hover,a.cr-card:hover{
+  border-color:var(--line-3);transform:translateY(-1px);
+  box-shadow:var(--sh-2),var(--card-top)}
+
+/* 30.5 The price is the strongest thing on a card, and the two cells that
+   carry it are the same object at two weights — not one framed cell next to
+   one bare one. Both get the hairline; the chosen term gets the accent edge
+   and the size. */
+.plat-price{border-color:var(--line);background:var(--surface-2)}
+.plat-price.is-focus,.plat-price.plat-best{border-color:var(--accent-line)}
+.plat-price.plat-best{border-color:var(--good);background:var(--good-soft)}
+.plat-price .pv{letter-spacing:-.02em}
+
+/* 30.6 Estimates read as annotation, not as alarm. See --est-ink. */
+.est,.pv.est,.cell-price.est,td.est,.value.est{color:var(--est-ink)!important}
+.badge-est{background:var(--surface-2);color:var(--text-2);border-color:var(--line-2)}
+
+/* 30.7 The matrix and the heatmap are the product, so the cheapest cell in a
+   column has to be findable at a glance and survive being repeated eight
+   times in a row. Tint plus the ★ the renderer already writes is two channels
+   — one of them a shape, so it still works in greyscale and for every kind of
+   colour vision. The ring was a third, and eight ringed chips per row turned
+   a price list into a checklist. */
+.cell-price.best{box-shadow:none}
+/* Hairlines OR zebra, never both. The tables have hairlines under every row
+   already, which is the finer instrument on a table this wide, so the zebra
+   goes and the hover takes over as the row-tracking device. */
+.mtx-table tbody tr:nth-child(even) td,.heatmap tbody tr:nth-child(even) td{background:transparent}
+.mtx-table tbody tr:nth-child(even) td.label,.heatmap tbody tr:nth-child(even) td.label{
+  background:var(--surface)}
+.mtx-table tbody tr:hover td,.heatmap tbody tr:hover td{background:var(--surface-2)}
+.mtx-table tbody tr:hover td.label,.heatmap tbody tr:hover td.label{background:var(--surface-2)}
+.mtx-table tbody tr,.heatmap tbody tr{transition:none}
+.mtx-table td.label,.heatmap td.label{font-weight:600}
+/* A sortable column header is a control; it looked like a label. */
+.mtx-table th[role="button"],.mtx-table th[data-sort],.heatmap th[data-sort]{cursor:pointer}
+.mtx-table th.sorted,.mtx-table th[aria-sort]:not([aria-sort="none"]),
+.heatmap th[aria-sort]:not([aria-sort="none"]){color:var(--text);background:var(--surface-2)}
+
+/* 30.8 The generated review pages print a bare <table> for the term list, so
+   it took its width from its content and sat in the left half of a 1,240px
+   page with nothing beside it — the single loudest "unfinished" tell on the
+   site. It is a table like every other table here. */
+#livePrices table,#termTable,.term-table{
+  width:100%;border-collapse:separate;border-spacing:0;font-size:var(--t-meta)}
+#livePrices th,#termTable th,.term-table th{
+  padding:12px 16px;text-align:right;color:var(--text-2);
+  font:700 var(--t-micro)/1.3 var(--font);text-transform:uppercase;letter-spacing:.06em;
+  border-bottom:1px solid var(--line-2)}
+#livePrices th:first-child,#termTable th:first-child,.term-table th:first-child{text-align:left}
+#livePrices td,#termTable td,.term-table td{
+  padding:11px 16px;text-align:right;border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums}
+#livePrices td:first-child,#termTable td:first-child,.term-table td:first-child{
+  text-align:left;color:var(--text-2)}
+#livePrices tr:last-child td,#termTable tr:last-child td,.term-table tr:last-child td{border-bottom:0}
+#livePrices tbody tr:hover td,#termTable tbody tr:hover td{background:var(--surface-2)}
+
+/* 30.9 The two headline prices on a review page are the same measurement at
+   two volumes, so they are the same tile at the same weight — the green is
+   the board's "cheapest anywhere" mark and belongs only to the cell that
+   earned it. */
+.prices-grid{gap:var(--sp-3)}
+.price-box{padding:var(--sp-4) var(--sp-5)}
+
+/* 30.10 A section's title and the line beside it belong to the same object.
+   --sp-5 under a head, --sp-7 between sections, everywhere, on every page. */
+.section-head{margin-bottom:var(--sp-4)}
+.section-head + *{margin-top:0}
+section + section,.section + .section{margin-top:var(--gap-section)}
+
+/* 30.11 One pill geometry. The feature bar, the segmented control and the
+   long lists of head-to-head links were three different pills at three
+   heights; the list links in particular were pills that did not know they
+   were pills. */
+.all-plats-list a,.h2h-list a,.vs-list a{
+  display:inline-flex;align-items:center;padding:0 14px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);
+  font:600 var(--t-meta)/1 var(--font);
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.all-plats-list a:hover,.h2h-list a:hover,.vs-list a:hover{
+  color:var(--text);border-color:var(--line-3)}
+/* One disabled state for every control that can have one. */
+.btn[disabled],.btn[aria-disabled="true"],.chip[disabled],.feat-chip[disabled],
+.calc-chip[disabled],.tab-btn[disabled],button[disabled]{
+  opacity:.45;cursor:not-allowed;pointer-events:none}
+
+/* 30.12 The freshness pill is the page's proof of life and was floating on
+   its own line between the subtitle and the first card. It belongs with the
+   line it qualifies. */
+.hero-badge,.status-badge{vertical-align:middle}
+
+/* 30.13 A 26px sparkline on a card is a direction, not a chart.
+   It was being drawn with the full chart kit — a filled area, two dashed
+   guides and an end dot — and at that height the fill is a solid slab under
+   a flat line, which is what put a navy brick on seventeen cards. The line
+   alone, at the weight the rest of the card's hairlines use. The big
+   sparklines on the review and history pages keep the whole kit. */
+.plat-trend .spark-area{fill:none}
+.plat-trend .spark-guide{display:none}
+.plat-trend .spark-line{stroke-width:1.4}
+.plat-meta,.plat-trend-label{font-size:var(--t-micro);color:var(--text-3)}
+
+/* 30.14 A note is not a warning. The history page opened with its own depth
+   caveat painted in --warn-soft, which on this site means "this price is
+   stale" — so the first thing the page said about itself was said in the
+   colour of a fault. It is a note: page surface, hairline, accent rule. */
+[data-hist-depth],.hist-depth,.epb-note{
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--accent-line);
+  border-radius:var(--r-sm);color:var(--text-2)}
+
+/* 30.15 The term table on a review page was capped at 620px inside a
+   1,176px column with nothing beside it. A price list is the width of the
+   page it is the subject of. */
+#livePrices table{max-width:none}
+
+/* 30.16 The cheapest card already carries four marks: the green frame, the
+   green rank chip, the green price cell and the badge. The fifth was a
+   second ring drawn inside the first. */
+.plat-card:first-child:not(.stale):not(.nodata){box-shadow:var(--sh-2),var(--card-top)}
+
+/* 30.17 The calculator is the one panel on the board and it was measured in
+   numbers that exist nowhere else on the site (26/28/8/44/20/13.5/10.5). The
+   ramp and the scale, like everything around it. */
+.board .calc{padding:var(--sp-5);margin:var(--sp-2) 0 var(--gap-section)}
+.calc-head h2{font-size:var(--t-h2)}
+.calc-sub,.calc-empty{font-size:var(--t-meta)}
+.calc-legend{font-size:var(--t-micro)}
+.calc-controls{gap:var(--sp-5)}
+.calc-results{margin-top:var(--sp-5);padding-top:var(--sp-4)}
+.calc-results h3{font-size:var(--t-body)}
+.seg .calc-chip{font-size:var(--t-meta)}
+
+/* 30.18 Hairlines or zebra, on every table, not just the wide ones. The term
+   table on a review page had both. */
+#livePrices tbody tr:nth-child(even) td,
+.table-wrap table tbody tr:nth-child(even) td{background:transparent}
+
+/* 30.19 Two measurements of the same thing get the same rule over them. The
+   65k box wore an accent gradient the 130k box did not, so the pair read as
+   a headline and a footnote. Which one is cheapest is the green figure's job.
+   The accent rule moves to whichever box actually holds the cheapest quote. */
+.price-box::after{background:var(--line-2)}
+.price-box:first-child::after{background:var(--line-2)}
+.price-box:has(.value.best)::after,.price-box.is-best::after{background:var(--good)}
+
+/* 30.20 The band that closes a page is a place, not a moat. sp-7 outside it
+   and sp-7 inside it stacked to 104px of nothing above a section title. */
+.faq-section,.board .faq-section,.all-plats,.h2h{
+  padding:var(--sp-6) 0 var(--sp-7);margin-top:var(--sp-6)}
+
+/* 30.21 A trend that did not move should look like it did not move. The card
+   sparkline is drawn in the hairline ink until the price actually changes,
+   at which point --good / --bad take it over — the same two colours the
+   delta pill beside it uses. */
+.plat-trend .spark-line,.plat-trend .spark-end{stroke:var(--line-3)}
+.plat-trend .spark.is-down .spark-line,.plat-trend .spark.is-down .spark-end{stroke:var(--good)}
+.plat-trend .spark.is-up .spark-line,.plat-trend .spark.is-up .spark-end{stroke:var(--bad)}
+
+/* 30.22 Three hero tiles are three readings of the same market, so their
+   three figures have to sit on one line. The shop tile's label carries a
+   disclosure badge as well as its caption, and allowed to wrap it pushed its
+   own number half a line below its neighbours' — which is exactly the kind
+   of near-miss that makes a row of peers look thrown together.
+   The "→" that says the tile is a link comes out of the label and goes to
+   the corner of the tile, where it cannot push anything anywhere, and the
+   label row reserves two lines on all three tiles. That is deliberately not
+   a truncation and not a media query: the caption is data, the badge is a
+   disclosure that must stay readable at every width, and a fixed box is the
+   only version of this that cannot come apart at some viewport nobody
+   screenshotted. */
+.stat-tile .stat-label{min-height:46px;align-items:flex-start;padding-right:20px}
+.stat-tile-link .stat-label::after{
+  position:absolute;top:var(--sp-4);right:22px;margin:0;line-height:1}
+.stat-tile-shop .badge-ours{padding:3px 7px;letter-spacing:0}
+
+@media(max-width:820px){
+  :root{--sp-7:38px;--sp-8:52px}
+  .plat-prices{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .chip,.feat-chip,.calc-chip,.tab,.tab-btn,.svc-tag,.seg .calc-chip{min-height:44px}
+  .all-plats-list a,.h2h-list a,.vs-list a{min-height:44px;padding:0 16px}
+  .hm-ref-link,.rank-ref-link{min-width:36px;min-height:36px}
+}
+@media(max-width:560px){
+  /* A 170px name column on a 375px screen leaves room for one price. */
+  .mtx-table th:first-child,.mtx-table td.label,
+  .heatmap th:first-child,.heatmap td.label{
+    min-width:112px!important;max-width:132px;padding-left:12px;padding-right:10px;
+    font-size:var(--t-meta)}
+  .mtx-table td,.heatmap td{padding-left:8px;padding-right:8px}
+  .cell-price{min-width:52px;padding:5px 7px}
+}
+@media(max-width:480px){
+  .plat-card{padding:16px 16px 15px}
+  .plat-card::before{top:13px;right:13px}
+  .footer{gap:28px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .btn:active,.cta-btn:active,.plat-card.clickable:hover,.read-card:hover,
+  .stat-tile-link:hover,a.cr-card:hover{transform:none!important}
+}
+
+@media print{
+  .nav,.epb-toggle,.epb-skip,.footer-social,.cta-live{display:none!important}
+  body{background:#fff;color:#000}
+  .mtx-wrap,.heatmap-wrap,.table-wrap{overflow:visible;border:1px solid #ccc}
+}

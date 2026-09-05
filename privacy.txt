@@ -1,0 +1,46 @@
+Privacy Policy for energypriceboard.com
+Last Updated: 08.06.2026
+
+1. Introduction
+This Privacy Policy explains how energypriceboard.com ("we," "us," or "our") handles information. We are committed to protecting your privacy and being transparent about our practices. By using our Service, you agree to the terms outlined in this policy.
+
+2. Information We Do NOT Collect
+We do not knowingly collect, store, or process any personally identifiable information ("PII") from our users. This includes, but is not limited to:
+
+Your name
+
+Your email address
+
+Your IP address (see Section 3 on Analytics)
+
+Your TRON wallet address
+
+Any other information that can identify you as an individual.
+
+3. Automatically Collected Information (The Future Use of Analytics)
+Currently, we do not use any cookies or similar tracking technologies.
+However, we plan to implement third-party analytics services (such as Google Analytics) in the future to collect standard internet log information and details of visitor behavior patterns in an anonymous, aggregated form. This data helps us understand how many people visit different parts of the site and improve our service. This information is not used to identify any individual.
+
+4. Price Data We Collect and Store
+The core function of our Service is to aggregate and display publicly available information on energy prices on the TRON network. This non-personal, historical price data is stored on our server in an encrypted form for the sole purpose of providing and improving our service. This data cannot be linked to any individual user.
+
+5. Third-Party Links and APIs
+Our Service provides data obtained from third-party APIs and contains links to external websites and services. Some of these links are referral/affiliate links — when you click them and use the service, the destination site may set cookies or track the referral for commission purposes. Their own privacy policies and terms of service apply. We do not control and are not responsible for their content or their privacy practices.
+We only receive aggregated, non-personal price data from these third-party providers. They do not receive any information about our users through our Service.
+
+6. Data Storage and Security
+The historical price data we collect is stored on servers. We implement appropriate technical measures to protect this data. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee its absolute security.
+
+7. Your Rights
+Since we do not collect personal data, there is no individual user data to access, rectify, or delete. If you have contacted us via email and wish for us to delete that correspondence, you can make a request at the email address provided below.
+
+8. Age Restriction
+Our Service is not intended for individuals under the age of majority ("minors") in their jurisdiction. We do not knowingly collect personal information from minors. If you are a minor, please do not use our Service.
+
+9. Changes to This Privacy Policy
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
+
+10. Contact Us
+If you have any questions about this Privacy Policy, please contact us at:
+Email: fivex56@gmail.com
+
