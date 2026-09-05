@@ -1,0 +1,149 @@
+{
+  "about": "Sending USDT TRC20 to an empty wallet costs twice the energy, 24.11.2026",
+  "chain_checked_utc": "2026-11-24T09:24:52+00:00",
+  "chain": {
+    "getEnergyFee_sun": 100,
+    "getTransactionFee_sun_per_byte": 1000,
+    "getFreeNetLimit_bytes": 600
+  },
+  "usdt_sample": {
+    "blocks": [
+      88279343,
+      88279243,
+      88279143,
+      88279043,
+      88278943,
+      88278843,
+      88278743,
+      88278643,
+      88278543,
+      88278443,
+      88278343,
+      88278243
+    ],
+    "plain_successful_transfers": 1571,
+    "energy_used_counts": {
+      "64285": 1269,
+      "130285": 297,
+      "89325": 5
+    },
+    "burned_trx_counts_by_energy": {
+      "64285": 119,
+      "130285": 52,
+      "89325": 1
+    },
+    "share_130285_pct": 18.9,
+    "share_64285_pct": 80.8,
+    "burned_share_of_130285_pct": 17.5,
+    "burned_share_of_64285_pct": 9.4
+  },
+  "recipient_check_130285_first_block": [
+    {
+      "received_units": 6744000000,
+      "balance_now_units": 6744000000,
+      "equal": true
+    },
+    {
+      "received_units": 1003010000,
+      "balance_now_units": 1003010000,
+      "equal": true
+    },
+    {
+      "received_units": 73421439,
+      "balance_now_units": 73421439,
+      "equal": true
+    },
+    {
+      "received_units": 340000000,
+      "balance_now_units": 340000000,
+      "equal": true
+    },
+    {
+      "received_units": 18000000,
+      "balance_now_units": 18000000,
+      "equal": true
+    },
+    {
+      "received_units": 10000085609,
+      "balance_now_units": 10000085609,
+      "equal": true
+    },
+    {
+      "received_units": 120000000,
+      "balance_now_units": 120000000,
+      "equal": true
+    },
+    {
+      "received_units": 780400000,
+      "balance_now_units": 0,
+      "equal": false
+    }
+  ],
+  "burn_trx": {
+    "64285_energy": 6.4285,
+    "130285_energy": 13.0285,
+    "difference": 6.6,
+    "shortfall_if_65000_rented": 6.5285,
+    "shortfall_if_130000_rented": 0.0285
+  },
+  "board_scan": {
+    "generated_at": "2026-11-24T09:15:55.527400+00:00",
+    "platforms": 22,
+    "65k_1h_price": {
+      "quotes": 20,
+      "cheapest_name": "NETTS",
+      "cheapest_trx": 1.43,
+      "cheapest_has_referral": true,
+      "median_trx": 2.74,
+      "max_trx": 4.75
+    },
+    "130k_1h_price": {
+      "quotes": 20,
+      "cheapest_name": "tronfor.me",
+      "cheapest_trx": 2.86,
+      "cheapest_has_referral": false,
+      "median_trx": 5.48,
+      "max_trx": 9.56
+    },
+    "65k_1d_price": {
+      "quotes": 17,
+      "cheapest_name": "NETTS",
+      "cheapest_trx": 1.96,
+      "cheapest_has_referral": true,
+      "median_trx": 3.78,
+      "max_trx": 13.65
+    },
+    "130k_1d_price": {
+      "quotes": 17,
+      "cheapest_name": "NETTS",
+      "cheapest_trx": 3.95,
+      "cheapest_has_referral": true,
+      "median_trx": 7.56,
+      "max_trx": 27.3
+    },
+    "platforms_with_both_1h": 20,
+    "ratio_130k_to_65k_1h_median": 2.0
+  },
+  "board_7d": {
+    "65k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 1.5,
+      "cheapest_min_trx": 1.04,
+      "cheapest_max_trx": 2.15
+    },
+    "130k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 3.01,
+      "cheapest_min_trx": 2.08,
+      "cheapest_max_trx": 4.2
+    }
+  },
+  "sources": [
+    "TRON full-node HTTP API via tron-rpc.publicnode.com: getchainparameters, getnowblock, gettransactioninfobyblocknum, triggerconstantcontract balanceOf",
+    "https://energypriceboard.com/result.json",
+    "Energy Price Board scan archive (epb.db)"
+  ],
+  "sample_span_minutes_at_3s_blocks": 55,
+  "recipient_check_equal": "7 of 8",
+  "burn130_vs_cheapest_130k_1h_ratio": 4.6
+}

@@ -1,0 +1,190 @@
+{
+  "about": "TRX 能量是什么、怎么获得、租赁是什么意思 (what TRON energy is, how to get it, what renting means), 23.11.2026",
+  "chain_checked_utc": "2026-11-23T09:22:15+00:00",
+  "chain": {
+    "getEnergyFee_sun": 100,
+    "getTransactionFee_sun_per_byte": 1000,
+    "getFreeNetLimit_bytes": 600,
+    "TotalEnergyLimit": 180000000000,
+    "TotalEnergyWeight_trx": 18628014297,
+    "energy_per_staked_trx_per_day": 9.66
+  },
+  "usdt_transfers": {
+    "block": 88250503,
+    "successful_transfers": 94,
+    "energy_used_counts": {
+      "64285": 81,
+      "130285": 13
+    },
+    "burned_some_trx_for_energy": 13,
+    "no_trx_burned_for_energy": 81
+  },
+  "burn_trx": {
+    "64285_energy": 6.4285,
+    "130285_energy": 13.0285
+  },
+  "stake_trx_for_one_transfer_per_day": 6650.0,
+  "board_scan": {
+    "generated_at": "2026-11-23T09:15:53.087439+00:00",
+    "platforms": 22,
+    "65k_1h_price": {
+      "quotes": 20,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 1.17,
+      "cheapest_has_referral": false,
+      "median_trx": 2.67,
+      "top5": [
+        {
+          "platform": "CatFee",
+          "trx": 1.17,
+          "has_referral": false
+        },
+        {
+          "platform": "NETTS",
+          "trx": 1.43,
+          "has_referral": true
+        },
+        {
+          "platform": "tronfor.me",
+          "trx": 1.67,
+          "has_referral": false
+        },
+        {
+          "platform": "JustLend DAO — Energy Rental",
+          "trx": 1.95,
+          "has_referral": false
+        },
+        {
+          "platform": "TR Energy",
+          "trx": 2.27,
+          "has_referral": true
+        }
+      ]
+    },
+    "130k_1h_price": {
+      "quotes": 20,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 2.34,
+      "cheapest_has_referral": false,
+      "median_trx": 5.33,
+      "top5": [
+        {
+          "platform": "CatFee",
+          "trx": 2.34,
+          "has_referral": false
+        },
+        {
+          "platform": "tronfor.me",
+          "trx": 2.86,
+          "has_referral": false
+        },
+        {
+          "platform": "NETTS",
+          "trx": 2.88,
+          "has_referral": true
+        },
+        {
+          "platform": "JustLend DAO — Energy Rental",
+          "trx": 3.9,
+          "has_referral": false
+        },
+        {
+          "platform": "TR Energy",
+          "trx": 4.56,
+          "has_referral": true
+        }
+      ]
+    },
+    "65k_1d_price": {
+      "quotes": 17,
+      "cheapest_name": "NETTS",
+      "cheapest_trx": 1.96,
+      "cheapest_has_referral": true,
+      "median_trx": 3.78,
+      "top5": [
+        {
+          "platform": "NETTS",
+          "trx": 1.96,
+          "has_referral": true
+        },
+        {
+          "platform": "JustLend DAO — Energy Rental",
+          "trx": 2.56,
+          "has_referral": false
+        },
+        {
+          "platform": "TronMax",
+          "trx": 2.6,
+          "has_referral": true
+        },
+        {
+          "platform": "Ergon",
+          "trx": 2.92,
+          "has_referral": false
+        },
+        {
+          "platform": "TronEnergize",
+          "trx": 2.92,
+          "has_referral": false
+        }
+      ]
+    }
+  },
+  "board_7d": {
+    "65k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 1.5,
+      "cheapest_min_trx": 1.04,
+      "cheapest_max_trx": 2.15
+    },
+    "span": [
+      "1794821400000",
+      "1795425300000"
+    ],
+    "130k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 3.01,
+      "cheapest_min_trx": 2.08,
+      "cheapest_max_trx": 4.2
+    }
+  },
+  "sources": [
+    "TronGrid public API: getchainparameters, getaccountresource, getnowblock, gettransactioninfobyblocknum",
+    "https://energypriceboard.com/result.json",
+    "Energy Price Board scan archive (epb.db)"
+  ],
+  "article_table_65k_1h_top5": [
+    {
+      "platform": "CatFee",
+      "65k_1h_trx": 1.17,
+      "130k_1h_trx": 2.34,
+      "has_referral": false
+    },
+    {
+      "platform": "NETTS",
+      "65k_1h_trx": 1.43,
+      "130k_1h_trx": 2.88,
+      "has_referral": true
+    },
+    {
+      "platform": "tronfor.me",
+      "65k_1h_trx": 1.67,
+      "130k_1h_trx": 2.86,
+      "has_referral": false
+    },
+    {
+      "platform": "JustLend DAO — Energy Rental",
+      "65k_1h_trx": 1.95,
+      "130k_1h_trx": 3.9,
+      "has_referral": false
+    },
+    {
+      "platform": "TR Energy",
+      "65k_1h_trx": 2.27,
+      "130k_1h_trx": 4.56,
+      "has_referral": true
+    }
+  ],
+  "all_65k_1h_quotes_below_burn": true,
+  "ratio_burn_to_cheapest_65k_1h": 5.5
+}

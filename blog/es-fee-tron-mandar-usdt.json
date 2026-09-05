@@ -1,0 +1,107 @@
+{
+  "about": "Cuánto cuesta la fee de TRON para mandar USDT, 25.11.2026",
+  "chain_checked_utc": "2026-11-25T09:23:32+00:00",
+  "chain": {
+    "getEnergyFee_sun": 100,
+    "getTransactionFee_sun_per_byte": 1000,
+    "getFreeNetLimit_bytes": 600
+  },
+  "usdt_sample": {
+    "blocks": [
+      88308105,
+      88308005,
+      88307905,
+      88307805,
+      88307705,
+      88307605
+    ],
+    "plain_successful_transfers": 878,
+    "energy_used_counts": {
+      "64285": 708,
+      "130285": 170
+    },
+    "share_64285_pct": 80.6,
+    "share_130285_pct": 19.4,
+    "bandwidth_bytes_counts": {
+      "345": 846,
+      "346": 7,
+      "339": 4,
+      "412": 4,
+      "347": 4,
+      "354": 3,
+      "338": 3,
+      "415": 2,
+      "342": 1,
+      "414": 1,
+      "350": 1,
+      "447": 1,
+      "479": 1
+    },
+    "most_common_bytes": 345,
+    "paid_bandwidth_in_trx_share_pct": 31.5
+  },
+  "burn_trx": {
+    "64285_energy": 6.4285,
+    "130285_energy": 13.0285,
+    "bandwidth_most_common_bytes": 0.345
+  },
+  "board_scan": {
+    "generated_at": "2026-11-25T09:15:32.335509+00:00",
+    "platforms": 22,
+    "note": "live quotes only: estimated (filled) and stale values excluded",
+    "65k_1h_price": {
+      "quotes": 20,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 1.17,
+      "cheapest_has_referral": false,
+      "median_trx": 2.67
+    },
+    "130k_1h_price": {
+      "quotes": 18,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 2.34,
+      "cheapest_has_referral": false,
+      "median_trx": 5.1
+    },
+    "65k_1d_price": {
+      "quotes": 11,
+      "cheapest_name": "TronMax",
+      "cheapest_trx": 2.6,
+      "cheapest_has_referral": true,
+      "median_trx": 3.78
+    },
+    "130k_1d_price": {
+      "quotes": 11,
+      "cheapest_name": "TronMax",
+      "cheapest_trx": 5.2,
+      "cheapest_has_referral": true,
+      "median_trx": 7.56
+    }
+  },
+  "board_7d": {
+    "65k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 1.5,
+      "cheapest_min_trx": 1.04,
+      "cheapest_max_trx": 2.15
+    },
+    "130k_1h_price": {
+      "scans": 672,
+      "cheapest_median_trx": 2.95,
+      "cheapest_min_trx": 2.08,
+      "cheapest_max_trx": 4.2
+    }
+  },
+  "sources": [
+    "TRON full-node HTTP API via tron-rpc.publicnode.com: getchainparameters, getnowblock, gettransactioninfobyblocknum",
+    "https://energypriceboard.com/result.json",
+    "Energy Price Board scan archive (epb.db, minimum per scan, scans with 5+ quotes)"
+  ],
+  "computed": {
+    "free_transfers_per_day_from_free_bandwidth": 1,
+    "sample_span_minutes_at_3s_blocks": 25,
+    "shortfall_trx_if_130000_rented_for_130285": 0.0285,
+    "saving_trx_burn64285_vs_cheapest_65k_1h": 5.2585,
+    "burn64285_vs_cheapest_65k_1h_ratio": 5.5
+  }
+}

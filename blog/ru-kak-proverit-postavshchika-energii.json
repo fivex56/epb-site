@@ -1,0 +1,77 @@
+{
+  "about": "Как проверить поставщика энергии самому (ru), 27.11.2026",
+  "chain_checked_utc": "2026-11-27T09:22:38+00:00",
+  "nodes_used": {
+    "https://api.trongrid.io": 43
+  },
+  "chain": {
+    "getEnergyFee_sun": 100,
+    "energy_per_staked_trx": 9.67,
+    "burn_trx_64285": 6.4285,
+    "burn_trx_130285": 13.0285
+  },
+  "sample": {
+    "head_block": 88365692,
+    "blocks": [
+      88365462,
+      88365661
+    ],
+    "blocks_read": 200,
+    "span_utc": [
+      "2026-11-27T09:11:06+00:00",
+      "2026-11-27T09:21:03+00:00"
+    ],
+    "energy_delegations": 13894,
+    "energy_undelegations": 13225,
+    "delegations_le_200k": 12903,
+    "delegations_ge_64285": 13688,
+    "locked_delegations": 521,
+    "locked_share_pct": 3.7,
+    "locked_period_blocks_counts": {
+      "200": 450,
+      "100": 28,
+      "20": 13,
+      "1200": 10,
+      "300": 6,
+      "28800": 6,
+      "4": 2,
+      "28810": 2
+    },
+    "matched_with_payment": 3223,
+    "matched_share_pct": 23.2,
+    "note_matched": "only TRX payments from the receiver 0-180 s before the delegation (USDT matches dropped: ambiguous)",
+    "matched_energy_median": 65004,
+    "matched_paid_to_delegating_address_pct": 0.1,
+    "lag_s_median": 3.0,
+    "lag_s_p90": 6.0,
+    "lag_le_6s_pct": 94.0,
+    "undelegations_matched_in_window": 7931,
+    "undelegate_after_s_median": 45.0
+  },
+  "board_scan": {
+    "generated_at": "2026-11-27T09:15:51.001561+00:00",
+    "platforms": 22,
+    "65k_1h_price": {
+      "quotes": 20,
+      "min_trx": 1.17,
+      "median_trx": 2.74
+    },
+    "130k_1h_price": {
+      "quotes": 20,
+      "min_trx": 2.34,
+      "median_trx": 5.48
+    }
+  },
+  "sources": [
+    "TronGrid / publicnode: getchainparameters, getaccountresource, getnowblock, getblockbylimitnext",
+    "https://energypriceboard.com/result.json"
+  ],
+  "computed": {
+    "sample_span_minutes_at_3s_blocks": 10,
+    "unlocked_share_pct": 96.3,
+    "most_common_lock_period_blocks": 200,
+    "most_common_lock_period_minutes": 10,
+    "payment_address_differs_from_delegator_pct": 99.9,
+    "shortfall_trx_if_130000_rented_for_130285": 0.0285
+  }
+}
