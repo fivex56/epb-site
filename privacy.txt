@@ -1,0 +1,63 @@
+Privacy Policy
+
+Last updated: 06.09.2026 · applies to energypriceboard.com
+
+1. Introduction
+
+This Privacy Policy explains how energypriceboard.com ("we," "us," or "our") handles information. We are committed to protecting your privacy and being transparent about our practices. By using our Service, you agree to the terms outlined in this policy.
+
+2. Information we do not collect
+
+We do not ask for, and have no way to store, personally identifiable information. There is no account, no sign-in, no form and no newsletter anywhere on this site. We never see or store:
+
+- Your name.
+
+- Your email address, unless you write to us yourself.
+
+- Your TRON wallet address — the board never asks for one, and you never paste one into it.
+
+- Anything else that identifies you as an individual.
+
+Your browser does keep a single setting of its own: epb-theme, which remembers whether you chose the light or the dark theme. It stays in your browser, it is not a cookie, and it never reaches us.
+
+3. Analytics
+
+The board runs two third-party analytics counters: Google Analytics 4 and Yandex.Metrika. They load from Google's and Yandex's own servers and record standard visit data — pages viewed, referrer, approximate location, device and browser, and your IP address, which those providers process on their own terms.
+
+The two differ in what they leave behind in your browser. Google Analytics is configured with browser storage switched off and IP anonymisation on, so it writes no cookies of its own. Yandex.Metrika does write its own cookies, and it is configured with session replay ("Webvisor") and click maps, so it also records how a page was scrolled and where it was clicked.
+
+Both counters are on every page of the board except four: the error page, two redirect stubs kept for old links, and a one-line file that proves domain ownership to a search engine. Those four carry neither counter.
+
+We read this only in aggregate, to see which pages are worth keeping. We do not try to identify anyone from it and we do not combine it with anything else. A browser-level tracker blocker, or a Do Not Track / opt-out extension, stops both counters, and the board works exactly the same without them.
+
+4. Price data
+
+The core function of the Service is to aggregate and display publicly available information on energy prices on the TRON network. That data is about platforms, not about people: it cannot be linked to any user, and it is deliberately public — the same file the board reads is served openly and is documented here. Longer history is kept in the project's own database and published as daily and weekly extracts.
+
+5. Third-party links and APIs
+
+Our Service provides data obtained from third-party APIs and contains links to external websites and services. Some of these links are referral/affiliate links — when you click them and use the service, the destination site may set cookies or track the referral for commission purposes. Their own privacy policies and terms of service apply. We do not control and are not responsible for their content or their privacy practices.
+
+We only receive aggregated, non-personal price data from these third-party providers. They do not receive any information about our users through our Service.
+
+6. Storage and security
+
+The site is a set of static files. Price history is stored by the project and published in the open, because the whole point of the board is that anyone can check the numbers. We take reasonable technical care of it, but no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee its absolute security.
+
+7. Your rights
+
+Since we hold no personal data of our own, there is no user record for us to show you, correct or delete. Data held by Google and Yandex is subject to their policies, and both offer their own opt-outs. If you have written to us by email and want that correspondence deleted, ask at the address below.
+
+8. Age restriction
+
+Our Service is not intended for individuals under the age of majority ("minors") in their jurisdiction. We do not knowingly collect personal information from minors. If you are a minor, please do not use our Service.
+
+9. Changes to this Privacy Policy
+
+We may update this policy from time to time. Changes are posted on this page and the "Last updated" date above is moved.
+
+10. Contact us
+
+If you have any questions about this Privacy Policy, please contact us at: fivex56@gmail.com.
+
+This file is generated from privacy.html. If the two ever disagree, the page is the original.
