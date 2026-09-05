@@ -1,0 +1,119 @@
+{
+  "about": "Комиссия перевода USDT TRC20: сжигание TRX против аренды энергии, 16.10.2026",
+  "chain_checked_utc": "2026-10-16T14:54:48+00:00",
+  "chain": {
+    "getEnergyFee_sun": 100,
+    "getTransactionFee_sun_per_byte": 1000,
+    "getFreeNetLimit_bytes": 600,
+    "TotalEnergyLimit": 180000000000,
+    "TotalEnergyWeight_trx": 18769271118,
+    "energy_per_staked_trx_per_day": 9.59
+  },
+  "usdt_transfers": {
+    "block": 87163165,
+    "successful_transfers": 60,
+    "used_64285_energy": 49,
+    "used_130285_energy": 11,
+    "bandwidth_bytes_counts": {
+      "345": 53,
+      "346": 4,
+      "354": 2,
+      "339": 1
+    },
+    "examples": [
+      {
+        "tx": "40638502bd1c232ae6a2afae5d4a01402ee64e9d2f94d4f9578cf185a303da66",
+        "energy": 64285,
+        "energy_burned_sun": 0,
+        "net_bytes": 345,
+        "net_fee_sun": 0
+      },
+      {
+        "tx": "0bd7a072377c3eb159ab8aa3ff0f7516066762b41b1da8b84105dbb808e7fba6",
+        "energy": 64285,
+        "energy_burned_sun": 0,
+        "net_bytes": 345,
+        "net_fee_sun": 345000
+      },
+      {
+        "tx": "b45df656e22d2b97ac5d22ee44c7ab1662f67cf8d42988badd3607457914feb3",
+        "energy": 64285,
+        "energy_burned_sun": 0,
+        "net_bytes": 345,
+        "net_fee_sun": 345000
+      },
+      {
+        "tx": "9190c2d5c3914c0fd680d687cf134971f7ecba742e6e3a5d80699bc4118f363f",
+        "energy": 64285,
+        "energy_burned_sun": 0,
+        "net_bytes": 354,
+        "net_fee_sun": 0
+      },
+      {
+        "tx": "0742577fb4a51dd8785b1840fdc440ad91d9025d55915fea9500acddf8950e15",
+        "energy": 130285,
+        "energy_burned_sun": 13028500,
+        "net_bytes": 345,
+        "net_fee_sun": 0
+      },
+      {
+        "tx": "892c11f6020e23e50621b9983c0042f87d9810bf150920413b41c1dc16e9f566",
+        "energy": 64285,
+        "energy_burned_sun": 0,
+        "net_bytes": 345,
+        "net_fee_sun": 345000
+      }
+    ]
+  },
+  "burn_trx": {
+    "64285_energy": 6.4285,
+    "130285_energy": 13.0285,
+    "345_bytes_bandwidth": 0.345
+  },
+  "board_scan": {
+    "generated_at": "2026-10-16T14:50:18.106042+00:00",
+    "platforms": 22,
+    "65k_1h_price": {
+      "quotes": 19,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 1.82,
+      "cheapest_has_referral": false,
+      "median_trx": 2.73
+    },
+    "130k_1h_price": {
+      "quotes": 17,
+      "cheapest_name": "CatFee",
+      "cheapest_trx": 3.64,
+      "cheapest_has_referral": false,
+      "median_trx": 5.2
+    }
+  },
+  "board_7d": {
+    "from_utc": "2026-10-09T14:50+00:00",
+    "to_utc": "2026-10-16T14:50+00:00",
+    "65k_1h_price": {
+      "scans": 412,
+      "cheapest_median_trx": 1.56,
+      "cheapest_min_trx": 1.04,
+      "cheapest_max_trx": 2.27
+    },
+    "130k_1h_price": {
+      "scans": 412,
+      "cheapest_median_trx": 3.12,
+      "cheapest_min_trx": 2.08,
+      "cheapest_max_trx": 4.58
+    }
+  },
+  "derived": {
+    "saving_one_transfer_trx": 4.61,
+    "burn_over_rent": 3.5,
+    "stake_trx_for_one_transfer_per_day": 6703,
+    "shortfall_130k_package_energy": 285,
+    "shortfall_130k_package_trx": 0.0285
+  },
+  "sources": [
+    "TronGrid public API: getchainparameters, getaccountresource, getblockbynum, gettransactioninfobyid",
+    "https://energypriceboard.com/result.json",
+    "Energy Price Board scan archive (epb.db)"
+  ]
+}

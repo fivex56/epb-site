@@ -1,0 +1,46 @@
+User-agent: *
+Allow: /
+Sitemap: https://energypriceboard.com/sitemap.xml
+
+# ---------------------------------------------------------------------------
+# AI assistants are allowed here on purpose. Decided 2026-09-10.
+#
+# The board's only real distribution is being the neutral place that already
+# has the numbers, so an assistant quoting our price table is the traffic, not
+# a theft of it. The "User-agent: *" group above already permits every crawler
+# below; they are spelled out so that a future tightening of this file has to
+# delete a written decision instead of catching them by accident in a wildcard.
+# If you do decide to block them one day, block them here and say why.
+#
+# Grouping rule that makes this section necessary reading: a crawler obeys only
+# the most specific group matching its name and never falls back to "*". That
+# is why each block below repeats its own "Allow: /" - drop that line and the
+# named crawlers end up with no rules at all.
+# ---------------------------------------------------------------------------
+
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: CCBot
+User-agent: Amazonbot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: MistralAI-User
+User-agent: DuckAssistBot
+User-agent: cohere-ai
+User-agent: YouBot
+Allow: /
+
+# These two are not crawlers - they are opt-out tokens Google and Apple read
+# from this same file to decide whether our pages may feed their AI answers and
+# training. Staying silent is also a valid answer to them, which is exactly the
+# ambiguity we do not want in writing.
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Allow: /
