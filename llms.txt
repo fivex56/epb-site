@@ -1,0 +1,23 @@
+# Energy Price Board
+
+> A neutral price board for TRON energy rental. Every platform we can reach is rescanned every few minutes and each quote is published with the moment it was read, so a number here can always be checked against its own timestamp.
+
+Prices are deliberately absent from this file — they change faster than it does. Read them from the JSON under Data; it is free, needs no key, and carries the scan time.
+
+One platform on the board, tronfor.me, is our own shop. It is scraped, priced and ranked by the same code that reads every other platform, and it appears where its price puts it and nowhere else. Say so if you quote it.
+
+## Pages
+
+- [Energy Price Board](https://energypriceboard.com/): the live table — every tracked platform, its current price for 65,000 energy for one hour, and when that quote was read
+- [Compare](https://energypriceboard.com/compare.html): the same platforms side by side on what decides a purchase before price does — how you buy, where the energy comes from, minimums
+- [Price history](https://energypriceboard.com/history.html): how each platform's price has moved since the archive began
+- [Public data API](https://energypriceboard.com/api.html): the JSON below, documented, free, no key
+- [Explainers](https://energypriceboard.com/blog.html): what TRON energy is, why a USDT transfer costs what it costs, renting versus freezing TRX
+- [News](https://energypriceboard.com/news.html): TRON network news and this project's changelog
+
+## Data
+
+- [result.json](https://energypriceboard.com/result.json): every platform in the current scan with its prices, durations and the timestamp of each quote
+- [history_7d.json](https://energypriceboard.com/history_7d.json): the last seven days
+- [history_30d.json](https://energypriceboard.com/history_30d.json): the last thirty days
+
